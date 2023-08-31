@@ -65,12 +65,19 @@ namespace IBKR_Trader
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            // Parameters to connect to TWS are:
-            // host       - IP address or host name of the host running TWS
-            // port       - listening port 7496 or 7497
-            // clientId   - client application identifier can be any number
-            ibClient.ClientSocket.eConnect("", 7497, 0);
+            // fixes crash on clicking connect when already connected.
+            if (ibClient.ClientSocket.IsConnected())
+                return;
 
+            else
+            {
+                // Parameters to connect to TWS are:
+                // host       - IP address or host name of the host running TWS
+                // port       - listening port 7496 or 7497
+                // clientId   - client application identifier can be any number
+                ibClient.ClientSocket.eConnect("", 7497, 0);
+            }
+           
             var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
             reader.Start();
             new Thread(() =>
