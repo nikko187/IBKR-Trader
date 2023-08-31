@@ -11,6 +11,14 @@ using System.ComponentModel;
 using IBApi;
 
 
+/* PROPOSED ADDITIONS, REVISIONS, AND FIXES
+ * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
+ * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
+ * REVISE - BRACKET CHECK BOX? - activates brackets to simply click buy/sell, bypassing Control+Clicking to send bracket order buy/sell.
+ * FIX - CONNECT BUTTON - clicking CONNECT when already connected will crash the app.
+ * FIX - Primary Ex field - right now it is useless and always says ISLAND
+ * */
+
 namespace IBKR_Trader
 {
     public partial class Form1 : Form
