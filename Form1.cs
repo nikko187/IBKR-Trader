@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading;
@@ -57,20 +58,24 @@ namespace IBKR_Trader
             // Instantiate the ibClient
             ibClient = new IBKR_Trader.EWrapperImpl();
 
-
         }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
             btnConnect.PerformClick();
+
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
             // fixes crash on clicking connect when already connected.
             if (ibClient.ClientSocket.IsConnected())
+            {
+                btnConnect.Text = "Connected!";
+                btnConnect.BackColor = Color.LightGreen;
                 return;
+            }
 
             else
             {
@@ -79,10 +84,12 @@ namespace IBKR_Trader
                 // port       - listening port 7496 or 7497
                 // clientId   - client application identifier can be any number
                 ibClient.ClientSocket.eConnect("", 7497, 0);
+
             }
-           
+
             var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
             reader.Start();
+
             new Thread(() =>
             {
                 while (ibClient.ClientSocket.IsConnected())
@@ -179,6 +186,17 @@ namespace IBKR_Trader
         }
         private void getData()
         {
+            if (ibClient.ClientSocket.IsDataAvailable() == true)
+            {
+                btnConnect.Text = "Connected!";
+                btnConnect.BackColor = Color.LightGreen;
+            }
+            else
+            {
+                btnConnect.Text = "Connect";
+                btnConnect.BackColor = Color.Gainsboro;
+            }
+
             // clears contents of TnS when changing
             listViewTns.Items.Clear();
 
@@ -347,6 +365,8 @@ namespace IBKR_Trader
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             ibClient.ClientSocket.eDisconnect();
+            btnConnect.Text = "Connect";
+            btnConnect.BackColor = Color.Gainsboro;
         }
 
         private void btnSell_Click(object sender, EventArgs e)
