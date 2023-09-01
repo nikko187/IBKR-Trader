@@ -69,6 +69,7 @@
             label10 = new Label();
             label2 = new Label();
             numPort = new NumericUpDown();
+            chkBracket = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -460,12 +461,23 @@
             numPort.TabIndex = 39;
             numPort.Value = new decimal(new int[] { 7497, 0, 0, 0 });
             // 
+            // chkBracket
+            // 
+            chkBracket.AutoSize = true;
+            chkBracket.Location = new Point(146, 272);
+            chkBracket.Name = "chkBracket";
+            chkBracket.Size = new Size(87, 19);
+            chkBracket.TabIndex = 40;
+            chkBracket.Text = "Use Bracket";
+            chkBracket.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(644, 459);
+            Controls.Add(chkBracket);
             Controls.Add(numPort);
             Controls.Add(label2);
             Controls.Add(label10);
@@ -554,5 +566,6 @@
         private Label label10;
         private Label label2;
         private NumericUpDown numPort;
+        private CheckBox chkBracket;
     }
 }

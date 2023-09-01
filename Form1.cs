@@ -374,7 +374,7 @@ namespace IBKR_Trader
         {
             string side = "Sell";
 
-            if (Form.ModifierKeys == Keys.Control)
+            if (chkBracket.Checked)
             {
                 send_bracket_order(side);
             }
@@ -388,7 +388,7 @@ namespace IBKR_Trader
         {
             string side = "Buy";
 
-            if (Form.ModifierKeys == Keys.Control)
+            if (chkBracket.Checked)
             {
                 send_bracket_order(side);
             }
@@ -442,10 +442,10 @@ namespace IBKR_Trader
 
             string order_type = cbOrderType.Text;   // sets LMT or STP from box
             string action = side;   // sets BUY or SELL from button click
-            double quantity = Convert.ToDouble(numQuantity.Value);  // number of shares
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
+            double quantity = Math.Round((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));  // number of shares
 
             // side is either buy or sell. calls bracketorder function and stores results in list varialbe called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
