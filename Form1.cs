@@ -9,6 +9,7 @@ using System.Text;
 using System.Linq;
 using System.ComponentModel;
 using IBApi;
+using System.Drawing.Text;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -55,12 +56,14 @@ namespace IBKR_Trader
 
             // Instantiate the ibClient
             ibClient = new IBKR_Trader.EWrapperImpl();
+
+
         }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            btnConnect.PerformClick();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
