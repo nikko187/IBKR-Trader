@@ -62,7 +62,7 @@ namespace IBKR_Trader
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Auto-Click connect on launch
+            // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
 
         }
@@ -540,7 +540,7 @@ namespace IBKR_Trader
             // Visible shares to the market
             // order.DisplaySize = Convert.ToInt32(tbVisible.Text);
 
-            // order.OutsideRth = cbOutsideRTH.Checked;
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
             order.OutsideRth = chkOutside.Checked;
 
             // Place the order
