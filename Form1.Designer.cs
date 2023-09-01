@@ -464,7 +464,7 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
-            chkBracket.Location = new Point(146, 272);
+            chkBracket.Location = new Point(53, 278);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(87, 19);
             chkBracket.TabIndex = 40;

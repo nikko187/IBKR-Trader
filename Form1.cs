@@ -472,7 +472,7 @@ namespace IBKR_Trader
             // Profit Target order
             Order takeProfit = new Order();
             takeProfit.OrderId = parent.OrderId + 1;
-            takeProfit.Action = action.Equals("BUY") ? "SELL" : "BUY"; // if statement
+            takeProfit.Action = action.Equals("Buy") ? "Sell" : "Buy"; // if statement
             takeProfit.OrderType = "LMT";
             takeProfit.TotalQuantity = (decimal)quantity;
             takeProfit.LmtPrice = takeProfitLimitPrice;
@@ -482,7 +482,7 @@ namespace IBKR_Trader
             // Stop loss order
             Order stopLoss = new Order();
             stopLoss.OrderId = parent.OrderId + 2;
-            stopLoss.Action = action.Equals("BUY") ? "SELL" : "BUY";
+            stopLoss.Action = action.Equals("Buy") ? "Sell" : "Buy";
             stopLoss.OrderType = "STP"; //or "STP LMT"
             //Stop trigger price
             // add stopLoss.LmtPrice here if you are going to use a stop limit order
