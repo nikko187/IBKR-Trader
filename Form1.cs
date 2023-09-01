@@ -17,7 +17,6 @@ using System.Drawing.Text;
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
  * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
  * REVISE - BRACKET CHECK BOX? - activates brackets to simply click buy/sell, bypassing Control+Clicking to send bracket order buy/sell.
- * FIX - CONNECT BUTTON - clicking CONNECT when already connected will crash the app.
  * FIX - Primary Ex field - right now it is useless and always says ISLAND
  * */
 
@@ -63,12 +62,14 @@ namespace IBKR_Trader
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            btnConnect.PerformClick();
+            // Auto-Click connect on launch
+            // btnConnect.PerformClick();
 
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
+
             // fixes crash on clicking connect when already connected.
             if (ibClient.ClientSocket.IsConnected())
             {
@@ -83,37 +84,37 @@ namespace IBKR_Trader
                 // host       - IP address or host name of the host running TWS
                 // port       - listening port 7496 or 7497
                 // clientId   - client application identifier can be any number
-                ibClient.ClientSocket.eConnect("", 7497, 0);
+                int port = (int)numPort.Value;
+                ibClient.ClientSocket.eConnect("", port, 0);
 
-            }
+                var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
+                reader.Start();
 
-            var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
-            reader.Start();
-
-            new Thread(() =>
-            {
-                while (ibClient.ClientSocket.IsConnected())
+                new Thread(() =>
                 {
-                    ibClient.Signal.waitForSignal();
-                    reader.processMsgs();
-                }
-            })
-            { IsBackground = true }.Start();
+                    while (ibClient.ClientSocket.IsConnected())
+                    {
+                        ibClient.Signal.waitForSignal();
+                        reader.processMsgs();
+                    }
+                })
+                { IsBackground = true }.Start();
 
-            // Wait until the connection is completed
-            while (ibClient.NextOrderId <= 0) { }
+                // Wait until the connection is completed
+                while (ibClient.NextOrderId <= 0) { }
 
-            // Set up the form object in the ewrapper
-            ibClient.myform = (Form1)Application.OpenForms[0];
+                // Set up the form object in the ewrapper
+                ibClient.myform = (Form1)Application.OpenForms[0];
 
 
-            // Update order ID value
-            order_id = ibClient.NextOrderId;
+                // Update order ID value
+                order_id = ibClient.NextOrderId;
 
-            // Subscribe to Group 4 within TWS
-            ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
+                // Subscribe to Group 4 within TWS
+                ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
 
-            getData();
+                getData();
+            }
 
         }
 
@@ -126,7 +127,7 @@ namespace IBKR_Trader
                 try
                 {
                     SetTextCallbackContractId d = new SetTextCallbackContractId(AddTextBoxItemConId);
-                    this.Invoke(d, new object[] { contractId});
+                    this.Invoke(d, new object[] { contractId });
                 }
                 catch (Exception e)
                 {
@@ -186,7 +187,7 @@ namespace IBKR_Trader
         }
         private void getData()
         {
-            if (ibClient.ClientSocket.IsDataAvailable() == true)
+            if (ibClient.ClientSocket.IsConnected() == true)
             {
                 btnConnect.Text = "Connected!";
                 btnConnect.BackColor = Color.LightGreen;
@@ -623,5 +624,6 @@ namespace IBKR_Trader
         {
             ibClient.ClientSocket.reqGlobalCancel();
         }
+
     }
 }

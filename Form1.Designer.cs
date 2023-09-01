@@ -68,8 +68,10 @@
             btnCancelAll = new Button();
             label10 = new Label();
             label2 = new Label();
+            numPort = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -433,11 +435,11 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(210, 14);
+            label10.Location = new Point(202, 9);
             label10.Name = "label10";
-            label10.Size = new Size(78, 15);
+            label10.Size = new Size(86, 15);
             label10.TabIndex = 37;
-            label10.Text = "Use Port 7497";
+            label10.Text = "Select Port first";
             // 
             // label2
             // 
@@ -449,12 +451,22 @@
             label2.TabIndex = 38;
             label2.Text = "Qty";
             // 
+            // numPort
+            // 
+            numPort.Location = new Point(294, 5);
+            numPort.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numPort.Name = "numPort";
+            numPort.Size = new Size(88, 23);
+            numPort.TabIndex = 39;
+            numPort.Value = new decimal(new int[] { 7497, 0, 0, 0 });
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(644, 459);
+            Controls.Add(numPort);
             Controls.Add(label2);
             Controls.Add(label10);
             Controls.Add(btnCancelAll);
@@ -496,6 +508,7 @@
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -540,5 +553,6 @@
         private Button btnCancelAll;
         private Label label10;
         private Label label2;
+        private NumericUpDown numPort;
     }
 }
