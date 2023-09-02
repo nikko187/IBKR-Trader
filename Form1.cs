@@ -69,6 +69,7 @@ namespace IBKR_Trader
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
+            numPort.ReadOnly = true;
 
             // fixes crash on clicking connect when already connected.
             if (ibClient.ClientSocket.IsConnected())
@@ -368,6 +369,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.eDisconnect();
             btnConnect.Text = "Connect";
             btnConnect.BackColor = Color.Gainsboro;
+            numPort.ReadOnly = false;
         }
 
         private void btnSell_Click(object sender, EventArgs e)
@@ -445,16 +447,20 @@ namespace IBKR_Trader
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
-            double quantity = Math.Round((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));  // number of shares
+            double quantity = Math.Floor((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));  // number of shares
 
             // side is either buy or sell. calls bracketorder function and stores results in list varialbe called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
             foreach (Order o in bracket)    // loops through each order in the list
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
 
+
             // increase order id by 3 to not use same order id twice and get an error
+
+
             order_id += 3;
         }
+
 
         public static List<Order> BracketOrder(int parentOrderId, string action, double quantity, double limitPrice, double takeProfitLimitPrice, double stopLossPrice, string order_type)
         {
@@ -469,6 +475,8 @@ namespace IBKR_Trader
             //The LAST CHILD will have it set to true
             parent.Transmit = false;
 
+            /** TAKE PROFIT IS DISABLED FOR NOW
+             * 
             // Profit Target order
             Order takeProfit = new Order();
             takeProfit.OrderId = parent.OrderId + 1;
@@ -478,6 +486,7 @@ namespace IBKR_Trader
             takeProfit.LmtPrice = takeProfitLimitPrice;
             takeProfit.ParentId = parentOrderId;
             takeProfit.Transmit = false;
+            **/
 
             // Stop loss order
             Order stopLoss = new Order();
@@ -495,7 +504,7 @@ namespace IBKR_Trader
 
             List<Order> bracketOrder = new List<Order>();
             bracketOrder.Add(parent);
-            bracketOrder.Add(takeProfit);
+            // bracketOrder.Add(takeProfit);
             bracketOrder.Add(stopLoss);
             return bracketOrder;
         }
@@ -623,6 +632,20 @@ namespace IBKR_Trader
         private void btnCancelAll_Click(object sender, EventArgs e)
         {
             ibClient.ClientSocket.reqGlobalCancel();
+        }
+
+        private void chkBracket_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkBracket.Checked)
+            {
+                tbStopLoss.ReadOnly = false;
+                label2.Text = "$ Risk";
+            }
+            else
+            {
+                tbStopLoss.ReadOnly = true;
+                label2.Text = "Quantity";
+            }
         }
 
     }

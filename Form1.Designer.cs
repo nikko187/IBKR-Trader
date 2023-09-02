@@ -60,8 +60,6 @@
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
-            label5 = new Label();
-            label9 = new Label();
             tbTakeProfit = new TextBox();
             tbStopLoss = new TextBox();
             btnCancelLast = new Button();
@@ -70,6 +68,8 @@
             label2 = new Label();
             numPort = new NumericUpDown();
             chkBracket = new CheckBox();
+            cbTakeProfit = new CheckBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -94,7 +94,7 @@
             cbSymbol.Name = "cbSymbol";
             cbSymbol.Size = new Size(88, 25);
             cbSymbol.TabIndex = 1;
-            cbSymbol.Text = "AAPL";
+            cbSymbol.Text = "TSLA";
             cbSymbol.SelectedIndexChanged += cbSymbol_SelectedIndexChanged;
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
@@ -196,6 +196,7 @@
             tbPrimaryEx.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbPrimaryEx.Location = new Point(106, 122);
             tbPrimaryEx.Name = "tbPrimaryEx";
+            tbPrimaryEx.ReadOnly = true;
             tbPrimaryEx.Size = new Size(88, 25);
             tbPrimaryEx.TabIndex = 14;
             tbPrimaryEx.Text = "NASDAQ";
@@ -369,31 +370,12 @@
             columnHeader3.Text = "Time";
             columnHeader3.Width = 80;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label5.Location = new Point(226, 294);
-            label5.Name = "label5";
-            label5.Size = new Size(62, 15);
-            label5.TabIndex = 31;
-            label5.Text = "Take Profit";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label9.Location = new Point(231, 263);
-            label9.Name = "label9";
-            label9.Size = new Size(57, 15);
-            label9.TabIndex = 32;
-            label9.Text = "Stop Loss";
-            // 
             // tbTakeProfit
             // 
             tbTakeProfit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbTakeProfit.Location = new Point(294, 289);
             tbTakeProfit.Name = "tbTakeProfit";
+            tbTakeProfit.ReadOnly = true;
             tbTakeProfit.Size = new Size(88, 25);
             tbTakeProfit.TabIndex = 33;
             tbTakeProfit.Text = "0.00";
@@ -403,6 +385,7 @@
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbStopLoss.Location = new Point(294, 258);
             tbStopLoss.Name = "tbStopLoss";
+            tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
             tbStopLoss.TabIndex = 34;
             tbStopLoss.Text = "0.00";
@@ -436,7 +419,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(202, 9);
+            label10.Location = new Point(205, 7);
             label10.Name = "label10";
             label10.Size = new Size(86, 15);
             label10.TabIndex = 37;
@@ -445,12 +428,12 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label2.Location = new Point(106, 49);
             label2.Name = "label2";
-            label2.Size = new Size(23, 13);
+            label2.Size = new Size(53, 15);
             label2.TabIndex = 38;
-            label2.Text = "Qty";
+            label2.Text = "Quantity";
             // 
             // numPort
             // 
@@ -464,12 +447,34 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
-            chkBracket.Location = new Point(53, 278);
+            chkBracket.Location = new Point(147, 262);
+            chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
-            chkBracket.Size = new Size(87, 19);
+            chkBracket.Size = new Size(142, 19);
             chkBracket.TabIndex = 40;
-            chkBracket.Text = "Use Bracket";
+            chkBracket.Text = "Use $ Risk + Stop Loss";
             chkBracket.UseVisualStyleBackColor = true;
+            chkBracket.CheckedChanged += chkBracket_CheckedChanged;
+            // 
+            // cbTakeProfit
+            // 
+            cbTakeProfit.AutoSize = true;
+            cbTakeProfit.Enabled = false;
+            cbTakeProfit.Location = new Point(205, 293);
+            cbTakeProfit.Name = "cbTakeProfit";
+            cbTakeProfit.Size = new Size(81, 19);
+            cbTakeProfit.TabIndex = 41;
+            cbTakeProfit.Text = "Take Profit";
+            cbTakeProfit.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 308);
+            label5.Name = "label5";
+            label5.Size = new Size(146, 15);
+            label5.TabIndex = 42;
+            label5.Text = "NOTE: TWS link to Group 4";
             // 
             // Form1
             // 
@@ -477,6 +482,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(644, 459);
+            Controls.Add(label5);
+            Controls.Add(cbTakeProfit);
             Controls.Add(chkBracket);
             Controls.Add(numPort);
             Controls.Add(label2);
@@ -485,8 +492,6 @@
             Controls.Add(btnCancelLast);
             Controls.Add(tbStopLoss);
             Controls.Add(tbTakeProfit);
-            Controls.Add(label9);
-            Controls.Add(label5);
             Controls.Add(listViewTns);
             Controls.Add(chkOutside);
             Controls.Add(btnBuy);
@@ -557,8 +562,6 @@
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
-        private Label label5;
-        private Label label9;
         private TextBox tbTakeProfit;
         private TextBox tbStopLoss;
         private Button btnCancelLast;
@@ -567,5 +570,7 @@
         private Label label2;
         private NumericUpDown numPort;
         private CheckBox chkBracket;
+        private CheckBox cbTakeProfit;
+        private Label label5;
     }
 }
