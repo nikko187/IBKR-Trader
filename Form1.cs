@@ -11,12 +11,12 @@ using System.Linq;
 using System.ComponentModel;
 using IBApi;
 using System.Drawing.Text;
+using System.Windows.Forms.VisualStyles;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
  * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
- * REVISE - BRACKET CHECK BOX? - activates brackets to simply click buy/sell, bypassing Control+Clicking to send bracket order buy/sell.
  * FIX - Primary Ex field - right now it is useless and always says ISLAND
  * */
 
@@ -35,7 +35,7 @@ namespace IBKR_Trader
 
         public void AddListBoxItem(string text)
         {
-            // See if a new invocation is required form a different thread            
+            // See if a new invocation is required from a different thread            
             if (this.lbData.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(AddListBoxItem);
@@ -203,7 +203,7 @@ namespace IBKR_Trader
             listViewTns.Items.Clear();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            ibClient.ClientSocket.cancelRealTimeBars(0);
+            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -345,11 +345,6 @@ namespace IBKR_Trader
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
@@ -376,6 +371,13 @@ namespace IBKR_Trader
         {
             string side = "Sell";
 
+            if (cbOrderType.Text == "SNAP MKT")
+                numPrice.Value = Convert.ToDecimal(tbBid.Text);
+            else if (cbOrderType.Text == "SNAP MID")
+                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) - Convert.ToDecimal(tbBid.Text)) / 2;
+            else if (cbOrderType.Text == "SNAP PRIM")
+                numPrice.Value = Convert.ToDecimal(tbAsk.Text);
+
             if (chkBracket.Checked)
             {
                 send_bracket_order(side);
@@ -390,6 +392,13 @@ namespace IBKR_Trader
         {
             string side = "Buy";
 
+            if (cbOrderType.Text == "SNAP MKT")
+                numPrice.Value = Convert.ToDecimal(tbAsk.Text);
+            else if (cbOrderType.Text == "SNAP MID")
+                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) - Convert.ToDecimal(tbBid.Text)) / 2;
+            else if (cbOrderType.Text == "SNAP PRIM")
+                numPrice.Value = Convert.ToDecimal(tbBid.Text);
+
             if (chkBracket.Checked)
             {
                 send_bracket_order(side);
@@ -398,32 +407,9 @@ namespace IBKR_Trader
             {
                 send_order(side);
             }
+
         }
 
-        /*
-        // ~~~~~    IN PROGRESS SECTION FOR RISK CALCULATION FOR AUTOMATIC QUANTITY ~~~~~
-        public static int CalculateShares(double riskPerShare, double maxRisk, double minRisk, bool tradeShares = false)
-        {
-            double calcShares;
-
-            // If trade shares is true, use the value in maxRisk which will be a max share amount instead of a dollar amount
-            if (tradeShares)
-            {
-                calcShares = maxRisk;
-            }
-            else
-            {
-                // check if the user has the option enabled to minimize how little the risk can be to help avoid issues with slippp
-                var rps = riskPerShare > minRisk ? riskPerShare : minRisk;
-                calcShares = maxRisk / rps;
-            }
-
-            var quantity = Convert.ToInt32(calcShares);
-
-            return quantity;
-            
-        }
-        */
 
         public void send_bracket_order(string side)
         {
@@ -447,7 +433,8 @@ namespace IBKR_Trader
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
-            double quantity = Math.Floor((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));  // number of shares
+            // Number of Share automatically calculated per $ Risk and Stop Loss distance.
+            double quantity = Math.Floor((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));
 
             // side is either buy or sell. calls bracketorder function and stores results in list varialbe called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
@@ -455,10 +442,13 @@ namespace IBKR_Trader
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
 
 
-            // increase order id by 3 to not use same order id twice and get an error
+            string printBox = action + quantity + contract.Symbol + "at" + order_type + lmtPrice;
+            lbData.Items.Add(printBox);
+
+            // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
+            order_id += 2;
 
 
-            order_id += 3;
         }
 
 
@@ -535,18 +525,19 @@ namespace IBKR_Trader
             order.OrderType = cbOrderType.Text;
 
             // number of shares from Quantity
-            order.TotalQuantity = (decimal)Convert.ToDouble(numQuantity.Value);
-
+            order.TotalQuantity = numQuantity.Value;
 
             // Value from limit price
             order.LmtPrice = Convert.ToDouble(numPrice.Value);
-            // checks for a stop order
+
+            // checks for a stop order and uses the Price box for the Aux Price (stop price)
             if (cbOrderType.Text == "STP")
-            {
-                // Stop order value from the limit textbox
                 order.AuxPrice = Convert.ToDouble(numPrice.Value);
-            }
-            // Visible shares to the market
+            // checks for one of the SNAP order types, and sets the Aux price to 0 (offset)
+            else if (cbOrderType.Text is "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
+                order.AuxPrice = 0.0;
+
+            // Visible shares to the market // ***** DISABLED ******
             // order.DisplaySize = Convert.ToInt32(tbVisible.Text);
 
             // checks if Outside RTH is checked, then apply outsideRTH to the order
@@ -554,6 +545,9 @@ namespace IBKR_Trader
 
             // Place the order
             ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " " + order.LmtPrice;
+            lbData.Items.Add(printBox);
 
             // increase the order id value
             order_id++;
@@ -582,12 +576,13 @@ namespace IBKR_Trader
                 try
                 {
                     timer1.Stop();  // stop the timer
-                    // Add bid price to limit box
-                    numPrice.Value = Convert.ToDecimal(tbBid.Text);
+
+                    // Add Last price to limit box
+                    numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
                     timer1_counter = 5; // reset time counter back to 5
 
-                    // convert contract id from an int to a strong and add exchange +
+                    // convert contract id from an int to a strong and add exchange
                     string strGroup = myContractId.ToString() + "@SMART";
                     // update the display group which will change the symbol
                     ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
@@ -634,18 +629,38 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqGlobalCancel();
         }
 
+        /********** // THE PURPOSE OF THIS WAS TO KEEP THE RISK QTY IN ANOTHER FIELD UPDATED WITH CHANGES TO IT'S VARIABLES //
+        private void UpdateRiskQty(object sender, EventArgs e)
+        {
+            numAuto.Value = Math.Floor((decimal)(Convert.ToDouble(numQuantity.Value) / (Convert.ToDouble(numPrice.Value) - Convert.ToDouble(tbStopLoss.Text))));
+
+        }
+
+        **********/
         private void chkBracket_CheckedChanged(object sender, EventArgs e)
         {
             if (chkBracket.Checked)
             {
                 tbStopLoss.ReadOnly = false;
                 label2.Text = "$ Risk";
+                // numAuto.ReadOnly = true;
             }
             else
             {
                 tbStopLoss.ReadOnly = true;
                 label2.Text = "Quantity";
+                // numAuto.ReadOnly = false;
             }
+        }
+
+        private void OrderType_Changed(object sender, EventArgs e)
+        {
+            if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
+            {
+                numPrice.ReadOnly = true;
+            }
+            else
+                numPrice.ReadOnly = false;
         }
 
     }

@@ -153,7 +153,7 @@
             // 
             cbMarket.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbMarket.FormattingEnabled = true;
-            cbMarket.Items.AddRange(new object[] { "SMART", "ARCA", "BATS", "ISLAND", "NYSE" });
+            cbMarket.Items.AddRange(new object[] { "SMART", "ISLAND", "EDGX" });
             cbMarket.Location = new Point(294, 66);
             cbMarket.Name = "cbMarket";
             cbMarket.Size = new Size(88, 25);
@@ -174,12 +174,13 @@
             // 
             cbOrderType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbOrderType.FormattingEnabled = true;
-            cbOrderType.Items.AddRange(new object[] { "LMT", "MKT", "STP" });
+            cbOrderType.Items.AddRange(new object[] { "LMT", "MKT", "STP", "SNAP MKT", "SNAP MID", "SNAP PRIM" });
             cbOrderType.Location = new Point(12, 122);
             cbOrderType.Name = "cbOrderType";
             cbOrderType.Size = new Size(88, 25);
             cbOrderType.TabIndex = 10;
             cbOrderType.Text = "LMT";
+            cbOrderType.TextChanged += OrderType_Changed;
             // 
             // label4
             // 
@@ -193,6 +194,7 @@
             // 
             // tbPrimaryEx
             // 
+            tbPrimaryEx.BackColor = SystemColors.ControlLight;
             tbPrimaryEx.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbPrimaryEx.Location = new Point(106, 122);
             tbPrimaryEx.Name = "tbPrimaryEx";
@@ -234,9 +236,11 @@
             // 
             // tbBid
             // 
+            tbBid.BackColor = SystemColors.ControlLight;
             tbBid.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbBid.Location = new Point(106, 175);
             tbBid.Name = "tbBid";
+            tbBid.ReadOnly = true;
             tbBid.Size = new Size(88, 25);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
@@ -244,9 +248,11 @@
             // 
             // tbAsk
             // 
+            tbAsk.BackColor = SystemColors.ControlLight;
             tbAsk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbAsk.Location = new Point(200, 175);
             tbAsk.Name = "tbAsk";
+            tbAsk.ReadOnly = true;
             tbAsk.Size = new Size(88, 25);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
@@ -274,9 +280,11 @@
             // 
             // tbLast
             // 
+            tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbLast.Location = new Point(200, 225);
             tbLast.Name = "tbLast";
+            tbLast.ReadOnly = true;
             tbLast.Size = new Size(88, 25);
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
@@ -472,9 +480,9 @@
             label5.AutoSize = true;
             label5.Location = new Point(12, 308);
             label5.Name = "label5";
-            label5.Size = new Size(146, 15);
+            label5.Size = new Size(127, 15);
             label5.TabIndex = 42;
-            label5.Text = "NOTE: TWS link to Group 4";
+            label5.Text = "Linked to TWS Group 4";
             // 
             // Form1
             // 
