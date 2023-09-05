@@ -374,7 +374,7 @@ namespace IBKR_Trader
             if (cbOrderType.Text == "SNAP MKT")
                 numPrice.Value = Convert.ToDecimal(tbBid.Text);
             else if (cbOrderType.Text == "SNAP MID")
-                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) - Convert.ToDecimal(tbBid.Text)) / 2;
+                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
             else if (cbOrderType.Text == "SNAP PRIM")
                 numPrice.Value = Convert.ToDecimal(tbAsk.Text);
 
@@ -395,7 +395,7 @@ namespace IBKR_Trader
             if (cbOrderType.Text == "SNAP MKT")
                 numPrice.Value = Convert.ToDecimal(tbAsk.Text);
             else if (cbOrderType.Text == "SNAP MID")
-                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) - Convert.ToDecimal(tbBid.Text)) / 2;
+                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
             else if (cbOrderType.Text == "SNAP PRIM")
                 numPrice.Value = Convert.ToDecimal(tbBid.Text);
 
@@ -436,18 +436,16 @@ namespace IBKR_Trader
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
             double quantity = Math.Floor((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));
 
-            // side is either buy or sell. calls bracketorder function and stores results in list varialbe called bracket
+            // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
             foreach (Order o in bracket)    // loops through each order in the list
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
-
 
             string printBox = action + quantity + contract.Symbol + "at" + order_type + lmtPrice;
             lbData.Items.Add(printBox);
 
             // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
             order_id += 2;
-
 
         }
 
@@ -461,8 +459,9 @@ namespace IBKR_Trader
             parent.OrderType = order_type;  // "LMT", "STP", or "STP LMT"
             parent.TotalQuantity = (decimal)quantity;
             parent.LmtPrice = limitPrice;
+            parent.AuxPrice = 0.00;     // Sets Aux price to 0.00 (offset) for any of the SNAP orders.
             //The parent and children orders will need this attribute set to false to prevent accidental executions.
-            //The LAST CHILD will have it set to true
+            //The last child (STP) will have it set to true
             parent.Transmit = false;
 
             /** TAKE PROFIT IS DISABLED FOR NOW
@@ -482,8 +481,8 @@ namespace IBKR_Trader
             Order stopLoss = new Order();
             stopLoss.OrderId = parent.OrderId + 2;
             stopLoss.Action = action.Equals("Buy") ? "Sell" : "Buy";
-            stopLoss.OrderType = "STP"; //or "STP LMT"
-            //Stop trigger price
+            stopLoss.OrderType = "STP";     // or "STP LMT", then use the field below...
+            // Stop trigger price
             // add stopLoss.LmtPrice here if you are going to use a stop limit order
             stopLoss.AuxPrice = stopLossPrice;
             stopLoss.TotalQuantity = (decimal)quantity;
@@ -530,12 +529,10 @@ namespace IBKR_Trader
             // Value from limit price
             order.LmtPrice = Convert.ToDouble(numPrice.Value);
 
-            // checks for a stop order and uses the Price box for the Aux Price (stop price)
+            // Sets AuxPrice to 0.00 for the SNAP type orders. 0.00 offset. if it's a STP order, use the price from price box.
+            order.AuxPrice = 0.00;
             if (cbOrderType.Text == "STP")
                 order.AuxPrice = Convert.ToDouble(numPrice.Value);
-            // checks for one of the SNAP order types, and sets the Aux price to 0 (offset)
-            else if (cbOrderType.Text is "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
-                order.AuxPrice = 0.0;
 
             // Visible shares to the market // ***** DISABLED ******
             // order.DisplaySize = Convert.ToInt32(tbVisible.Text);
@@ -663,5 +660,9 @@ namespace IBKR_Trader
                 numPrice.ReadOnly = false;
         }
 
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Welcome to IBKR Trader, powered by Interactive Brokers.\r\nPlease select the Port # first, by checking what you have setup in TWS API settings.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\nOrder Types:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the\r\ncurrent BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell.\r\n\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nIf you check the box \"Use $ Risk + Stop Loss,\" please note the Qty field will change to\r\n$ Risk, input the $ amount you wish to risk in that trade, and the Stop Loss price for the\r\nbracket order, after which the amount of shares will be automatically calculated once\r\nyou click Buy or Sell.\r\nNOTE: If you then wish to trim, uncheck \"use $ risk\" to disable Bracket and trim Shares\r\nas normal.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4 ");
+        }
     }
 }
