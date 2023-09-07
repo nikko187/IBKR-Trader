@@ -121,7 +121,8 @@ namespace IBKR_Trader
             string tickStringData = ("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flat true, or false
-
+            // tickType = 48;
+           
             if (tickType == 48)     //used for time and sales (RTVolume)
             {
                 string _tickString = value;

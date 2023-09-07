@@ -41,8 +41,6 @@
             label3 = new Label();
             cbOrderType = new ComboBox();
             label4 = new Label();
-            tbPrimaryEx = new TextBox();
-            PrimaryExchange = new Label();
             cbTif = new ComboBox();
             label6 = new Label();
             tbBid = new TextBox();
@@ -71,9 +69,13 @@
             cbTakeProfit = new CheckBox();
             label5 = new Label();
             btnHelp = new Button();
+            label9 = new Label();
+            numRisk = new NumericUpDown();
+            labelSpread = new Label();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numRisk).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -127,24 +129,25 @@
             numQuantity.Name = "numQuantity";
             numQuantity.Size = new Size(88, 25);
             numQuantity.TabIndex = 4;
-            numQuantity.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            numQuantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numPrice
             // 
             numPrice.DecimalPlaces = 2;
             numPrice.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             numPrice.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numPrice.Location = new Point(200, 61);
+            numPrice.Location = new Point(106, 111);
             numPrice.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
             numPrice.Name = "numPrice";
             numPrice.Size = new Size(88, 25);
             numPrice.TabIndex = 6;
+            numPrice.ValueChanged += UpdateRiskQty;
             // 
             // Price
             // 
             Price.AutoSize = true;
             Price.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            Price.Location = new Point(200, 43);
+            Price.Location = new Point(106, 93);
             Price.Name = "Price";
             Price.Size = new Size(33, 15);
             Price.TabIndex = 7;
@@ -193,27 +196,6 @@
             label4.TabIndex = 12;
             label4.Text = "Type";
             // 
-            // tbPrimaryEx
-            // 
-            tbPrimaryEx.BackColor = SystemColors.ControlLight;
-            tbPrimaryEx.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbPrimaryEx.Location = new Point(106, 111);
-            tbPrimaryEx.Name = "tbPrimaryEx";
-            tbPrimaryEx.ReadOnly = true;
-            tbPrimaryEx.Size = new Size(88, 25);
-            tbPrimaryEx.TabIndex = 14;
-            tbPrimaryEx.Text = "NASDAQ";
-            // 
-            // PrimaryExchange
-            // 
-            PrimaryExchange.AutoSize = true;
-            PrimaryExchange.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            PrimaryExchange.Location = new Point(106, 93);
-            PrimaryExchange.Name = "PrimaryExchange";
-            PrimaryExchange.Size = new Size(60, 15);
-            PrimaryExchange.TabIndex = 15;
-            PrimaryExchange.Text = "PrimaryEx";
-            // 
             // cbTif
             // 
             cbTif.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
@@ -238,11 +220,11 @@
             // tbBid
             // 
             tbBid.BackColor = SystemColors.ControlLight;
-            tbBid.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbBid.Location = new Point(106, 160);
+            tbBid.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            tbBid.Location = new Point(106, 158);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
-            tbBid.Size = new Size(88, 25);
+            tbBid.Size = new Size(88, 27);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
             tbBid.Click += tbBid_Click;
@@ -250,11 +232,11 @@
             // tbAsk
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
-            tbAsk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbAsk.Location = new Point(200, 160);
+            tbAsk.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            tbAsk.Location = new Point(200, 158);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
-            tbAsk.Size = new Size(88, 25);
+            tbAsk.Size = new Size(88, 27);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
             tbAsk.Click += tbAsk_Click;
@@ -273,7 +255,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(200, 142);
+            label7.Location = new Point(262, 142);
             label7.Name = "label7";
             label7.Size = new Size(26, 15);
             label7.TabIndex = 21;
@@ -290,6 +272,7 @@
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
+            tbLast.TextChanged += UpdateRiskQty;
             // 
             // label8
             // 
@@ -357,7 +340,7 @@
             // 
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listViewTns.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            listViewTns.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.Location = new Point(397, 5);
             listViewTns.Name = "listViewTns";
@@ -397,7 +380,8 @@
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
             tbStopLoss.TabIndex = 34;
-            tbStopLoss.Text = "0.00";
+            tbStopLoss.Text = "1.00";
+            tbStopLoss.TextChanged += UpdateRiskQty;
             // 
             // btnCancelLast
             // 
@@ -456,12 +440,13 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
-            chkBracket.Location = new Point(152, 247);
+            chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            chkBracket.Location = new Point(151, 249);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
-            chkBracket.Size = new Size(139, 19);
+            chkBracket.Size = new Size(138, 19);
             chkBracket.TabIndex = 40;
-            chkBracket.Text = "Use $ Risk +Stop Loss";
+            chkBracket.Text = "Use $ Risk+Stop Loss";
             chkBracket.UseVisualStyleBackColor = true;
             chkBracket.CheckedChanged += chkBracket_CheckedChanged;
             // 
@@ -495,12 +480,46 @@
             btnHelp.UseVisualStyleBackColor = true;
             btnHelp.Click += btnHelp_Click;
             // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(200, 43);
+            label9.Name = "label9";
+            label9.Size = new Size(37, 15);
+            label9.TabIndex = 44;
+            label9.Text = "$ Risk";
+            // 
+            // numRisk
+            // 
+            numRisk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            numRisk.Location = new Point(200, 61);
+            numRisk.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
+            numRisk.Name = "numRisk";
+            numRisk.ReadOnly = true;
+            numRisk.Size = new Size(88, 25);
+            numRisk.TabIndex = 45;
+            numRisk.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            numRisk.ValueChanged += UpdateRiskQty;
+            // 
+            // labelSpread
+            // 
+            labelSpread.AutoSize = true;
+            labelSpread.Location = new Point(186, 142);
+            labelSpread.Name = "labelSpread";
+            labelSpread.Size = new Size(22, 15);
+            labelSpread.TabIndex = 46;
+            labelSpread.Text = "0.0";
+            labelSpread.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(644, 459);
+            Controls.Add(labelSpread);
+            Controls.Add(numRisk);
+            Controls.Add(label9);
             Controls.Add(btnHelp);
             Controls.Add(label5);
             Controls.Add(cbTakeProfit);
@@ -525,8 +544,6 @@
             Controls.Add(tbBid);
             Controls.Add(label6);
             Controls.Add(cbTif);
-            Controls.Add(PrimaryExchange);
-            Controls.Add(tbPrimaryEx);
             Controls.Add(label4);
             Controls.Add(cbOrderType);
             Controls.Add(label3);
@@ -546,6 +563,7 @@
             ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numRisk).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -563,8 +581,6 @@
         private Label label3;
         private ComboBox cbOrderType;
         private Label label4;
-        private TextBox tbPrimaryEx;
-        private Label PrimaryExchange;
         private ComboBox cbTif;
         private Label label6;
         private TextBox tbBid;
@@ -595,5 +611,8 @@
         private ListBox lbHelp;
         private RichTextBox richTextBox1;
         private Button btnHelp;
+        private Label label9;
+        private NumericUpDown numRisk;
+        private Label labelSpread;
     }
 }

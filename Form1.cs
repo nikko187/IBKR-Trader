@@ -17,7 +17,6 @@ using System.Windows.Forms.VisualStyles;
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
  * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
- * FIX - Primary Ex field - right now it is useless and always says ISLAND
  * */
 
 namespace IBKR_Trader
@@ -29,7 +28,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 6;
+        int timer1_counter = 5;
         int myContractId;
 
 
@@ -50,6 +49,7 @@ namespace IBKR_Trader
 
         // Create ibClient object to represent the connection
         IBKR_Trader.EWrapperImpl ibClient;
+
         public Form1()
         {
             InitializeComponent();
@@ -81,40 +81,48 @@ namespace IBKR_Trader
 
             else
             {
-                // Parameters to connect to TWS are:
-                // host       - IP address or host name of the host running TWS
-                // port       - listening port 7496 or 7497
-                // clientId   - client application identifier can be any number
-                int port = (int)numPort.Value;
-                ibClient.ClientSocket.eConnect("", port, 0);
-
-                var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
-                reader.Start();
-
-                new Thread(() =>
+                try
                 {
-                    while (ibClient.ClientSocket.IsConnected())
+                    // Parameters to connect to TWS are:
+                    // host       - IP address or host name of the host running TWS
+                    // port       - listening port 7496 or 7497
+                    // clientId   - client application identifier can be any number
+                    int port = (int)numPort.Value;
+                    ibClient.ClientSocket.eConnect("", port, 0);
+
+                    var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
+                    reader.Start();
+
+                    new Thread(() =>
                     {
-                        ibClient.Signal.waitForSignal();
-                        reader.processMsgs();
-                    }
-                })
-                { IsBackground = true }.Start();
+                        while (ibClient.ClientSocket.IsConnected())
+                        {
+                            ibClient.Signal.waitForSignal();
+                            reader.processMsgs();
+                        }
+                    })
+                    { IsBackground = true }.Start();
 
-                // Wait until the connection is completed
-                while (ibClient.NextOrderId <= 0) { }
+                    // Wait until the connection is completed
+                    while (ibClient.NextOrderId <= 0) { }
 
-                // Set up the form object in the ewrapper
-                ibClient.myform = (Form1)Application.OpenForms[0];
+                    // Set up the form object in the ewrapper
+                    ibClient.myform = (Form1)Application.OpenForms[0];
 
+                    // Update order ID value
+                    order_id = ibClient.NextOrderId;
 
-                // Update order ID value
-                order_id = ibClient.NextOrderId;
+                    // Subscribe to Group 4 within TWS
+                    ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
 
-                // Subscribe to Group 4 within TWS
-                ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
+                    getData();
 
-                getData();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Failure to connect.\r\nPlease make sure API is active in TWS, read-only is disabled, and the Port number is correct.");
+                }
+
             }
 
         }
@@ -183,7 +191,10 @@ namespace IBKR_Trader
                         this.tbBid.Text = tickerPrice[2];
 
                     }
+                    double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
+                    labelSpread.Text = spread.ToString();
                 }
+
             }
         }
         private void getData()
@@ -193,7 +204,7 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connected!";
                 btnConnect.BackColor = Color.LightGreen;
             }
-            else
+            else if (ibClient.ClientSocket.IsConnected() == false)
             {
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
@@ -203,7 +214,7 @@ namespace IBKR_Trader
             listViewTns.Items.Clear();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+            ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -241,7 +252,7 @@ namespace IBKR_Trader
 
         public void AddListViewItemTickString(string _tickString)
         {
-            if (this.listViewTns.InvokeRequired)
+            if (listViewTns.InvokeRequired)
             {
                 try
                 {
@@ -268,6 +279,8 @@ namespace IBKR_Trader
                     // example 701.28;1;1348075471534;67854;701.46918464;true
                     // extract each value from string and store it in a string list
                     string[] listTimeSales = _tickString.Split(';');
+
+                    // Console.WriteLine(listTimeSales);
 
                     // get the first value form the list convert it to a double this value is the last price
                     double last_price = Convert.ToDouble(listTimeSales[0]);
@@ -301,7 +314,7 @@ namespace IBKR_Trader
                     if (last_price == theAsk)
                     {
                         lx.ForeColor = Color.Green; // listview foreground color
-                        lx.Text = (listTimeSales[0]); // last price
+                        lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
                         listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
@@ -310,7 +323,7 @@ namespace IBKR_Trader
                     else if (last_price == theBid)
                     {
                         lx.ForeColor = Color.Red;
-                        lx.Text = (listTimeSales[0]);
+                        lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -322,7 +335,7 @@ namespace IBKR_Trader
                     else if (last_price > myMean && last_price < theAsk)
                     {
                         lx.ForeColor = Color.Lime;
-                        lx.Text = (listTimeSales[0]);
+                        lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -332,7 +345,7 @@ namespace IBKR_Trader
                     else
                     {
                         lx.ForeColor = Color.DarkRed;
-                        lx.Text = (listTimeSales[0]);
+                        lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -371,7 +384,7 @@ namespace IBKR_Trader
         {
             string side = "Sell";
 
-            if (cbOrderType.Text == "SNAP MKT")
+            if (cbOrderType.Text is "SNAP MKT" or "MKT")
                 numPrice.Value = Convert.ToDecimal(tbBid.Text);
             else if (cbOrderType.Text == "SNAP MID")
                 numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
@@ -392,7 +405,7 @@ namespace IBKR_Trader
         {
             string side = "Buy";
 
-            if (cbOrderType.Text == "SNAP MKT")
+            if (cbOrderType.Text is "SNAP MKT" or "MKT")
                 numPrice.Value = Convert.ToDecimal(tbAsk.Text);
             else if (cbOrderType.Text == "SNAP MID")
                 numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
@@ -427,22 +440,22 @@ namespace IBKR_Trader
             contract.Currency = "USD";
 
             // orderid, action, qty, entryprice, targetprice, stoploss
-
             string order_type = cbOrderType.Text;   // sets LMT or STP from box
             string action = side;   // sets BUY or SELL from button click
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
+
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
-            double quantity = Math.Floor((Convert.ToDouble(numQuantity.Value)) / Math.Abs(lmtPrice - stopLoss));
+            double quantity = Math.Floor((Convert.ToDouble(numRisk.Value)) / Math.Abs(lmtPrice - stopLoss));
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
             foreach (Order o in bracket)    // loops through each order in the list
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
 
-            string printBox = action + quantity + contract.Symbol + "at" + order_type + lmtPrice;
-            lbData.Items.Add(printBox);
+            string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " and Stop " + stopLoss;
+            lbData.Items.Insert(0, printBox);
 
             // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
             order_id += 2;
@@ -544,7 +557,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.placeOrder(order_id, contract, order);
 
             string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " " + order.LmtPrice;
-            lbData.Items.Add(printBox);
+            lbData.Items.Insert(0, printBox);
 
             // increase the order id value
             order_id++;
@@ -626,27 +639,31 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqGlobalCancel();
         }
 
-        /********** // THE PURPOSE OF THIS WAS TO KEEP THE RISK QTY IN ANOTHER FIELD UPDATED WITH CHANGES TO IT'S VARIABLES //
+        // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
         private void UpdateRiskQty(object sender, EventArgs e)
         {
-            numAuto.Value = Math.Floor((decimal)(Convert.ToDouble(numQuantity.Value) / (Convert.ToDouble(numPrice.Value) - Convert.ToDouble(tbStopLoss.Text))));
-
+            if (chkBracket.Checked)
+            {
+                if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
+                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                else
+                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
+            }
         }
 
-        **********/
         private void chkBracket_CheckedChanged(object sender, EventArgs e)
         {
             if (chkBracket.Checked)
             {
                 tbStopLoss.ReadOnly = false;
-                label2.Text = "$ Risk";
-                // numAuto.ReadOnly = true;
+                numQuantity.ReadOnly = true;
+                numRisk.ReadOnly = false;
             }
             else
             {
                 tbStopLoss.ReadOnly = true;
-                label2.Text = "Quantity";
-                // numAuto.ReadOnly = false;
+                numQuantity.ReadOnly = false;
+                numRisk.ReadOnly = true;
             }
         }
 
@@ -662,7 +679,7 @@ namespace IBKR_Trader
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Welcome to IBKR Trader, powered by Interactive Brokers.\r\nPlease select the Port # first, by checking what you have setup in TWS API settings.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the\r\ncurrent BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell.\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" please note the Qty field will change to $ Risk, input the $ amount you wish to risk in that trade, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell.\r\nNOTE: If you then wish to trim, uncheck \"use $ risk\" to disable Bracket and trim Shares\r\nas normal.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4 ");
+            MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API or IB Gateway and an IBKR Pro account.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
         }
     }
 }
