@@ -214,7 +214,7 @@ namespace IBKR_Trader
             listViewTns.Items.Clear();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -223,12 +223,12 @@ namespace IBKR_Trader
 
             // Set the underlying stock symbol fromthe cbSymbol combobox            
             contract.Symbol = cbSymbol.Text;
-            // Set the Security type to STK for a Stock
+            // Set the Security type to STK for a Stock, FUT for Futures
             contract.SecType = "STK";
-            // Use "SMART" as the general exchange
+            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND
+            // Use either NYSE or ISLAND. For futures use "GLOBEX"
             contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
@@ -237,34 +237,32 @@ namespace IBKR_Trader
             // the line below to request delayed data
             ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
 
-            // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
-
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
-            ibClient.ClientSocket.reqContractDetails(88, contract);
+            ibClient.ClientSocket.reqContractDetails(1, contract);
 
             timer1.Start();
         }
 
         delegate void SetTextCallbackTickString(string _tickString);
-
+        // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
         {
-            if (listViewTns.InvokeRequired)
-            {
-                try
+            /*    if (listViewTns.InvokeRequired)
                 {
-                    SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
-                    this.Invoke(d, new object[] { _tickString });
-                }
-                catch (Exception)
-                {
+                    try
+                    {
+                        SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
+                        this.Invoke(d, new object[] { _tickString });
+                    }
+                    catch (Exception)
+                    {
 
+                    }
                 }
-            }
-            else
+                else*/
             {
                 try
                 {
@@ -681,5 +679,87 @@ namespace IBKR_Trader
         {
             MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API or IB Gateway and an IBKR Pro account.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
         }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // If you click in column 10, the X
+            if (e.ColumnIndex == 10)
+            {
+                if (e.RowIndex == -1) return;
+                if (e.RowIndex >= 0)
+                {
+                    // represents the selected row
+                    DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+                    if (row.Cells[1].Value != null)
+                    {
+                        // gets order id from data grid in second column and conerts to an integer, cancels the order
+                        ibClient.ClientSocket.cancelOrder(Convert.ToInt32(row.Cells["colid"].Value), "");
+
+                        // removes the row from the grid after a second click on it.
+                        dataGridView1.Rows.RemoveAt(e.RowIndex);
+                    }
+                    else
+                    {
+                        // show a message box if no value is in the order id cell
+                        MessageBox.Show("No ID Number in ID Cell ");
+                    }
+                }
+            }
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == 10)
+            {
+                // adds an X to colume 10 which is colCancel column
+                e.Value = "X";
+            }
+            try
+            {
+                if (dataGridView1.Rows[e.RowIndex].Cells[6].Value != null && !string.IsNullOrWhiteSpace(dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString())) 
+                {
+                    // creates a fill status variable and gets value of column 9
+                    string fillstatus = dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString().Trim();
+
+                    // checks if cell valye is SELL and changes color to Red and Bold
+                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Sell")
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = Color.Red;
+                    dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+
+                    // checks if cell value is BUY and changes color to green and bold
+                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Buy")
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = System.Drawing.Color.Green;
+                    dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+
+                    // checks if value in cell column 8 if Filled and if it is changes fore color to Green
+                    if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Filled")
+                        dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
+
+                    //check if value in cell 8 is canceled and if so changes fore color text to green
+                    if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Canceled") {
+                        if (fillstatus == "0.00")
+                        {
+                            dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
+                        }
+                    }
+                    // checks for partial fill in column 8 status column and changes text to yellow
+                    if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Submitted")
+                    {
+                        if (dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString).Trim() != "0.00") {
+                            dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Yellow };
+                        }
+                    }
+
+                }
+                else
+                {
+                    dataGridView1.Rows[e.RowIndex].Cells[6].Style = dataGridView1.DefaultCellStyle;
+                }
+            }
+            catch (Exception) { }
+        }
+
+        delegate void SetTextCallbackOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice)
     }
 }

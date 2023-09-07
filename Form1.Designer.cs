@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             cbSymbol = new ComboBox();
@@ -72,10 +75,23 @@
             label9 = new Label();
             numRisk = new NumericUpDown();
             labelSpread = new Label();
+            dataGridView1 = new DataGridView();
+            colTime = new DataGridViewTextBoxColumn();
+            colid = new DataGridViewTextBoxColumn();
+            colSymbol = new DataGridViewTextBoxColumn();
+            colPrice = new DataGridViewTextBoxColumn();
+            colTrigger = new DataGridViewTextBoxColumn();
+            colShares = new DataGridViewTextBoxColumn();
+            colSide = new DataGridViewTextBoxColumn();
+            colType = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
+            colFill = new DataGridViewTextBoxColumn();
+            colCancel = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numRisk).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -108,7 +124,7 @@
             lbData.ItemHeight = 15;
             lbData.Location = new Point(12, 311);
             lbData.Name = "lbData";
-            lbData.Size = new Size(370, 139);
+            lbData.Size = new Size(370, 109);
             lbData.TabIndex = 2;
             // 
             // label1
@@ -342,9 +358,9 @@
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
-            listViewTns.Location = new Point(397, 5);
+            listViewTns.Location = new Point(388, 5);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(238, 445);
+            listViewTns.Size = new Size(238, 415);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -511,12 +527,98 @@
             labelSpread.Text = "0.0";
             labelSpread.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // dataGridView1
+            // 
+            dataGridViewCellStyle1.BackColor = Color.Black;
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.BackgroundColor = SystemColors.AppWorkspace;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colTime, colid, colSymbol, colPrice, colTrigger, colShares, colSide, colType, colStatus, colFill, colCancel });
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.Black;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridView1.Location = new Point(12, 426);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(614, 125);
+            dataGridView1.TabIndex = 47;
+            dataGridView1.CellClick += dataGridView1_CellClick;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting;
+            // 
+            // colTime
+            // 
+            colTime.HeaderText = "Time";
+            colTime.Name = "colTime";
+            // 
+            // colid
+            // 
+            colid.HeaderText = "ID";
+            colid.Name = "colid";
+            // 
+            // colSymbol
+            // 
+            colSymbol.HeaderText = "Symbol";
+            colSymbol.Name = "colSymbol";
+            // 
+            // colPrice
+            // 
+            colPrice.HeaderText = "Price";
+            colPrice.Name = "colPrice";
+            // 
+            // colTrigger
+            // 
+            colTrigger.HeaderText = "AuxPrice";
+            colTrigger.Name = "colTrigger";
+            // 
+            // colShares
+            // 
+            colShares.HeaderText = "Shares";
+            colShares.Name = "colShares";
+            // 
+            // colSide
+            // 
+            colSide.HeaderText = "Side";
+            colSide.Name = "colSide";
+            // 
+            // colType
+            // 
+            colType.HeaderText = "Type";
+            colType.Name = "colType";
+            // 
+            // colStatus
+            // 
+            colStatus.HeaderText = "Status";
+            colStatus.Name = "colStatus";
+            // 
+            // colFill
+            // 
+            colFill.HeaderText = "Fill";
+            colFill.Name = "colFill";
+            // 
+            // colCancel
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 192, 192);
+            colCancel.DefaultCellStyle = dataGridViewCellStyle2;
+            colCancel.HeaderText = "X";
+            colCancel.Name = "colCancel";
+            colCancel.Width = 20;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(644, 459);
+            ClientSize = new Size(628, 554);
+            Controls.Add(dataGridView1);
+            Controls.Add(listViewTns);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
             Controls.Add(label9);
@@ -531,7 +633,6 @@
             Controls.Add(btnCancelLast);
             Controls.Add(tbStopLoss);
             Controls.Add(tbTakeProfit);
-            Controls.Add(listViewTns);
             Controls.Add(chkOutside);
             Controls.Add(btnBuy);
             Controls.Add(btnSell);
@@ -564,6 +665,7 @@
             ((System.ComponentModel.ISupportInitialize)numPrice).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             ((System.ComponentModel.ISupportInitialize)numRisk).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -614,5 +716,17 @@
         private Label label9;
         private NumericUpDown numRisk;
         private Label labelSpread;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colTime;
+        private DataGridViewTextBoxColumn colid;
+        private DataGridViewTextBoxColumn colSymbol;
+        private DataGridViewTextBoxColumn colPrice;
+        private DataGridViewTextBoxColumn colTrigger;
+        private DataGridViewTextBoxColumn colShares;
+        private DataGridViewTextBoxColumn colSide;
+        private DataGridViewTextBoxColumn colType;
+        private DataGridViewTextBoxColumn colStatus;
+        private DataGridViewTextBoxColumn colFill;
+        private DataGridViewTextBoxColumn colCancel;
     }
 }

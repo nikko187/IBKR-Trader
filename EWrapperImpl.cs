@@ -234,6 +234,12 @@ namespace IBKR_Trader
             Console.WriteLine("OrderStatus. Id: " + orderId + ", Status: " + status + ", Filled: " + Util.DecimalMaxString(filled) + ", Remaining: " + Util.DecimalMaxString(remaining)
                 + ", AvgFillPrice: " + Util.DoubleMaxString(avgFillPrice) + ", PermId: " + Util.IntMaxString(permId) + ", ParentId: " + Util.IntMaxString(parentId) + 
                 ", LastFillPrice: " + Util.DoubleMaxString(lastFillPrice) + ", ClientId: " + Util.IntMaxString(clientId) + ", WhyHeld: " + whyHeld + ", MktCapPrice: " + Util.DoubleMaxString(mktCapPrice));
+
+            try
+            {
+                myform.AddDataGridViewItemOrderStatus(orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice);
+            }
+            catch (Exception) { }
         }
         //! [orderstatus]
 
@@ -248,6 +254,14 @@ namespace IBKR_Trader
                 ", CompeteAgainstBestOffset: " + (order.CompeteAgainstBestOffset == Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID ? "UpToMid" : Util.DoubleMaxString(order.CompeteAgainstBestOffset)) +
                 ", MidOffsetAtWhole: " + Util.DoubleMaxString(order.MidOffsetAtWhole) + ", MidOffsetAtHalf: " + Util.DoubleMaxString(order.MidOffsetAtHalf) +
                 ", FAGroup: " + order.FaGroup + ", FAMethod: " + order.FaMethod);
+
+            string open_order = (order.PermId + "," + order.ClientId + "," + orderId + "," + order.Account + "," + contract.Symbol + "," + contract.SecType + "," + contract.Exchange + "," + order.Action + "," + order.OrderType + "," + order.TotalQuantity + "," + order.CashQty + "," + order.LmtPrice + "," + order.AuxPrice + "," + orderState.Status);
+
+            try
+            {
+                myform.AddListBoxItemOpenOrder(open_order);
+            }
+            catch (Exception) { }
         }
         //! [openorder]
 
