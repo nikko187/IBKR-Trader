@@ -280,7 +280,7 @@ namespace IBKR_Trader
                 {
 
                 }
-            } 
+            }
             else
             {
                 try
