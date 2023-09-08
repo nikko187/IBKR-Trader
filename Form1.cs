@@ -649,10 +649,18 @@ namespace IBKR_Trader
             {
                 if (chkBracket.Checked)
                 {
-                    if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                    if (cbOrderType.Text is "LMT" or "STP")
+                    {
+                        try
+                        {
+                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                        }
+                        catch (Exception) { }
+                    }
                     else
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
+                    {
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                    }
                 }
             }
         }
@@ -673,6 +681,7 @@ namespace IBKR_Trader
             }
         }
 
+        /****************** DISABLED. NOT IN USE RIGHT NOW
         private void OrderType_Changed(object sender, EventArgs e)
         {
             if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
@@ -682,7 +691,7 @@ namespace IBKR_Trader
             else
                 numPrice.ReadOnly = false;
         }
-
+        *********************/
         private void btnHelp_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API or IB Gateway and an IBKR Pro account.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
