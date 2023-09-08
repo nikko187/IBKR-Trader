@@ -13,6 +13,7 @@ using IBApi;
 using System.Drawing.Text;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
+using System.Diagnostics.Contracts;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -279,7 +280,7 @@ namespace IBKR_Trader
                 {
 
                 }
-            }
+            } 
             else
             {
                 try
@@ -646,15 +647,27 @@ namespace IBKR_Trader
         private void btnCancelLast_Click(object sender, EventArgs e)
         {
             if (BracketOrderExecuted)
+            {
                 ibClient.ClientSocket.cancelOrder(order_id - 3, "");
+
+                string printBox = "Cancelled bracket order";
+                lbData.Items.Insert(0, printBox);
+            }
             else
+            {
                 ibClient.ClientSocket.cancelOrder(order_id - 1, "");
+                string printBox = "Cancelled order";
+                lbData.Items.Insert(0, printBox);
+            }
             BracketOrderExecuted = false;
+
         }
 
         private void btnCancelAll_Click(object sender, EventArgs e)
         {
             ibClient.ClientSocket.reqGlobalCancel();
+            string printBox = "All open orders cancelled";
+            lbData.Items.Insert(0, printBox);
         }
 
         // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
