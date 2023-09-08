@@ -184,7 +184,7 @@
             cbOrderType.Size = new Size(88, 25);
             cbOrderType.TabIndex = 10;
             cbOrderType.Text = "LMT";
-            cbOrderType.TextChanged += OrderType_Changed;
+            cbOrderType.TextChanged += UpdateRiskQty;
             // 
             // label4
             // 
@@ -272,7 +272,6 @@
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
-            tbLast.TextChanged += UpdateRiskQty;
             // 
             // label8
             // 
