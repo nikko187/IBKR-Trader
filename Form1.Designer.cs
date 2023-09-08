@@ -200,7 +200,7 @@
             cbOrderType.Size = new Size(88, 25);
             cbOrderType.TabIndex = 10;
             cbOrderType.Text = "LMT";
-            cbOrderType.TextChanged += OrderType_Changed;
+            cbOrderType.TextChanged += UpdateRiskQty;
             // 
             // label4
             // 
@@ -711,7 +711,6 @@
         private CheckBox cbTakeProfit;
         private Label label5;
         private ListBox lbHelp;
-        private RichTextBox richTextBox1;
         private Button btnHelp;
         private Label label9;
         private NumericUpDown numRisk;

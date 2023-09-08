@@ -1,17 +1,17 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Threading;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
+using System.IO;
 using System.Linq;
-using System.ComponentModel;
-using IBApi;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Globalization;
+using System.Threading;
 using System.Drawing.Text;
-using System.Windows.Forms.VisualStyles;
+using IBApi;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -48,14 +48,14 @@ namespace IBKR_Trader
         }
 
         // Create ibClient object to represent the connection
-        IBKR_Trader.EWrapperImpl ibClient;
+        EWrapperImpl ibClient;
 
         public Form1()
         {
             InitializeComponent();
 
             // Instantiate the ibClient
-            ibClient = new IBKR_Trader.EWrapperImpl();
+            ibClient = new EWrapperImpl();
 
         }
 
@@ -64,6 +64,33 @@ namespace IBKR_Trader
         {
             // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
+
+            
+            // dataGridView3 Properties
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.ShowCellToolTips = false;
+            dataGridView1.BackgroundColor = SystemColors.AppWorkspace;
+            dataGridView1.DefaultCellStyle.BackColor = Color.Black;
+            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
+
+            // Columns
+            dataGridView1.Columns[0].Width = 60;
+            dataGridView1.Columns[1].Width = 60;
+            dataGridView1.Columns[2].Width = 60;
+            dataGridView1.Columns[3].Width = 60;
+            dataGridView1.Columns[4].Width = 60;
+            dataGridView1.Columns[5].Width = 60;
+            dataGridView1.Columns[6].Width = 60;
+            dataGridView1.Columns[7].Width = 60;
+            dataGridView1.Columns[8].Width = 60;
+            dataGridView1.Columns[9].Width = 60;
+            dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
+            dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
+            dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
+            dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
 
         }
 
@@ -214,7 +241,7 @@ namespace IBKR_Trader
             listViewTns.Items.Clear();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+            ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -241,7 +268,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
-            ibClient.ClientSocket.reqContractDetails(1, contract);
+            ibClient.ClientSocket.reqContractDetails(88, contract);
 
             timer1.Start();
         }
@@ -653,7 +680,7 @@ namespace IBKR_Trader
                     {
                         try
                         {
-                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / numPrice.Value - Convert.ToDecimal(tbStopLoss.Text)));
                         }
                         catch (Exception) { }
                     }
@@ -734,10 +761,11 @@ namespace IBKR_Trader
             }
             try
             {
-                if (dataGridView1.Rows[e.RowIndex].Cells[6].Value != null && !string.IsNullOrWhiteSpace(dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString())) 
+                if (dataGridView1.Rows[e.RowIndex].Cells[6].Value != null && !string.IsNullOrWhiteSpace(dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString()) && dataGridView1.Rows[e.RowIndex].Cells[9].Value != null) 
                 {
                     // creates a fill status variable and gets value of column 9
                     string fillstatus = dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString().Trim();
+
 
                     // checks if cell valye is SELL and changes color to Red and Bold
                     if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Sell")
@@ -763,7 +791,8 @@ namespace IBKR_Trader
                     // checks for partial fill in column 8 status column and changes text to yellow
                     if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Submitted")
                     {
-                        if (dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString).Trim() != "0.00") {
+                        if (dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString().Trim() != "0.00")
+                        {
                             dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Yellow };
                         }
                     }
@@ -777,6 +806,194 @@ namespace IBKR_Trader
             catch (Exception) { }
         }
 
-        delegate void SetTextCallbackOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice)
+        delegate void SetTextCallbackOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice);
+
+        public void AddDataGridViewItemOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
+        {
+            // see if a new invocation is required from a diff thread
+            if (dataGridView1.InvokeRequired)
+            {
+                SetTextCallbackOrderStatus d = new SetTextCallbackOrderStatus(AddDataGridViewItemOrderStatus);
+                this.Invoke(d, new object[] { orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice });
+            }
+            else
+            {
+                string myStatus = status;
+                if (myStatus == "Cancelled")
+                {
+                    myStatus = "Canceled";
+                }
+
+                // order status
+                // 0 orderid + 1 status + 2 filled 3 reamining: 4 remaining 5 avgfillprice 6 permid 7 parentid 8 lastfillprice 9 clientid 10 whyheld 11 mktcapprice
+
+                string searchValue = Convert.ToString(orderId);     // 0 represents order id
+                int countRow = 0;
+                Boolean wasFound = false;
+
+                try
+                {
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[1].Value != null && !string.IsNullOrWhiteSpace(row.Cells[1].Value.ToString()))
+                        {
+                            if (row.Cells[1].Value.ToString().Equals(searchValue))      // order id searchvalue
+                            {
+                                // modify value in the first cell of second row
+                                dataGridView1.Rows[countRow].Cells[1].Value = orderId;          // order number
+                                dataGridView1.Rows[countRow].Cells[5].Value = filled + "/" + remaining;     // filled vs remaining
+                                dataGridView1.Rows[countRow].Cells[8].Value = myStatus;         // Status of order
+                                dataGridView1.Rows[countRow].Cells[9].Value = lastFillPrice.ToString("N2");     // e.lastFillPrice
+                                dataGridView1.Rows[countRow].Cells[10].Value = "X";     // cancel
+
+                                wasFound = true;
+                                break;
+                            }
+                            countRow++;
+                        }
+                        
+                    }
+                }
+                catch (Exception) { }
+
+                if (wasFound)
+                {
+                    int rowCount = 0;
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[1].Value.ToString().Equals(searchValue))
+                        {
+                            dataGridView1.Rows[countRow].Cells[5].Value = filled + "/" + remaining;
+                            dataGridView1.Rows[countRow].Cells[8].Value = myStatus;
+                            dataGridView1.Rows[countRow].Cells[9].Value = lastFillPrice.ToString("N2");
+                            dataGridView1.Rows[countRow].Cells[10].Value = "X";
+
+                            break;
+                        }
+                        rowCount++;
+                    }
+                }
+                else if (!wasFound)     // was not found in data grid view
+                {
+                    int n = dataGridView1.Rows.Add();
+                    {
+                        dataGridView1.Rows[n].Cells[1].Value = orderId;
+                        dataGridView1.Rows[n].Cells[2].Value = cbSymbol.Text;
+                        dataGridView1.Rows[n].Cells[3].Value = numPrice.Text;
+                        dataGridView1.Rows[n].Cells[5].Value = filled + "/" + remaining;
+                        dataGridView1.Rows[n].Cells[8].Value = myStatus;
+                        dataGridView1.Rows[n].Cells[9].Value = lastFillPrice.ToString("N2");
+                        dataGridView1.Rows[n].Cells[10].Value = "X";
+                    }
+                }
+
+                else
+                {
+                    int n = dataGridView1.Rows.Add();       // not yet added in the data grid view
+                    {
+                        dataGridView1.Rows[n].Cells[1].Value = orderId;
+                        dataGridView1.Rows[n].Cells[5].Value = filled + "/" + remaining;
+                        dataGridView1.Rows[n].Cells[8].Value = myStatus;
+                        dataGridView1.Rows[n].Cells[9].Value = lastFillPrice.ToString("N2");
+                        dataGridView1.Rows[n].Cells[10].Value = "X";
+
+                    }
+                }
+                dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.RowCount - 1;
+            }
+        }
+
+        delegate void SetTextCallbackOpenOrder(string open_order);
+        
+        public void AddListBoxItemOpenOrder(string open_order)
+        {
+            if (lbData.InvokeRequired)
+            {
+                SetTextCallbackOpenOrder d = new SetTextCallbackOpenOrder(AddListBoxItemOpenOrder);
+                this.Invoke(d, new object[] { open_order });
+            }
+            else
+            {
+                lbData.Items.Add(open_order);
+
+                string[] myOpenOrder = new string[] { open_order };
+                myOpenOrder = open_order.Split(',');
+
+                string searchValue = Convert.ToString(myOpenOrder[2]);      // 2 = order id
+                int countRow = 0;
+                Boolean wasFound = false;
+
+                double myLimitPrice = Convert.ToDouble(myOpenOrder[11]);    // 11 = lmtPrice
+                double myAuxPrice = Convert.ToDouble(myOpenOrder[12]);      // 12 = auxPrice
+
+                if (dataGridView1.Rows.Count < 0)
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                try
+                {
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if ((bool)row.Cells[0].Value?.ToString().Equals(searchValue))
+                        {
+                            dataGridView1.Rows[countRow].Cells[1].Value = myOpenOrder[2];   // order number
+                            dataGridView1.Rows[countRow].Cells[2].Value = myOpenOrder[4];   // stock symbol
+                            dataGridView1.Rows[countRow].Cells[3].Value = myLimitPrice.ToString("N2");  // limit price to 2 decimals
+                            dataGridView1.Rows[countRow].Cells[4].Value = myAuxPrice.ToString("N2");  // Aux price to 2 decimals
+                            dataGridView1.Rows[countRow].Cells[6].Value = myOpenOrder[7];   // Action (buy or sell)
+                            dataGridView1.Rows[countRow].Cells[7].Value = myOpenOrder[8];   // order type LMT, MKT....
+                            dataGridView1.Rows[countRow].Cells[10].Value = "X";   // cancel button
+
+                            wasFound = true;
+                            break;
+                        }
+                        countRow++;
+                    }
+                }
+                catch
+                {
+                    if (wasFound)
+                    {
+                        int rowCount = 0;
+                        dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                        foreach (DataGridViewRow row in dataGridView1.Rows)
+                        {
+                            if (row.Cells[1].Value.ToString().Equals(searchValue))
+                            {
+                                // Check video on lots of commented out values for Cells[1,2,3,4,5,6,7]
+                                dataGridView1.Rows[countRow].Cells[10].Value = "X";
+                                break;
+                            }
+                            rowCount++;
+                        }
+                    }
+                    else if (!wasFound)
+                    {
+                        int n = dataGridView1.Rows.Add();
+
+                        dataGridView1.Rows[n].Cells[0].Value = "Time";          // time submitted
+                        dataGridView1.Rows[n].Cells[1].Value = myOpenOrder[2];  // order id number
+                        dataGridView1.Rows[n].Cells[2].Value = myOpenOrder[4];  // stock symbol
+                        dataGridView1.Rows[countRow].Cells[3].Value = myLimitPrice.ToString("N2");  // limit price to 2 decimals
+                        dataGridView1.Rows[countRow].Cells[4].Value = myAuxPrice.ToString("N2");    // aux price to 2 decimals
+
+                        dataGridView1.Rows[n].Cells[6].Value = myOpenOrder[7];      // shares remaining
+                        dataGridView1.Rows[n].Cells[7].Value = myOpenOrder[8];      // order type
+                        dataGridView1.Rows[n].Cells[10].Value = "X";                // cancel order
+                    }
+                    else
+                    {
+                        int n = dataGridView1.Rows.Add();           // not yet added in the data grid view
+
+                        dataGridView1.Rows[n].Cells[1].Value = myOpenOrder[2];      // order id
+                        dataGridView1.Rows[n].Cells[2].Value = myOpenOrder[4];      // stock symbol
+                        dataGridView1.Rows[n].Cells[6].Value = myOpenOrder[7];      // shares remaining
+                        dataGridView1.Rows[n].Cells[7].Value = myOpenOrder[8];      // status of order
+
+                    }
+                }
+            }
+        }
     }
 }

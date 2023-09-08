@@ -18,7 +18,7 @@ namespace IBKR_Trader
         private int nextOrderId;
 
         // assigned as main form once we connect;
-        public Form1 myform;
+        public Form1? myform;
 
         //! [socket_declare]
         EClientSocket clientSocket;
@@ -237,7 +237,7 @@ namespace IBKR_Trader
 
             try
             {
-                myform.AddDataGridViewItemOrderStatus(orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice);
+                myform?.AddDataGridViewItemOrderStatus(orderId, status, (double)filled, (double)remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice);
             }
             catch (Exception) { }
         }
@@ -259,7 +259,7 @@ namespace IBKR_Trader
 
             try
             {
-                myform.AddListBoxItemOpenOrder(open_order);
+                myform?.AddListBoxItemOpenOrder(open_order);
             }
             catch (Exception) { }
         }
