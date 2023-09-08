@@ -88,11 +88,16 @@
             colFill = new DataGridViewTextBoxColumn();
             colCancel = new DataGridViewTextBoxColumn();
             cbAlwaysOnTop = new CheckBox();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numRisk).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
             SuspendLayout();
             // 
             // btnConnect
@@ -125,7 +130,7 @@
             lbData.ItemHeight = 15;
             lbData.Location = new Point(12, 311);
             lbData.Name = "lbData";
-            lbData.Size = new Size(370, 109);
+            lbData.Size = new Size(370, 94);
             lbData.TabIndex = 2;
             // 
             // label1
@@ -282,7 +287,7 @@
             // 
             tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbLast.Location = new Point(200, 210);
+            tbLast.Location = new Point(200, 206);
             tbLast.Name = "tbLast";
             tbLast.ReadOnly = true;
             tbLast.Size = new Size(88, 25);
@@ -295,7 +300,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(200, 192);
+            label8.Location = new Point(200, 188);
             label8.Name = "label8";
             label8.Size = new Size(28, 15);
             label8.TabIndex = 23;
@@ -361,7 +366,7 @@
             listViewTns.ForeColor = Color.White;
             listViewTns.Location = new Point(388, 5);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(238, 415);
+            listViewTns.Size = new Size(238, 400);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -405,7 +410,7 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Popup;
             btnCancelLast.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(12, 210);
+            btnCancelLast.Location = new Point(12, 206);
             btnCancelLast.Name = "btnCancelLast";
             btnCancelLast.Size = new Size(88, 25);
             btnCancelLast.TabIndex = 35;
@@ -418,7 +423,7 @@
             btnCancelAll.BackColor = Color.FromArgb(255, 192, 128);
             btnCancelAll.FlatStyle = FlatStyle.Popup;
             btnCancelAll.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCancelAll.Location = new Point(294, 210);
+            btnCancelAll.Location = new Point(294, 206);
             btnCancelAll.Name = "btnCancelAll";
             btnCancelAll.Size = new Size(88, 25);
             btnCancelAll.TabIndex = 36;
@@ -457,8 +462,9 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
+            chkBracket.CheckAlign = ContentAlignment.MiddleRight;
             chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(151, 249);
+            chkBracket.Location = new Point(150, 249);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(138, 19);
@@ -470,8 +476,9 @@
             // cbTakeProfit
             // 
             cbTakeProfit.AutoSize = true;
+            cbTakeProfit.CheckAlign = ContentAlignment.MiddleRight;
             cbTakeProfit.Enabled = false;
-            cbTakeProfit.Location = new Point(210, 278);
+            cbTakeProfit.Location = new Point(207, 278);
             cbTakeProfit.Name = "cbTakeProfit";
             cbTakeProfit.Size = new Size(81, 19);
             cbTakeProfit.TabIndex = 41;
@@ -544,10 +551,10 @@
             dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridView1.Location = new Point(12, 426);
+            dataGridView1.Location = new Point(3, 3);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(614, 125);
+            dataGridView1.Size = new Size(600, 122);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -623,14 +630,45 @@
             cbAlwaysOnTop.UseVisualStyleBackColor = true;
             cbAlwaysOnTop.CheckedChanged += cbAlwaysOnTop_CheckedChanged;
             // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Location = new Point(12, 411);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(614, 153);
+            tabControl1.TabIndex = 49;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(dataGridView1);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(606, 125);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Orders";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(606, 125);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Positions";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(628, 555);
+            ClientSize = new Size(633, 572);
+            Controls.Add(tabControl1);
             Controls.Add(cbAlwaysOnTop);
-            Controls.Add(dataGridView1);
             Controls.Add(listViewTns);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
@@ -679,6 +717,8 @@
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             ((System.ComponentModel.ISupportInitialize)numRisk).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -741,5 +781,8 @@
         private DataGridViewTextBoxColumn colFill;
         private DataGridViewTextBoxColumn colCancel;
         private CheckBox cbAlwaysOnTop;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
     }
 }
