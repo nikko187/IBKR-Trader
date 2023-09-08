@@ -642,13 +642,17 @@ namespace IBKR_Trader
         // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
         private void UpdateRiskQty(object sender, EventArgs e)
         {
+            if (cbOrderType.Text is "LMT" or "STP")
+                numPrice.ReadOnly = false;
+            else
+                numPrice.ReadOnly = true;
+
             if (chkBracket_CheckedChanged != null)
             {
                 if (chkBracket.Checked)
                 {
                     if (cbOrderType.Text is "LMT" or "STP")
                     {
-                        numPrice.ReadOnly = false;
                         try
                         {
                             numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
@@ -657,7 +661,6 @@ namespace IBKR_Trader
                     }
                     else
                     {
-                        numPrice.ReadOnly = true;
                         numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
                     }
                 }
