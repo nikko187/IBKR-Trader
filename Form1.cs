@@ -717,7 +717,10 @@ namespace IBKR_Trader
 
         private void cbAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (cbAlwaysOnTop.Checked == true)
+                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            else
+                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
     }
 }
