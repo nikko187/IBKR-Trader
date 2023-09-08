@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
  * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
+ * NOTE: CANCEL LAST WILL ONLY CANCEL THE CHILD ORDER AND NOT THE PARENT, WHEN USING BRACKETS
  * */
 
 namespace IBKR_Trader
@@ -185,21 +186,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
                     {
                         // Add the text string to the list box
 
                         this.tbLast.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
                     {
                         // Add the text string to the list box
 
                         this.tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
                     {
                         // Add the text string to the list box
 
@@ -250,7 +251,7 @@ namespace IBKR_Trader
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
+            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
 
             // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
 
@@ -438,6 +439,7 @@ namespace IBKR_Trader
 
         }
 
+        private bool BracketOrderExecuted = false;
 
         public void send_bracket_order(string side)
         {
@@ -472,9 +474,9 @@ namespace IBKR_Trader
             string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " and Stop " + stopLoss;
             lbData.Items.Insert(0, printBox);
 
-            // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
+            // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error.
             order_id += 2;
-
+            BracketOrderExecuted = true;
         }
 
 
@@ -618,9 +620,6 @@ namespace IBKR_Trader
             timer1_counter--;   // subtract 1 every time there is a tick
         }
 
-
-
-
         private void cbSymbol_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -646,7 +645,11 @@ namespace IBKR_Trader
 
         private void btnCancelLast_Click(object sender, EventArgs e)
         {
-            ibClient.ClientSocket.cancelOrder(order_id - 1, "");
+            if (BracketOrderExecuted)
+                ibClient.ClientSocket.cancelOrder(order_id - 3, "");
+            else
+                ibClient.ClientSocket.cancelOrder(order_id - 1, "");
+            BracketOrderExecuted = false;
         }
 
         private void btnCancelAll_Click(object sender, EventArgs e)
