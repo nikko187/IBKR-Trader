@@ -680,7 +680,7 @@ namespace IBKR_Trader
                     {
                         try
                         {
-                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / numPrice.Value - Convert.ToDecimal(tbStopLoss.Text)));
+                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
                         }
                         catch (Exception) { }
                     }
