@@ -87,6 +87,7 @@
             colStatus = new DataGridViewTextBoxColumn();
             colFill = new DataGridViewTextBoxColumn();
             colCancel = new DataGridViewTextBoxColumn();
+            cbAlwaysOnTop = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -611,12 +612,24 @@
             colCancel.Name = "colCancel";
             colCancel.Width = 20;
             // 
+            // cbAlwaysOnTop
+            // 
+            cbAlwaysOnTop.AutoSize = true;
+            cbAlwaysOnTop.Location = new Point(12, 247);
+            cbAlwaysOnTop.Name = "cbAlwaysOnTop";
+            cbAlwaysOnTop.Size = new Size(104, 19);
+            cbAlwaysOnTop.TabIndex = 48;
+            cbAlwaysOnTop.Text = "Always On Top";
+            cbAlwaysOnTop.UseVisualStyleBackColor = true;
+            cbAlwaysOnTop.CheckedChanged += cbAlwaysOnTop_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(628, 554);
+            ClientSize = new Size(628, 555);
+            Controls.Add(cbAlwaysOnTop);
             Controls.Add(dataGridView1);
             Controls.Add(listViewTns);
             Controls.Add(labelSpread);
@@ -727,5 +740,6 @@
         private DataGridViewTextBoxColumn colStatus;
         private DataGridViewTextBoxColumn colFill;
         private DataGridViewTextBoxColumn colCancel;
+        private CheckBox cbAlwaysOnTop;
     }
 }

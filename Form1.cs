@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Threading;
 using System.Drawing.Text;
 using IBApi;
+using System.Runtime.InteropServices;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -23,7 +24,21 @@ namespace IBKR_Trader
 {
     public partial class Form1 : Form
     {
-        // Delegate enables asynchronous calls for settings text property on ListBox
+        // ENABLES ABILITY TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS.
+        // METHOD WAY DOWN BELOW AS: cbAlwaysOnTop_CheckedChanged
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        static readonly IntPtr HWND_TOP = new IntPtr(0);
+        static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+        const UInt32 SWP_NOSIZE = 0x0001;
+        const UInt32 SWP_NOMOVE = 0x0002;
+        const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+
+        // DELEGATE ENABLES ASYNCHRONOUS CALLS FOR SETTING TEXT PROPERTY ON LISTBOX
         delegate void SetTextCallback(string text);
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
@@ -65,7 +80,7 @@ namespace IBKR_Trader
             // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
 
-            
+
             // dataGridView3 Properties
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.ShowCellToolTips = false;
@@ -76,12 +91,12 @@ namespace IBKR_Trader
 
             // Columns
             dataGridView1.Columns[0].Width = 60;
-            dataGridView1.Columns[1].Width = 60;
-            dataGridView1.Columns[2].Width = 60;
+            dataGridView1.Columns[1].Width = 50;
+            dataGridView1.Columns[2].Width = 55;
             dataGridView1.Columns[3].Width = 60;
             dataGridView1.Columns[4].Width = 60;
             dataGridView1.Columns[5].Width = 60;
-            dataGridView1.Columns[6].Width = 60;
+            dataGridView1.Columns[6].Width = 50;
             dataGridView1.Columns[7].Width = 60;
             dataGridView1.Columns[8].Width = 60;
             dataGridView1.Columns[9].Width = 60;
@@ -239,6 +254,7 @@ namespace IBKR_Trader
 
             // clears contents of TnS when changing
             listViewTns.Items.Clear();
+            DateTime now = DateTime.Now;
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
             ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
@@ -761,7 +777,7 @@ namespace IBKR_Trader
             }
             try
             {
-                if (dataGridView1.Rows[e.RowIndex].Cells[6].Value != null && !string.IsNullOrWhiteSpace(dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString()) && dataGridView1.Rows[e.RowIndex].Cells[9].Value != null) 
+                if (dataGridView1.Rows[e.RowIndex].Cells[6].Value != null && !string.IsNullOrWhiteSpace(dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString()) && dataGridView1.Rows[e.RowIndex].Cells[9].Value != null)
                 {
                     // creates a fill status variable and gets value of column 9
                     string fillstatus = dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString().Trim();
@@ -782,7 +798,8 @@ namespace IBKR_Trader
                         dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
 
                     //check if value in cell 8 is canceled and if so changes fore color text to green
-                    if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Canceled") {
+                    if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Canceled")
+                    {
                         if (fillstatus == "0.00")
                         {
                             dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
@@ -851,7 +868,7 @@ namespace IBKR_Trader
                             }
                             countRow++;
                         }
-                        
+
                     }
                 }
                 catch (Exception) { }
@@ -906,7 +923,7 @@ namespace IBKR_Trader
         }
 
         delegate void SetTextCallbackOpenOrder(string open_order);
-        
+
         public void AddListBoxItemOpenOrder(string open_order)
         {
             if (lbData.InvokeRequired)
@@ -994,6 +1011,15 @@ namespace IBKR_Trader
                     }
                 }
             }
+        }
+
+        // USED TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS
+        private void cbAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAlwaysOnTop.Checked == true)
+                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            else
+                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
     }
 }
