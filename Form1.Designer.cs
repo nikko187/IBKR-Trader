@@ -348,7 +348,6 @@
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
-            listViewTns.Visible = false;
             // 
             // columnHeader1
             // 
@@ -528,7 +527,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(393, 428);
+            ClientSize = new Size(642, 428);
             Controls.Add(cbAlwaysOnTop);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);

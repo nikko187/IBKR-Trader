@@ -52,15 +52,15 @@ namespace IBKR_Trader
         public void AddListBoxItem(string text)
         {
             // See if a new invocation is required from a different thread            
-            if (this.lbData.InvokeRequired)
+            if (lbData.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(AddListBoxItem);
-                this.Invoke(d, new object[] { text });
+                Invoke(d, new object[] { text });
             }
             else
             {
                 // Add the text string to the list box
-                this.lbData.Items.Add(text);
+                lbData.Items.Add(text);
             }
         }
 
@@ -148,12 +148,12 @@ namespace IBKR_Trader
 
         public void AddTextBoxItemConId(int contractId)
         {
-            if (this.cbSymbol.InvokeRequired)
+            if (cbSymbol.InvokeRequired)
             {
                 try
                 {
                     SetTextCallbackContractId d = new SetTextCallbackContractId(AddTextBoxItemConId);
-                    this.Invoke(d, new object[] { contractId });
+                    Invoke(d, new object[] { contractId });
                 }
                 catch (Exception e)
                 {
@@ -167,12 +167,12 @@ namespace IBKR_Trader
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
         {
-            if (this.tbLast.InvokeRequired)
+            if (tbLast.InvokeRequired)
             {
                 SetTextCallbackTickPrice d = new SetTextCallbackTickPrice(AddTextBoxItemTickPrice);
                 try
                 {
-                    this.Invoke(d, new object[] { _tickPrice });
+                    Invoke(d, new object[] { _tickPrice });
                 }
                 catch (Exception e)
                 {
@@ -191,21 +191,21 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
 
-                        this.tbLast.Text = tickerPrice[2];
+                        tbLast.Text = tickerPrice[2];
 
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
                     {
                         // Add the text string to the list box
 
-                        this.tbAsk.Text = tickerPrice[2];
+                        tbAsk.Text = tickerPrice[2];
 
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
                     {
                         // Add the text string to the list box
 
-                        this.tbBid.Text = tickerPrice[2];
+                        tbBid.Text = tickerPrice[2];
 
                     }
                     double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
@@ -228,7 +228,7 @@ namespace IBKR_Trader
             }
 
             // clears contents of TnS when changing
-            listViewTns.Items.Clear();
+            // listViewTns.Items.Clear();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
             ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
@@ -274,7 +274,7 @@ namespace IBKR_Trader
                 try
                 {
                     SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
-                    this.Invoke(d, new object[] { _tickString });
+                    Invoke(d, new object[] { _tickString });
                 }
                 catch (Exception)
                 {
@@ -297,7 +297,7 @@ namespace IBKR_Trader
                     // extract each value from string and store it in a string list
                     string[] listTimeSales = _tickString.Split(';');
 
-                    // Console.WriteLine(listTimeSales);
+                    Console.WriteLine(listTimeSales);
 
                     // get the first value form the list convert it to a double this value is the last price
                     double last_price = Convert.ToDouble(listTimeSales[0]);
@@ -331,16 +331,16 @@ namespace IBKR_Trader
                     if (last_price == theAsk)
                     {
                         lx.ForeColor = Color.Green; // listview foreground color
-                        lx.Text = listTimeSales[0]; // last price
+                        lx.Text = (listTimeSales[0]); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
-                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
+                        listViewTns.Items.Insert(0, lx); // insert at top most line 
                     }
                     // if the last price is the same as the bid change the color to red
                     else if (last_price == theBid)
                     {
                         lx.ForeColor = Color.Red;
-                        lx.Text = listTimeSales[0];
+                        lx.Text = (listTimeSales[0]);
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -352,7 +352,7 @@ namespace IBKR_Trader
                     else if (last_price > myMean && last_price < theAsk)
                     {
                         lx.ForeColor = Color.Lime;
-                        lx.Text = listTimeSales[0];
+                        lx.Text = (listTimeSales[0]);
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -362,7 +362,7 @@ namespace IBKR_Trader
                     else
                     {
                         lx.ForeColor = Color.DarkRed;
-                        lx.Text = listTimeSales[0];
+                        lx.Text = (listTimeSales[0]);
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
@@ -610,7 +610,7 @@ namespace IBKR_Trader
 
                     timer1_counter = 6; // reset time counter back to 5
 
-                    // convert contract id from an int to a strong and add exchange
+                    // convert contract id from an int to a string and add exchange
                     string strGroup = myContractId.ToString() + "@SMART";
                     // update the display group which will change the symbol
                     ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
