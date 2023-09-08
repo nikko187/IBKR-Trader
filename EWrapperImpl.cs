@@ -18,7 +18,7 @@ namespace IBKR_Trader
         private int nextOrderId;
 
         // assigned as main form once we connect;
-        public Form1? myform;
+        public Form1 myform;
 
         //! [socket_declare]
         EClientSocket clientSocket;
