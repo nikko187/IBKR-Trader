@@ -72,6 +72,7 @@
             label9 = new Label();
             numRisk = new NumericUpDown();
             labelSpread = new Label();
+            cbAlwaysOnTop = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -510,12 +511,24 @@
             labelSpread.Text = "0.0";
             labelSpread.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // cbAlwaysOnTop
+            // 
+            cbAlwaysOnTop.AutoSize = true;
+            cbAlwaysOnTop.Location = new Point(12, 247);
+            cbAlwaysOnTop.Name = "cbAlwaysOnTop";
+            cbAlwaysOnTop.Size = new Size(104, 19);
+            cbAlwaysOnTop.TabIndex = 47;
+            cbAlwaysOnTop.Text = "Always On Top";
+            cbAlwaysOnTop.UseVisualStyleBackColor = true;
+            cbAlwaysOnTop.CheckedChanged += cbAlwaysOnTop_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(644, 459);
+            Controls.Add(cbAlwaysOnTop);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
             Controls.Add(label9);
@@ -613,5 +626,6 @@
         private Label label9;
         private NumericUpDown numRisk;
         private Label labelSpread;
+        private CheckBox cbAlwaysOnTop;
     }
 }
