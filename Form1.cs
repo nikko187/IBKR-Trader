@@ -19,7 +19,6 @@ using System.Diagnostics.Contracts;
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
  * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
- * NOTE: CANCEL LAST WILL ONLY CANCEL THE CHILD ORDER AND NOT THE PARENT, WHEN USING BRACKETS
  * */
 
 namespace IBKR_Trader
