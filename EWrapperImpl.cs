@@ -211,6 +211,13 @@ namespace IBKR_Trader
                 + ": Position: " + Util.DecimalMaxString(position) + ", MarketPrice: " + Util.DoubleMaxString(marketPrice) + ", MarketValue: " + Util.DoubleMaxString(marketValue) + 
                 ", AverageCost: " + Util.DoubleMaxString(averageCost) + ", UnrealizedPNL: " + Util.DoubleMaxString(unrealizedPNL) + ", RealizedPNL: " + Util.DoubleMaxString(realizedPNL) + 
                 ", AccountName: " + accountName);
+
+            string my_portfolioUpdate = contract.Symbol + ", " + contract.SecType + "," + contract.Exchange + "," + position + "," + marketPrice + "," + marketValue + "," + averageCost + "," + unrealizedPNL + "," + realizedPNL + "," + accountName;
+
+            string symbol = contract.Symbol;
+
+            myform.AddTextBoxItemUpdatePortfolio(symbol, position, marketPrice, averageCost, unrealizedPNL, realizedPNL);
+
         }
         //! [updateportfolio]
 

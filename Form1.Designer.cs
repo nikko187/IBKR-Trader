@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             cbSymbol = new ComboBox();
@@ -91,6 +92,14 @@
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
+            tbTotalPnl = new TextBox();
+            dataGridView4 = new DataGridView();
+            col_Symbol = new DataGridViewTextBoxColumn();
+            col_Position = new DataGridViewTextBoxColumn();
+            col_Price = new DataGridViewTextBoxColumn();
+            col_Openpnl = new DataGridViewTextBoxColumn();
+            col_Closedpnl = new DataGridViewTextBoxColumn();
+            col_Markedpnl = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -98,6 +107,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -553,8 +564,9 @@
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.Location = new Point(3, 3);
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(600, 122);
+            dataGridView1.Size = new Size(600, 146);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -637,7 +649,7 @@
             tabControl1.Location = new Point(12, 411);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(614, 153);
+            tabControl1.Size = new Size(614, 180);
             tabControl1.TabIndex = 49;
             // 
             // tabPage1
@@ -646,27 +658,94 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(606, 125);
+            tabPage1.Size = new Size(606, 152);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Orders";
             tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(tbTotalPnl);
+            tabPage2.Controls.Add(dataGridView4);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(606, 125);
+            tabPage2.Size = new Size(606, 152);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Positions";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tbTotalPnl
+            // 
+            tbTotalPnl.BackColor = Color.Black;
+            tbTotalPnl.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            tbTotalPnl.ForeColor = Color.White;
+            tbTotalPnl.Location = new Point(503, 129);
+            tbTotalPnl.Name = "tbTotalPnl";
+            tbTotalPnl.Size = new Size(100, 23);
+            tbTotalPnl.TabIndex = 1;
+            tbTotalPnl.Text = "0.00";
+            tbTotalPnl.TextAlign = HorizontalAlignment.Right;
+            // 
+            // dataGridView4
+            // 
+            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView4.Columns.AddRange(new DataGridViewColumn[] { col_Symbol, col_Position, col_Price, col_Openpnl, col_Closedpnl, col_Markedpnl });
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.Black;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dataGridView4.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridView4.Location = new Point(3, 3);
+            dataGridView4.Name = "dataGridView4";
+            dataGridView4.RowHeadersVisible = false;
+            dataGridView4.RowTemplate.Height = 25;
+            dataGridView4.ShowCellToolTips = false;
+            dataGridView4.Size = new Size(600, 124);
+            dataGridView4.TabIndex = 0;
+            dataGridView4.CellFormatting += dataGridView4_CellFormatting;
+            // 
+            // col_Symbol
+            // 
+            col_Symbol.HeaderText = "Symbol";
+            col_Symbol.Name = "col_Symbol";
+            col_Symbol.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // col_Position
+            // 
+            col_Position.HeaderText = "Position";
+            col_Position.Name = "col_Position";
+            col_Position.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // col_Price
+            // 
+            col_Price.HeaderText = "Price";
+            col_Price.Name = "col_Price";
+            // 
+            // col_Openpnl
+            // 
+            col_Openpnl.HeaderText = "Open PnL";
+            col_Openpnl.Name = "col_Openpnl";
+            // 
+            // col_Closedpnl
+            // 
+            col_Closedpnl.HeaderText = "Closed PnL";
+            col_Closedpnl.Name = "col_Closedpnl";
+            // 
+            // col_Markedpnl
+            // 
+            col_Markedpnl.HeaderText = "Marked PnL";
+            col_Markedpnl.Name = "col_Markedpnl";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(633, 572);
+            ClientSize = new Size(633, 595);
             Controls.Add(tabControl1);
             Controls.Add(cbAlwaysOnTop);
             Controls.Add(listViewTns);
@@ -719,6 +798,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -784,5 +866,13 @@
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
+        private DataGridView dataGridView4;
+        private TextBox tbTotalPnl;
+        private DataGridViewTextBoxColumn col_Symbol;
+        private DataGridViewTextBoxColumn col_Position;
+        private DataGridViewTextBoxColumn col_Price;
+        private DataGridViewTextBoxColumn col_Openpnl;
+        private DataGridViewTextBoxColumn col_Closedpnl;
+        private DataGridViewTextBoxColumn col_Markedpnl;
     }
 }

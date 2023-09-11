@@ -237,6 +237,115 @@ namespace IBKR_Trader
                     labelSpread.Text = spread.ToString();
                 }
 
+                switch (Convert.ToInt32(tickerPrice[0]))
+                {
+                    case 20:
+                        if (Convert.ToInt32(tickerPrice[1]) == 4)
+                        {
+                            try
+                            {
+                                // Create an object from a class
+                                ClassPositions myList20 = new ClassPositions();
+
+                                double tick_price = Convert.ToDouble(tickerPrice[2]);
+                                // round the tick_price to 2 decimal places
+                                tick_price = Math.Round(tick_price, 2);
+                                // gets the position value from the data grid and converts it to an integer
+                                int my_position = Convert.ToInt32(dataGridView4[1, 0].Value);
+                                // gets the realized value from the data grid and convert it to a double variable
+                                double total_realized = Convert.ToDouble(dataGridView4[4, 0].Value);
+                                // gets the average price from the data grid convert it to a double variable my_average
+                                double my_average = Convert.ToDouble(dataGridView4[2, 0].Value);
+
+                                // call a method within a class
+                                List<string> help = myList20.GetPNLData(tick_price, my_position, total_realized, my_average);
+
+                                // returned help string list values from our class
+                                dataGridView4[3, 0].Value = help[0]; // unrealized
+                                dataGridView4[5, 0].Value = help[1]; // marked
+
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Exception " + e);
+                            }
+                            // calls the method to calculate the position total 
+                            positionTotal();
+                            break;
+                        }
+                        break;
+                    case 21:
+                        if (Convert.ToInt32(tickerPrice[1]) == 4)
+                        {
+                            try
+                            {
+                                // Create an object from a class
+                                ClassPositions myList21 = new ClassPositions();
+
+                                double tick_price = Convert.ToDouble(tickerPrice[2]);
+                                // round the tick_price to 2 decimal places
+                                tick_price = Math.Round(tick_price, 2);
+                                // gets the position value from the data grid and converts it to an integer
+                                int my_position = Convert.ToInt32(dataGridView4[1, 1].Value);
+                                // gets the realized value from the data grid and convert it to a double variable
+                                double total_realized = Convert.ToDouble(dataGridView4[4, 1].Value);
+                                // gets the average price from the data grid convert it to a double variable my_average
+                                double my_average = Convert.ToDouble(dataGridView4[2, 1].Value);
+
+                                // call a method within a class
+                                List<string> help = myList21.GetPNLData(tick_price, my_position, total_realized, my_average);
+
+                                // returned help string list values from our class
+                                dataGridView4[3, 1].Value = help[0]; // unrealized
+                                dataGridView4[5, 1].Value = help[1]; // marked
+
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Exception " + e);
+                            }
+                            // calls the method to calculate the position total 
+                            positionTotal();
+                            break;
+                        }
+                        break;
+                    case 22:
+                        if (Convert.ToInt32(tickerPrice[1]) == 4)
+                        {
+                            try
+                            {
+                                // Create an object from a class
+                                ClassPositions myList22 = new ClassPositions();
+
+                                double tick_price = Convert.ToDouble(tickerPrice[2]);
+                                // round the tick_price to 2 decimal places
+                                tick_price = Math.Round(tick_price, 2);
+                                // gets the position value from the data grid and converts it to an integer
+                                int my_position = Convert.ToInt32(dataGridView4[1, 2].Value);
+                                // gets the realized value from the data grid and convert it to a double variable
+                                double total_realized = Convert.ToDouble(dataGridView4[4, 2].Value);
+                                // gets the average price from the data grid convert it to a double variable my_average
+                                double my_average = Convert.ToDouble(dataGridView4[2, 2].Value);
+
+                                // call a method within a class
+                                List<string> help = myList22.GetPNLData(tick_price, my_position, total_realized, my_average);
+
+                                // returned help string list values from our class
+                                dataGridView4[3, 2].Value = help[0]; // unrealized
+                                dataGridView4[5, 2].Value = help[1]; // marked
+
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Exception " + e);
+                            }
+                            // calls the method to calculate the position total 
+                            positionTotal();
+                            break;
+                        }
+                        break;
+                }
+
             }
         }
         private void getData()
@@ -255,6 +364,11 @@ namespace IBKR_Trader
             // clears contents of TnS when changing
             listViewTns.Items.Clear();
             DateTime now = DateTime.Now;
+
+            // account info and request account updates and current positions.
+            string account_number = "D005";
+            ibClient.ClientSocket.reqAccountUpdates(true, account_number);
+            ibClient.ClientSocket.reqPositions();
 
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
             ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
@@ -285,6 +399,9 @@ namespace IBKR_Trader
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
+
+            // requests all open order in account
+            ibClient.ClientSocket.reqAllOpenOrders();
 
             timer1.Start();
         }
@@ -1020,6 +1137,221 @@ namespace IBKR_Trader
                 SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             else
                 SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+        }
+
+        private void dataGridView4_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView4.Rows[e.RowIndex].Cells[5].Value != null && !string.IsNullOrWhiteSpace(dataGridView4.Rows[e.RowIndex].Cells[5].Value.ToString()))
+            {
+                double markedField = Convert.ToDouble(dataGridView4.Rows[e.RowIndex].Cells[5].Value.ToString().Trim());
+                double closedField = Convert.ToDouble(dataGridView4.Rows[e.RowIndex].Cells[4].Value.ToString().Trim());
+                double openField = Convert.ToDouble(dataGridView4.Rows[e.RowIndex].Cells[3].Value.ToString().Trim());
+                int positionField = int.Parse(dataGridView4.Rows[e.RowIndex].Cells[1].Value.ToString().Trim());
+
+                if (positionField > 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.Green;
+
+                if (positionField < 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.Red;
+
+                if (markedField > 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[5].Style.ForeColor = Color.Lime;
+
+                if (markedField < 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[5].Style.ForeColor = Color.Red;
+
+                if (closedField > 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[4].Style.ForeColor = Color.Lime;
+
+                if (closedField < 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[4].Style.ForeColor = Color.Red;
+
+                if (openField > 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[3].Style.ForeColor = Color.Lime;
+
+                if (openField < 0)
+                    dataGridView4.Rows[e.RowIndex].Cells[3].Style.ForeColor = Color.Red;
+
+                dataGridView4.Columns[3].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+            }
+            else
+            {
+                dataGridView4.Rows[e.RowIndex].Cells[5].Style = dataGridView1.DefaultCellStyle;
+            }
+        }
+
+        delegate void SetTextCallbackUpdatePortfolio(string symbol, decimal position, double marketPrice, double averageCost, double unrealizedPNL, double realizedPNL);
+
+        public void AddTextBoxItemUpdatePortfolio(string symbol, decimal position, double marketPrice, double averageCost, double unrealizedPNL, double realizedPNL)
+        {
+            // See if a new invocation is required form a different thread
+            if (this.dataGridView4.InvokeRequired)
+            {
+                SetTextCallbackUpdatePortfolio d = new SetTextCallbackUpdatePortfolio(AddTextBoxItemUpdatePortfolio);
+                this.Invoke(d, new object[] { symbol, position, marketPrice, averageCost, unrealizedPNL, realizedPNL });
+            }
+            else
+            {
+
+                string searchValue = symbol;
+                int countRow2 = 0;
+                Boolean wasFound2 = false;
+                double myMarkedPNL = unrealizedPNL + realizedPNL;
+                string iMarkedPNL = Convert.ToString(myMarkedPNL);
+
+
+                if (dataGridView4.Rows.Count < 0)
+
+                    // sets the selection mode
+                    dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+
+                try
+                {
+                    // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                    foreach (DataGridViewRow row in dataGridView4.Rows)
+                    {
+
+                        if (row.Cells[0].Value.ToString().Equals(searchValue))
+                        {
+                            wasFound2 = true;
+                            break;
+                        }
+                        countRow2++;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+
+                // if found and there is not position
+                if (wasFound2 && position == 0)
+                {
+                    dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    foreach (DataGridViewRow row in dataGridView4.Rows)
+                    {
+                        //seaches for the security symbol
+
+                        if (row.Cells[0].Value.ToString().Equals(searchValue))
+                        {
+                            // Modify the values in the row based on the current stock symbols values.
+                            dataGridView4.Rows[countRow2].Cells[1].Value = position;  // Postion
+                            dataGridView4.Rows[countRow2].Cells[2].Value = averageCost;    // average cost Price
+                            dataGridView4.Rows[countRow2].Cells[3].Value = unrealizedPNL;    // unrealized
+                            dataGridView4.Rows[countRow2].Cells[4].Value = realizedPNL;   // realized
+                            dataGridView4.Rows[countRow2].Cells[5].Value = iMarkedPNL;   // total pnl
+                            break;
+                        }
+                    }
+                    // Cancel the streaming data here for the found symbol 
+                    ibClient.ClientSocket.cancelMktData(countRow2 + 20);
+                }
+                // if symbol was found
+                else if (wasFound2)
+                {
+
+                    dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    foreach (DataGridViewRow row in dataGridView4.Rows)
+                    {
+                        if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                        {
+                            // Modify the values in the row based on the current stock symbol.
+                            dataGridView4.Rows[countRow2].Cells[1].Value = position;  // Postion
+                            dataGridView4.Rows[countRow2].Cells[2].Value = averageCost;    // average cost Price
+                            dataGridView4.Rows[countRow2].Cells[3].Value = unrealizedPNL;    // unrealized
+                            dataGridView4.Rows[countRow2].Cells[4].Value = realizedPNL;   // realized
+                            dataGridView4.Rows[countRow2].Cells[5].Value = iMarkedPNL;    // total pnl
+
+                            // if position is found call method for live streaming data
+                            int unique_id = Convert.ToInt32(countRow2 + 20);
+                            getPositionData(symbol, unique_id); // calls method symbol and position id
+
+                            break;
+                        }
+
+                    }
+                }
+                // symbol was not found in Data Grid View and position is not equal to zero
+                else if (!wasFound2 && position != 0)
+                {
+                    int n = dataGridView4.Rows.Add();
+                    {
+                        dataGridView4.Rows[n].Cells[0].Value = symbol;
+                        dataGridView4.Rows[n].Cells[1].Value = position;
+                        dataGridView4.Rows[n].Cells[2].Value = averageCost;
+                        dataGridView4.Rows[n].Cells[3].Value = unrealizedPNL;
+                        dataGridView4.Rows[n].Cells[4].Value = realizedPNL;
+                        dataGridView4.Rows[n].Cells[5].Value = iMarkedPNL;
+                    }
+                    // this is where you start the streaming data ***********
+                    int unique_id = Convert.ToInt32(n + 20);
+                    getPositionData(symbol, unique_id); // requests the live streaming data
+                }
+                // of all else fails 
+                else if (myMarkedPNL != 0.00)
+                {
+                    int n = dataGridView4.Rows.Add();  // Not added yet in the Data Grid view
+                    {
+                        dataGridView4.Rows[n].Cells[0].Value = symbol;
+                        dataGridView4.Rows[n].Cells[1].Value = position;
+                        dataGridView4.Rows[n].Cells[2].Value = averageCost;
+                        dataGridView4.Rows[n].Cells[3].Value = unrealizedPNL;
+                        dataGridView4.Rows[n].Cells[4].Value = realizedPNL;
+                        dataGridView4.Rows[n].Cells[5].Value = iMarkedPNL;
+                    }
+                }
+
+            }
+
+            positionTotal(); // calls the method to calculate the position total
+        }
+
+        public void getPositionData(string symbol, int unique_id)
+        {
+            // Create a new contract to specify the security we are searching for
+            IBApi.Contract contract = new IBApi.Contract();
+            // Create a new TagValueList object (for API version 9.71 and later) 
+            List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
+
+            // Set the underlying stock symbol from the tbSymbol text box
+            contract.Symbol = symbol;
+            // Set the Security type to STK for a Stock FUT = Futures, 
+            contract.SecType = "STK";  // "FUT"
+            // Use "SMART" as the general exchange
+            contract.Exchange = "SMART"; // "GLOBEX"
+            // Set the primary exchange (sometimes called Listing exchange)
+            // Use either NYSE or ISLAND for Futures use GLOBEX
+            contract.PrimaryExch = "ISLAND";
+            // Set the currency to USD
+            contract.Currency = "USD";
+
+
+            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3, live data = 1
+
+            ibClient.ClientSocket.reqMktData(unique_id, contract, "", false, false, mktDataOptions);
+
+        }
+
+        public void positionTotal()
+        {
+            double sumTotal = 0.00;
+
+            for (int i = 0; i < dataGridView4.Rows.Count; ++i)
+            {
+                sumTotal += Convert.ToDouble(dataGridView4.Rows[i].Cells[5].Value);
+            }
+
+            tbTotalPnl.Text = Convert.ToString(sumTotal);
+            if (sumTotal > 0)
+            {
+                tbTotalPnl.ForeColor = Color.LimeGreen;
+            }
+            else if (sumTotal < 0)
+            {
+                tbTotalPnl.ForeColor = Color.Red;
+            }
         }
     }
 }
