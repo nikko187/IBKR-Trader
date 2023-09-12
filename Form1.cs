@@ -14,6 +14,7 @@ using System.Drawing.Text;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
+using static System.Net.Mime.MediaTypeNames;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -123,7 +124,7 @@ namespace IBKR_Trader
                     while (ibClient.NextOrderId <= 0) { }
 
                     // Set up the form object in the ewrapper
-                    ibClient.myform = (Form1)Application.OpenForms[0];
+                    ibClient.myform = (Form1)System.Windows.Forms.Application.OpenForms[0];
 
                     // Update order ID value
                     order_id = ibClient.NextOrderId;
@@ -186,21 +187,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
                     {
                         // Add the text string to the list box
 
                         tbLast.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
                     {
                         // Add the text string to the list box
 
                         tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
                     {
                         // Add the text string to the list box
 
@@ -249,12 +250,11 @@ namespace IBKR_Trader
             // Set the currency to USD
             contract.Currency = "USD";
 
-            // If using delayed market data subscription un-comment 
-            // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
+            
+            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "233, 236", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -283,6 +283,8 @@ namespace IBKR_Trader
             {
                 try
                 {
+                    lbData.Items.Insert(0,_tickString);
+
                     // get the bid price from the textbox Bid
                     double theBid = Convert.ToDouble(tbBid.Text);
                     // gets the ask price from the textbox Ask
@@ -309,7 +311,7 @@ namespace IBKR_Trader
                     int share_size = trade_size * 100;
 
                     // formats a string to commas
-                    string strShareSize = share_size.ToString("###,####,##0");
+                    string strShareSize = share_size.ToString("###,###,##0");
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
@@ -368,7 +370,7 @@ namespace IBKR_Trader
                 }
                 catch
                 {
-
+                    Console.WriteLine("Time and Sales Error");
                 }
             }
         }
@@ -621,6 +623,7 @@ namespace IBKR_Trader
 
         private void cbSymbol_KeyDown(object sender, KeyEventArgs e)
         {
+            // suppress Enter key to not make dings. highlights text and adds to name
             if (e.KeyCode == Keys.Enter)
             {
                 cbSymbol.SelectionStart = 0;
@@ -631,7 +634,7 @@ namespace IBKR_Trader
                 string name = cbSymbol.Text;
 
 
-                // adds the security symbol to the dropdown list in the symbol combobox
+                // adds the security symbol to the dropdown list in the symbol combobox and sends getdata cmd.
                 if (!cbSymbol.Items.Contains(name))
                 {
                     cbSymbol.Items.Add(name);
@@ -668,7 +671,7 @@ namespace IBKR_Trader
             lbData.Items.Insert(0, printBox);
         }
 
-        // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
+        // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE APPROXIMATED VARIABLE QTY IN REAL-TIME WHEN USING BRACKETS //
         private void UpdateRiskQty(object sender, EventArgs e)
         {
             if (cbOrderType.Text is "LMT" or "STP")
@@ -735,6 +738,40 @@ namespace IBKR_Trader
                 SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             else
                 SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+        }
+
+        delegate void SetTextCallbackShortable(string shortable);
+        public void BtnShortable(string shortable)
+        {
+            // See if a new invocation is required from a different thread            
+            if (tbShortable.InvokeRequired)
+            {
+                SetTextCallbackShortable d = new SetTextCallbackShortable(BtnShortable);
+                Invoke(d, new object[] { shortable });
+
+            }
+            else
+            {
+                // change the text box to light green if over 1000 shares shortable. green is locate needed
+                // and red if security is not shortable. Similar to IB TWS.
+                double shortableshares = Convert.ToDouble(shortable);
+                if (shortableshares > 2.5)
+                {
+                    tbShortable.BackColor = Color.LightGreen;
+                    tbShortable.Text = ">1000";
+                }
+                else if (1.5 < shortableshares && shortableshares < 2.5)
+                {
+                    tbShortable.BackColor = Color.Green;
+                    tbShortable.Text = "Locate";
+                }
+                else
+                {
+                    tbShortable.BackColor = Color.Red;
+                    tbShortable.Text = "Not shortable";
+                }
+
+            }
         }
     }
 }

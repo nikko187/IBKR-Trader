@@ -73,6 +73,8 @@
             numRisk = new NumericUpDown();
             labelSpread = new Label();
             cbAlwaysOnTop = new CheckBox();
+            tbShortable = new TextBox();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -522,12 +524,34 @@
             cbAlwaysOnTop.UseVisualStyleBackColor = true;
             cbAlwaysOnTop.CheckedChanged += cbAlwaysOnTop_CheckedChanged;
             // 
+            // tbShortable
+            // 
+            tbShortable.BorderStyle = BorderStyle.None;
+            tbShortable.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            tbShortable.Location = new Point(124, 211);
+            tbShortable.Name = "tbShortable";
+            tbShortable.ReadOnly = true;
+            tbShortable.Size = new Size(57, 16);
+            tbShortable.TabIndex = 48;
+            tbShortable.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(124, 193);
+            label11.Name = "label11";
+            label11.Size = new Size(57, 15);
+            label11.TabIndex = 49;
+            label11.Text = "Shortable";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(642, 428);
+            Controls.Add(label11);
+            Controls.Add(tbShortable);
             Controls.Add(cbAlwaysOnTop);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
@@ -627,5 +651,7 @@
         private NumericUpDown numRisk;
         private Label labelSpread;
         private CheckBox cbAlwaysOnTop;
+        private TextBox tbShortable;
+        private Label label11;
     }
 }

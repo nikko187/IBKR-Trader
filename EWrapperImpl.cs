@@ -135,6 +135,13 @@ namespace IBKR_Trader
         public virtual void tickGeneric(int tickerId, int field, double value)
         {
             Console.WriteLine("Tick Generic. Ticker Id:" + tickerId + ", Field: " + field + ", Value: " + Util.DoubleMaxString(value));
+
+            if (field == 46)
+            {
+                double shortableshares = value;
+                string shortable = shortableshares.ToString();
+                myform.BtnShortable(shortable);
+            }
         }
         //! [tickgeneric]
 
