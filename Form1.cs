@@ -186,21 +186,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
                     {
                         // Add the text string to the list box
 
                         tbLast.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
                     {
                         // Add the text string to the list box
 
                         tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
                     {
                         // Add the text string to the list box
 
@@ -251,9 +251,7 @@ namespace IBKR_Trader
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
-
-            // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
+            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, mktDataOptions);
@@ -275,8 +273,9 @@ namespace IBKR_Trader
                     SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
                     Invoke(d, new object[] { _tickString });
                 }
-                catch (Exception)
+                catch (Exception f)
                 {
+                    Console.WriteLine("This is from tickString (TnS)", f);
 
                 }
             }
