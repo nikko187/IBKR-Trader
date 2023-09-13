@@ -250,11 +250,11 @@ namespace IBKR_Trader
             // Set the currency to USD
             contract.Currency = "USD";
 
-            
+
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 375", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "233, 236", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -283,7 +283,7 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    lbData.Items.Insert(0,_tickString);
+                    lbData.Items.Insert(0, _tickString);
 
                     // get the bid price from the textbox Bid
                     double theBid = Convert.ToDouble(tbBid.Text);
