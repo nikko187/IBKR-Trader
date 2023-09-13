@@ -395,7 +395,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "233, 236", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -410,22 +410,24 @@ namespace IBKR_Trader
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
         {
-            /*    if (listViewTns.InvokeRequired)
-                {
-                    try
-                    {
-                        SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
-                        this.Invoke(d, new object[] { _tickString });
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-                else*/
+            if (listViewTns.InvokeRequired)
             {
                 try
                 {
+                    SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
+                    this.Invoke(d, new object[] { _tickString });
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            else
+            {
+                try
+                {
+                    lbData.Items.Insert(0, _tickString);
+
                     // get the bid price from the textbox Bid
                     double theBid = Convert.ToDouble(tbBid.Text);
                     // gets the ask price from the textbox Ask
@@ -509,9 +511,9 @@ namespace IBKR_Trader
                         listViewTns.Items.Insert(0, lx);
                     }
                 }
-                catch
+                catch (Exception f)
                 {
-
+                    lbData.Items.Insert(0, "TnS" + f.Message);
                 }
             }
         }
@@ -581,6 +583,7 @@ namespace IBKR_Trader
 
         }
 
+        private bool BracketOrderExecuted = false;
 
         public void send_bracket_order(string side)
         {
@@ -617,6 +620,7 @@ namespace IBKR_Trader
 
             // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
             order_id += 2;
+            BracketOrderExecuted = true;
 
         }
 
@@ -789,12 +793,27 @@ namespace IBKR_Trader
 
         private void btnCancelLast_Click(object sender, EventArgs e)
         {
-            ibClient.ClientSocket.cancelOrder(order_id - 1, "");
+            if (BracketOrderExecuted)
+            {
+                ibClient.ClientSocket.cancelOrder(order_id - 3, "");
+
+                string printBox = "Cancelled bracket order";
+                lbData.Items.Insert(0, printBox);
+            }
+            else
+            {
+                ibClient.ClientSocket.cancelOrder(order_id - 1, "");
+                string printBox = "Cancelled order";
+                lbData.Items.Insert(0, printBox);
+            }
+            BracketOrderExecuted = false;
         }
 
         private void btnCancelAll_Click(object sender, EventArgs e)
         {
             ibClient.ClientSocket.reqGlobalCancel();
+            string printBox = "All open orders cancelled";
+            lbData.Items.Insert(0, printBox);
         }
 
         // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
@@ -1139,6 +1158,38 @@ namespace IBKR_Trader
                 SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
 
+        delegate void SetTextCallbackShortable(string shortable);
+        public void BtnShortable(string shortable)
+        {
+            // See if a new invocation is required from a different thread            
+            if (tbShortable.InvokeRequired)
+            {
+                SetTextCallbackShortable d = new SetTextCallbackShortable(BtnShortable);
+                Invoke(d, new object[] { shortable });
+            }
+            else
+            {
+                // change the text box to light green if over 1000 shares shortable. green is locate needed
+                // and red if security is not shortable. Similar to IB TWS.
+                double shortableshares = Convert.ToDouble(shortable);
+                if (shortableshares > 2.5)
+                {
+                    tbShortable.BackColor = Color.LightGreen;
+                    tbShortable.Text = ">1000";
+                }
+                else if (1.5 < shortableshares && shortableshares < 2.5)
+                {
+                    tbShortable.BackColor = Color.Green;
+                    tbShortable.Text = "Locate";
+                }
+                else
+                {
+                    tbShortable.BackColor = Color.Red;
+                    tbShortable.Text = "Not shortable";
+                }
+            }
+        }
+
         private void dataGridView4_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dataGridView4.Rows[e.RowIndex].Cells[5].Value != null && !string.IsNullOrWhiteSpace(dataGridView4.Rows[e.RowIndex].Cells[5].Value.ToString()))
@@ -1212,7 +1263,7 @@ namespace IBKR_Trader
                     foreach (DataGridViewRow row in dataGridView4.Rows)
                     {
 
-                        if (row.Cells[0].Value.ToString().Equals(searchValue))
+                        if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
                         {
                             wasFound2 = true;
                             break;

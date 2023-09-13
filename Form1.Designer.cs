@@ -100,6 +100,8 @@
             col_Openpnl = new DataGridViewTextBoxColumn();
             col_Closedpnl = new DataGridViewTextBoxColumn();
             col_Markedpnl = new DataGridViewTextBoxColumn();
+            tbShortable = new TextBox();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -740,12 +742,32 @@
             col_Markedpnl.HeaderText = "Marked PnL";
             col_Markedpnl.Name = "col_Markedpnl";
             // 
+            // tbShortable
+            // 
+            tbShortable.BorderStyle = BorderStyle.None;
+            tbShortable.Location = new Point(123, 215);
+            tbShortable.Name = "tbShortable";
+            tbShortable.ReadOnly = true;
+            tbShortable.Size = new Size(53, 16);
+            tbShortable.TabIndex = 50;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(123, 197);
+            label11.Name = "label11";
+            label11.Size = new Size(57, 15);
+            label11.TabIndex = 51;
+            label11.Text = "Shortable";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(633, 595);
+            Controls.Add(label11);
+            Controls.Add(tbShortable);
             Controls.Add(tabControl1);
             Controls.Add(cbAlwaysOnTop);
             Controls.Add(listViewTns);
@@ -874,5 +896,7 @@
         private DataGridViewTextBoxColumn col_Openpnl;
         private DataGridViewTextBoxColumn col_Closedpnl;
         private DataGridViewTextBoxColumn col_Markedpnl;
+        private TextBox tbShortable;
+        private Label label11;
     }
 }
