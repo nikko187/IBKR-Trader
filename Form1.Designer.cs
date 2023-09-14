@@ -105,6 +105,10 @@
             btnClose = new Button();
             btnCloseHalf = new Button();
             labelName = new Label();
+            tooltipPort = new ToolTip(components);
+            btnCloseQtr = new Button();
+            tooltipClosePortion = new ToolTip(components);
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -114,6 +118,7 @@
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // btnConnect
@@ -363,7 +368,7 @@
             // chkOutside
             // 
             chkOutside.AutoSize = true;
-            chkOutside.Location = new Point(294, 112);
+            chkOutside.Location = new Point(294, 109);
             chkOutside.Name = "chkOutside";
             chkOutside.Size = new Size(88, 19);
             chkOutside.TabIndex = 29;
@@ -398,12 +403,12 @@
             // columnHeader3
             // 
             columnHeader3.Text = "Time";
-            columnHeader3.Width = 80;
+            columnHeader3.Width = 90;
             // 
             // tbTakeProfit
             // 
             tbTakeProfit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTakeProfit.Location = new Point(294, 266);
+            tbTakeProfit.Location = new Point(294, 260);
             tbTakeProfit.Name = "tbTakeProfit";
             tbTakeProfit.ReadOnly = true;
             tbTakeProfit.Size = new Size(88, 25);
@@ -413,7 +418,7 @@
             // tbStopLoss
             // 
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbStopLoss.Location = new Point(294, 235);
+            tbStopLoss.Location = new Point(294, 229);
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
@@ -450,7 +455,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(12, 14);
+            label10.Location = new Point(294, 14);
             label10.Name = "label10";
             label10.Size = new Size(35, 15);
             label10.TabIndex = 37;
@@ -468,11 +473,12 @@
             // 
             // numPort
             // 
-            numPort.Location = new Point(52, 12);
+            numPort.Location = new Point(334, 12);
             numPort.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numPort.Name = "numPort";
             numPort.Size = new Size(48, 23);
             numPort.TabIndex = 39;
+            tooltipPort.SetToolTip(numPort, "Use the port # that is in your TWS API settings.\r\n");
             numPort.Value = new decimal(new int[] { 7497, 0, 0, 0 });
             // 
             // chkBracket
@@ -480,7 +486,7 @@
             chkBracket.AutoSize = true;
             chkBracket.CheckAlign = ContentAlignment.MiddleRight;
             chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(207, 240);
+            chkBracket.Location = new Point(207, 234);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(84, 19);
@@ -494,7 +500,7 @@
             cbTakeProfit.AutoSize = true;
             cbTakeProfit.CheckAlign = ContentAlignment.MiddleRight;
             cbTakeProfit.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            cbTakeProfit.Location = new Point(209, 269);
+            cbTakeProfit.Location = new Point(209, 263);
             cbTakeProfit.Name = "cbTakeProfit";
             cbTakeProfit.Size = new Size(82, 19);
             cbTakeProfit.TabIndex = 41;
@@ -505,15 +511,16 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 293);
+            label5.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label5.Location = new Point(12, 295);
             label5.Name = "label5";
-            label5.Size = new Size(127, 15);
+            label5.Size = new Size(126, 13);
             label5.TabIndex = 42;
             label5.Text = "Linked to TWS Group 4";
             // 
             // btnHelp
             // 
-            btnHelp.Location = new Point(12, 266);
+            btnHelp.Location = new Point(12, 267);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(47, 23);
             btnHelp.TabIndex = 43;
@@ -640,7 +647,7 @@
             // cbAlwaysOnTop
             // 
             cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Location = new Point(12, 239);
+            cbAlwaysOnTop.Location = new Point(74, 266);
             cbAlwaysOnTop.Name = "cbAlwaysOnTop";
             cbAlwaysOnTop.Size = new Size(104, 19);
             cbAlwaysOnTop.TabIndex = 48;
@@ -750,7 +757,7 @@
             // tbShortable
             // 
             tbShortable.BorderStyle = BorderStyle.None;
-            tbShortable.Location = new Point(141, 271);
+            tbShortable.Location = new Point(200, 292);
             tbShortable.Name = "tbShortable";
             tbShortable.ReadOnly = true;
             tbShortable.Size = new Size(53, 16);
@@ -760,7 +767,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(101, 271);
+            label11.Location = new Point(160, 292);
             label11.Name = "label11";
             label11.Size = new Size(38, 15);
             label11.TabIndex = 51;
@@ -784,22 +791,50 @@
             btnCloseHalf.BackColor = Color.Salmon;
             btnCloseHalf.FlatStyle = FlatStyle.Flat;
             btnCloseHalf.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseHalf.Location = new Point(141, 229);
+            btnCloseHalf.Location = new Point(106, 229);
             btnCloseHalf.Name = "btnCloseHalf";
-            btnCloseHalf.Size = new Size(53, 25);
+            btnCloseHalf.Size = new Size(88, 23);
             btnCloseHalf.TabIndex = 53;
             btnCloseHalf.Text = "50%";
+            tooltipClosePortion.SetToolTip(btnCloseHalf, "Will close 50% of pos at MKT\r\n");
             btnCloseHalf.UseVisualStyleBackColor = false;
             btnCloseHalf.Click += CloseHalfPos;
             // 
             // labelName
             // 
             labelName.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            labelName.Location = new Point(294, 5);
+            labelName.Location = new Point(0, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(88, 32);
+            labelName.Size = new Size(88, 30);
             labelName.TabIndex = 54;
             labelName.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tooltipPort
+            // 
+            tooltipPort.ToolTipTitle = "Select Port #";
+            // 
+            // btnCloseQtr
+            // 
+            btnCloseQtr.BackColor = Color.Salmon;
+            btnCloseQtr.FlatStyle = FlatStyle.Flat;
+            btnCloseQtr.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCloseQtr.Location = new Point(12, 229);
+            btnCloseQtr.Name = "btnCloseQtr";
+            btnCloseQtr.Size = new Size(88, 23);
+            btnCloseQtr.TabIndex = 55;
+            btnCloseQtr.Text = "25%";
+            tooltipClosePortion.SetToolTip(btnCloseQtr, "Will close 25% of pos at MKT\r\n");
+            btnCloseQtr.UseVisualStyleBackColor = false;
+            btnCloseQtr.Click += btnCloseQtr_Click;
+            // 
+            // panel1
+            // 
+            panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(labelName);
+            panel1.Location = new Point(12, 5);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(88, 32);
+            panel1.TabIndex = 56;
             // 
             // Form1
             // 
@@ -807,7 +842,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(633, 595);
-            Controls.Add(labelName);
+            Controls.Add(panel1);
+            Controls.Add(btnCloseQtr);
             Controls.Add(btnCloseHalf);
             Controls.Add(btnClose);
             Controls.Add(tbShortable);
@@ -867,6 +903,7 @@
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -945,5 +982,9 @@
         private Button btnClose;
         private Button btnCloseHalf;
         private Label labelName;
+        private ToolTip tooltipPort;
+        private Button btnCloseQtr;
+        private ToolTip tooltipClosePortion;
+        private Panel panel1;
     }
 }

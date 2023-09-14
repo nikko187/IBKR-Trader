@@ -1202,7 +1202,7 @@ namespace IBKR_Trader
                 double shortableshares = Convert.ToDouble(shortable);
                 if (shortableshares > 2.5)
                 {
-                    tbShortable.BackColor = Color.LimeGreen;
+                    tbShortable.BackColor = Color.LightGreen;
                     tbShortable.Text = "Yes";
                 }
                 else if (shortableshares > 1.5 && shortableshares < 2.5)
@@ -1621,5 +1621,78 @@ namespace IBKR_Trader
             }
         }
 
+        private void btnCloseQtr_Click(object sender, EventArgs e)
+        {
+            int countRow2 = 0;
+            decimal pos = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
+
+                }
+            }
+
+            IBApi.Contract contract = new Contract();
+            contract.Symbol = searchValue;
+            contract.SecType = "STK";
+            contract.Exchange = "SMART";
+            contract.PrimaryExch = "ISLAND";
+            contract.Currency = "USD";
+
+            IBApi.Order order = new IBApi.Order();
+            order.OrderId = order_id;
+
+            if (pos > 0)
+                order.Action = "Sell";
+
+            else if (pos < 0)
+                order.Action = "Buy";
+
+            order.OrderType = "MKT";
+
+            order.TotalQuantity = Math.Abs(Math.Floor(pos / 4));
+
+            order.LmtPrice = Convert.ToDouble(numPrice.Value);
+            order.AuxPrice = 0.00;
+
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
+            order.OutsideRth = chkOutside.Checked;
+
+            // Place the order
+            ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close quarter pos.";
+            lbData.Items.Insert(0, printBox);
+
+            // increase the order id value
+            order_id++;
+        }
     }
 }
