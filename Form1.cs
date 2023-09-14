@@ -13,6 +13,8 @@ using System.Threading;
 using System.Drawing.Text;
 using IBApi;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
+using System.Net.NetworkInformation;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -417,8 +419,9 @@ namespace IBKR_Trader
                     SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
                     this.Invoke(d, new object[] { _tickString });
                 }
-                catch (Exception)
+                catch (Exception f)
                 {
+                    lbData.Items.Insert(0, "TickString Invoke error: " + f);
 
                 }
             }
@@ -426,8 +429,6 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    lbData.Items.Insert(0, _tickString);
-
                     // get the bid price from the textbox Bid
                     double theBid = Convert.ToDouble(tbBid.Text);
                     // gets the ask price from the textbox Ask
@@ -440,13 +441,12 @@ namespace IBKR_Trader
                     // extract each value from string and store it in a string list
                     string[] listTimeSales = _tickString.Split(';');
 
-                    // Console.WriteLine(listTimeSales);
-
                     // get the first value form the list convert it to a double this value is the last price
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // REPLACED LINE: int trade_size = Convert.ToInt32(listTimeSales[1]);
                     int trade_size = Convert.ToInt32(listTimeSales[1]);
+                    //string strShareSize = listTimeSales[1];
 
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
@@ -454,7 +454,7 @@ namespace IBKR_Trader
                     int share_size = trade_size * 100;
 
                     // formats a string to commas
-                    string strShareSize = share_size.ToString("###,####,##0");
+                    string strShareSize = share_size.ToString();
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
@@ -468,19 +468,17 @@ namespace IBKR_Trader
 
                     ListViewItem lx = new ListViewItem();
 
-                    // string dt = String.Format("{0:hh:mm:ss}", dnt);
-
-                    // if the last price is the same as the ask change the color to green
-                    if (last_price == theAsk)
+                    // if the last price is the same as the ask change the color to lime
+                    if (last_price >= theAsk)
                     {
-                        lx.ForeColor = Color.Green; // listview foreground color
+                        lx.ForeColor = Color.Lime; // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
                         listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
                     }
                     // if the last price is the same as the bid change the color to red
-                    else if (last_price == theBid)
+                    else if (last_price <= theBid)
                     {
                         lx.ForeColor = Color.Red;
                         lx.Text = listTimeSales[0];
@@ -492,9 +490,9 @@ namespace IBKR_Trader
                     }
                     // if the last price in greater than the mean price and
                     // less than the ask price change the color to lime green
-                    else if (last_price > myMean && last_price < theAsk)
+                    else if (last_price > theBid && last_price < theAsk)
                     {
-                        lx.ForeColor = Color.Lime;
+                        lx.ForeColor = Color.LightGray;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -504,16 +502,16 @@ namespace IBKR_Trader
                     }
                     else
                     {
-                        lx.ForeColor = Color.DarkRed;
+                        lx.ForeColor = Color.White;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
                 }
-                catch (Exception f)
+                catch (Exception g)
                 {
-                    lbData.Items.Insert(0, "TnS" + f.Message);
+                    lbData.Items.Insert(0, "TnS error: " + g);
                 }
             }
         }
@@ -584,6 +582,7 @@ namespace IBKR_Trader
         }
 
         private bool BracketOrderExecuted = false;
+        private bool takeProfitEnabled = false;
 
         public void send_bracket_order(string side)
         {
@@ -611,21 +610,30 @@ namespace IBKR_Trader
             double quantity = Math.Floor((Convert.ToDouble(numRisk.Value)) / Math.Abs(lmtPrice - stopLoss));
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
-            List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type);
+            List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
             foreach (Order o in bracket)    // loops through each order in the list
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
 
-            string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " and Stop " + stopLoss;
-            lbData.Items.Insert(0, printBox);
-
             // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
-            order_id += 2;
-            BracketOrderExecuted = true;
+            if (takeProfitEnabled)
+            {
+                order_id += 3;
+                string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " Stop " + stopLoss + " and take profit " + takeProfit;
+                lbData.Items.Insert(0, printBox);
 
+            }
+
+            else
+            {
+                order_id += 2;
+                string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " Stop " + stopLoss + " and take profit " + takeProfit;
+                lbData.Items.Insert(0, printBox);
+            }
+
+            BracketOrderExecuted = true;
         }
 
-
-        public static List<Order> BracketOrder(int parentOrderId, string action, double quantity, double limitPrice, double takeProfitLimitPrice, double stopLossPrice, string order_type)
+        public static List<Order> BracketOrder(int parentOrderId, string action, double quantity, double limitPrice, double takeProfitLimitPrice, double stopLossPrice, string order_type, bool takeProfitEnabled)
         {
             //This will be our main or "parent" order
             Order parent = new Order();
@@ -639,38 +647,61 @@ namespace IBKR_Trader
             //The last child (STP) will have it set to true
             parent.Transmit = false;
 
-            /** TAKE PROFIT IS DISABLED FOR NOW
-             * 
+
             // Profit Target order
-            Order takeProfit = new Order();
-            takeProfit.OrderId = parent.OrderId + 1;
-            takeProfit.Action = action.Equals("Buy") ? "Sell" : "Buy"; // if statement
-            takeProfit.OrderType = "LMT";
-            takeProfit.TotalQuantity = (decimal)quantity;
-            takeProfit.LmtPrice = takeProfitLimitPrice;
-            takeProfit.ParentId = parentOrderId;
-            takeProfit.Transmit = false;
-            **/
+            if (takeProfitEnabled)
+            {
+                Order takeProfit = new Order();
+                takeProfit.OrderId = parent.OrderId + 1;
+                takeProfit.Action = action.Equals("Buy") ? "Sell" : "Buy"; // if statement
+                takeProfit.OrderType = "LMT";
+                takeProfit.TotalQuantity = (decimal)quantity;
+                takeProfit.LmtPrice = takeProfitLimitPrice;
+                takeProfit.ParentId = parentOrderId;
+                takeProfit.Transmit = false;
 
-            // Stop loss order
-            Order stopLoss = new Order();
-            stopLoss.OrderId = parent.OrderId + 2;
-            stopLoss.Action = action.Equals("Buy") ? "Sell" : "Buy";
-            stopLoss.OrderType = "STP";     // or "STP LMT", then use the field below...
-            // Stop trigger price
-            // add stopLoss.LmtPrice here if you are going to use a stop limit order
-            stopLoss.AuxPrice = stopLossPrice;
-            stopLoss.TotalQuantity = (decimal)quantity;
-            stopLoss.ParentId = parentOrderId;
-            //In this case, the low side order will be the last child being sent. Therefore, it needs to set this attribute to true
-            //to activate all its predecessors
-            stopLoss.Transmit = true;
+                // Stop loss order
+                Order stopLoss = new Order();
+                stopLoss.OrderId = parent.OrderId + 2;
+                stopLoss.Action = action.Equals("Buy") ? "Sell" : "Buy";
+                stopLoss.OrderType = "STP";     // or "STP LMT", then use the field below...
+                                                // Stop trigger price
+                                                // add stopLoss.LmtPrice here if you are going to use a stop limit order
+                stopLoss.AuxPrice = stopLossPrice;
+                stopLoss.TotalQuantity = (decimal)quantity;
+                stopLoss.ParentId = parentOrderId;
+                //In this case, the low side order will be the last child being sent. Therefore, it needs to set this attribute to true
+                //to activate all its predecessors
+                stopLoss.Transmit = true;
 
-            List<Order> bracketOrder = new List<Order>();
-            bracketOrder.Add(parent);
-            // bracketOrder.Add(takeProfit);
-            bracketOrder.Add(stopLoss);
-            return bracketOrder;
+                List<Order> bracketOrder = new List<Order>();
+                bracketOrder.Add(parent);
+                bracketOrder.Add(takeProfit);
+                bracketOrder.Add(stopLoss);
+                return bracketOrder;
+            }
+            else
+            {
+                // Stop loss order
+                Order stopLoss = new Order();
+                stopLoss.OrderId = parent.OrderId + 2;
+                stopLoss.Action = action.Equals("Buy") ? "Sell" : "Buy";
+                stopLoss.OrderType = "STP";     // or "STP LMT", then use the field below...
+                                                // Stop trigger price
+                                                // add stopLoss.LmtPrice here if you are going to use a stop limit order
+                stopLoss.AuxPrice = stopLossPrice;
+                stopLoss.TotalQuantity = (decimal)quantity;
+                stopLoss.ParentId = parentOrderId;
+                //In this case, the low side order will be the last child being sent. Therefore, it needs to set this attribute to true
+                //to activate all its predecessors
+                stopLoss.Transmit = true;
+
+                List<Order> bracketOrder = new List<Order>();
+                bracketOrder.Add(parent);
+                bracketOrder.Add(stopLoss);
+                return bracketOrder;
+            }
+
         }
 
         public void send_order(string side)
@@ -765,9 +796,6 @@ namespace IBKR_Trader
             timer1_counter--;   // subtract 1 every time there is a tick
         }
 
-
-
-
         private void cbSymbol_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -793,11 +821,18 @@ namespace IBKR_Trader
 
         private void btnCancelLast_Click(object sender, EventArgs e)
         {
-            if (BracketOrderExecuted)
+            if (BracketOrderExecuted && cbTakeProfit.Checked)
+            {
+                ibClient.ClientSocket.cancelOrder(order_id - 4, "");
+
+                string printBox = "Cancelled full bracket order";
+                lbData.Items.Insert(0, printBox);
+            }
+            else if (BracketOrderExecuted)
             {
                 ibClient.ClientSocket.cancelOrder(order_id - 3, "");
 
-                string printBox = "Cancelled bracket order";
+                string printBox = "Cancelled parent and/or stop loss";
                 lbData.Items.Insert(0, printBox);
             }
             else
@@ -860,17 +895,6 @@ namespace IBKR_Trader
             }
         }
 
-        /****************** DISABLED. NOT IN USE RIGHT NOW
-        private void OrderType_Changed(object sender, EventArgs e)
-        {
-            if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
-            {
-                numPrice.ReadOnly = true;
-            }
-            else
-                numPrice.ReadOnly = false;
-        }
-        *********************/
         private void btnHelp_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API or IB Gateway and an IBKR Pro account.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
@@ -921,13 +945,17 @@ namespace IBKR_Trader
 
                     // checks if cell valye is SELL and changes color to Red and Bold
                     if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Sell")
+                    {
                         dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = Color.Red;
-                    dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+                        dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+                    }
 
                     // checks if cell value is BUY and changes color to green and bold
                     if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Buy")
+                    {
                         dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = System.Drawing.Color.Green;
-                    dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+                        dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
+                    }
 
                     // checks if value in cell column 8 if Filled and if it is changes fore color to Green
                     if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Filled")
@@ -1169,15 +1197,15 @@ namespace IBKR_Trader
             }
             else
             {
-                // change the text box to light green if over 1000 shares shortable. green is locate needed
+                // change the text box to light green if over 1000 shares shortable. green if locate needed
                 // and red if security is not shortable. Similar to IB TWS.
                 double shortableshares = Convert.ToDouble(shortable);
                 if (shortableshares > 2.5)
                 {
-                    tbShortable.BackColor = Color.LightGreen;
-                    tbShortable.Text = ">1000";
+                    tbShortable.BackColor = Color.LimeGreen;
+                    tbShortable.Text = "Yes";
                 }
-                else if (1.5 < shortableshares && shortableshares < 2.5)
+                else if (shortableshares > 1.5 && shortableshares < 2.5)
                 {
                     tbShortable.BackColor = Color.Green;
                     tbShortable.Text = "Locate";
@@ -1185,7 +1213,7 @@ namespace IBKR_Trader
                 else
                 {
                     tbShortable.BackColor = Color.Red;
-                    tbShortable.Text = "Not shortable";
+                    tbShortable.Text = "No";
                 }
             }
         }
@@ -1235,7 +1263,7 @@ namespace IBKR_Trader
 
         public void AddTextBoxItemUpdatePortfolio(string symbol, decimal position, double marketPrice, double averageCost, double unrealizedPNL, double realizedPNL)
         {
-            // See if a new invocation is required form a different thread
+            // See if a new invocation is required from a different thread
             if (this.dataGridView4.InvokeRequired)
             {
                 SetTextCallbackUpdatePortfolio d = new SetTextCallbackUpdatePortfolio(AddTextBoxItemUpdatePortfolio);
@@ -1252,10 +1280,8 @@ namespace IBKR_Trader
 
 
                 if (dataGridView4.Rows.Count < 0)
-
                     // sets the selection mode
                     dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
 
                 try
                 {
@@ -1354,6 +1380,7 @@ namespace IBKR_Trader
                     }
                 }
 
+
             }
 
             positionTotal(); // calls the method to calculate the position total
@@ -1404,5 +1431,195 @@ namespace IBKR_Trader
                 tbTotalPnl.ForeColor = Color.Red;
             }
         }
+
+        private void cbTakeProfit_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbTakeProfit.Checked)
+            {
+                takeProfitEnabled = true;
+                tbTakeProfit.ReadOnly = false;
+            }
+            else
+            {
+                takeProfitEnabled = false;
+                tbTakeProfit.ReadOnly = true;
+            }
+        }
+
+        private void ClosePosition(object sender, EventArgs e)
+        {
+            int countRow2 = 0;
+            decimal pos = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
+
+                }
+            }
+
+            IBApi.Contract contract = new Contract();
+            contract.Symbol = searchValue;
+            contract.SecType = "STK";
+            contract.Exchange = "SMART";
+            contract.PrimaryExch = "ISLAND";
+            contract.Currency = "USD";
+
+            IBApi.Order order = new IBApi.Order();
+            order.OrderId = order_id;
+
+            if (pos > 0)
+                order.Action = "Sell";
+
+            else if (pos < 0)
+                order.Action = "Buy";
+
+            order.OrderType = "MKT";
+
+            order.TotalQuantity = Math.Abs(pos);
+
+            order.LmtPrice = Convert.ToDouble(numPrice.Value);
+            order.AuxPrice = 0.00;
+
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
+            order.OutsideRth = chkOutside.Checked;
+
+            // Place the order
+            ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close.";
+            lbData.Items.Insert(0, printBox);
+
+            // increase the order id value
+            order_id++;
+
+        }
+        private void CloseHalfPos(object sender, EventArgs e)
+        {
+            int countRow2 = 0;
+            decimal pos = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
+
+                }
+            }
+
+            IBApi.Contract contract = new Contract();
+            contract.Symbol = searchValue;
+            contract.SecType = "STK";
+            contract.Exchange = "SMART";
+            contract.PrimaryExch = "ISLAND";
+            contract.Currency = "USD";
+
+            IBApi.Order order = new IBApi.Order();
+            order.OrderId = order_id;
+
+            if (pos > 0)
+                order.Action = "Sell";
+
+            else if (pos < 0)
+                order.Action = "Buy";
+
+            order.OrderType = "MKT";
+
+            order.TotalQuantity = Math.Abs(Math.Floor(pos / 2));
+
+            order.LmtPrice = Convert.ToDouble(numPrice.Value);
+            order.AuxPrice = 0.00;
+
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
+            order.OutsideRth = chkOutside.Checked;
+
+            // Place the order
+            ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close half.";
+            lbData.Items.Insert(0, printBox);
+
+            // increase the order id value
+            order_id++;
+        }
+
+        delegate void SetTextCallbackGetFullName(string marketName);
+        public void GetFullName(string marketName)
+        {
+            if (lbData.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
+                    Invoke(d, new object[] { marketName });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "TickString Invoke error: " + f);
+
+                }
+            }
+            else
+            {
+                try
+                {
+                    labelName.Text = marketName;
+                }
+                catch (Exception) { }
+            }
+        }
+
     }
 }
