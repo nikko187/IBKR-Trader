@@ -109,6 +109,11 @@ namespace IBKR_Trader
             string strData = "Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + size;
             Console.WriteLine(strData);
             myform.AddListBoxItem(strData);
+
+            if (field == 21)
+            {
+                myform.AverageVolume(size);
+            }
         }
         //! [ticksize]
         

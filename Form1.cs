@@ -164,11 +164,10 @@ namespace IBKR_Trader
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Failure to connect.\r\nPlease make sure API is active in TWS, read-only is disabled, and the Port number is correct.");
+                    MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
                 }
 
             }
-
         }
 
         delegate void SetTextCallbackContractId(int contractId);
@@ -214,24 +213,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last quote 68, if you want realtime use tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
-
                         this.tbLast.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask quote 67, if you want realtime use tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
-
                         this.tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid quote 66, if you want realtime use tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
-
                         this.tbBid.Text = tickerPrice[2];
 
                     }
@@ -388,16 +384,16 @@ namespace IBKR_Trader
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "ISLAND";
+            contract.PrimaryExch = "";
             // Set the currency to USD
             contract.Currency = "USD";
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
+            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233, 236", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -444,17 +440,19 @@ namespace IBKR_Trader
                     // get the first value form the list convert it to a double this value is the last price
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
-                    // REPLACED LINE: int trade_size = Convert.ToInt32(listTimeSales[1]);
-                    int trade_size = Convert.ToInt32(listTimeSales[1]);
-                    //string strShareSize = listTimeSales[1];
+                    // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
+                    string size = listTimeSales[1];
+                    double shares = Convert.ToDouble(size);
+                    string strShareSize = shares.ToString("0.##");
 
+                    // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
-                    // adds 2 zeros to the trade size  ??  delete the " * 100 " to leave the data unmodified.
-                    int share_size = trade_size * 100;
-
-                    // formats a string to commas
-                    string strShareSize = share_size.ToString();
+                    // Current traded volume for the day.
+                    string volume = listTimeSales[3];
+                    double volumee = Convert.ToDouble(volume);
+                    string voll = volumee.ToString("0.##");
+                    labelVolume.Text = "Volume: " + voll;
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
@@ -486,7 +484,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
 
-                        lbData.Items.Insert(0, strSaleTime);
+                        // lbData.Items.Insert(0, strSaleTime);
                     }
                     // if the last price in greater than the mean price and
                     // less than the ask price change the color to lime green
@@ -498,7 +496,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
 
-                        lbData.Items.Add(epoch);
+                        // lbData.Items.Add(epoch);
                     }
                     else
                     {
@@ -806,7 +804,6 @@ namespace IBKR_Trader
                 e.SuppressKeyPress = true;
 
                 string name = cbSymbol.Text;
-
 
                 // adds the security symbol to the dropdown list in the symbol combobox
                 if (!cbSymbol.Items.Contains(name))
@@ -1598,7 +1595,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackGetFullName(string marketName);
         public void GetFullName(string marketName)
         {
-            if (lbData.InvokeRequired)
+            if (labelName.InvokeRequired)
             {
                 try
                 {
@@ -1607,8 +1604,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception f)
                 {
-                    lbData.Items.Insert(0, "TickString Invoke error: " + f);
-
+                    lbData.Items.Insert(0, "GetFullName Invoke error: " + f);
                 }
             }
             else
@@ -1693,6 +1689,28 @@ namespace IBKR_Trader
 
             // increase the order id value
             order_id++;
+        }
+
+        delegate void SetTextCallbackTickSize(decimal avgvol);
+        public void AverageVolume(decimal avgvol)
+        {
+            if (labelAvgVol.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackTickSize d = new SetTextCallbackTickSize(AverageVolume);
+                    Invoke(d, new object[] { avgvol });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "AvgVol Invoke error: " + f);
+                }
+            }
+            else
+            {
+                decimal AV = avgvol * 100;
+                labelAvgVol.Text = "AvgVol: " + AV.ToString("#,##0");
+            }
         }
     }
 }
