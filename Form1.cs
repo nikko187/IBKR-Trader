@@ -478,7 +478,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (last_price <= theBid)
                     {
-                        lx.ForeColor = Color.Red;
+                        lx.ForeColor = Color.Crimson;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -507,9 +507,9 @@ namespace IBKR_Trader
                         listViewTns.Items.Insert(0, lx);
                     }
                 }
-                catch (Exception g)
+                catch (Exception)
                 {
-                    lbData.Items.Insert(0, "TnS error: " + g);
+                    // lbData.Items.Insert(0, "TnS error: " + g);
                 }
             }
         }
