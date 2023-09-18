@@ -15,6 +15,7 @@ using IBApi;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography.X509Certificates;
 
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
@@ -118,11 +119,10 @@ namespace IBKR_Trader
             // fixes crash on clicking connect when already connected.
             if (ibClient.ClientSocket.IsConnected())
             {
-                btnConnect.Text = "Connected!";
+                btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
                 return;
             }
-
             else
             {
                 try
@@ -166,7 +166,6 @@ namespace IBKR_Trader
                 {
                     MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
                 }
-
             }
         }
 
@@ -207,7 +206,6 @@ namespace IBKR_Trader
             }
             else
             {
-
                 string[] tickerPrice = new string[] { _tickPrice };
                 tickerPrice = _tickPrice.Split(',');
 
@@ -350,7 +348,7 @@ namespace IBKR_Trader
         {
             if (ibClient.ClientSocket.IsConnected() == true)
             {
-                btnConnect.Text = "Connected!";
+                btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
             }
             else if (ibClient.ClientSocket.IsConnected() == false)
@@ -402,6 +400,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAllOpenOrders();
 
             timer1.Start();
+
         }
 
         delegate void SetTextCallbackTickString(string _tickString);
@@ -418,7 +417,6 @@ namespace IBKR_Trader
                 catch (Exception f)
                 {
                     lbData.Items.Insert(0, "TickString Invoke error: " + f);
-
                 }
             }
             else
@@ -449,18 +447,17 @@ namespace IBKR_Trader
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
                     // Current traded volume for the day.
-                    string volume = listTimeSales[3];
-                    double volumee = Convert.ToDouble(volume);
-                    string voll = volumee.ToString("0.##");
+                    double volume = Convert.ToDouble(listTimeSales[3]);
+                    string voll = volume.ToString("0.##");
                     labelVolume.Text = "Volume: " + voll;
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
-                    // *************************************************
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("h:mm:ss:ff");
+                    string strSaleTime = epoch.ToString("h:mm:ss:ff");  // formatting for time
 
+                    // used to get midprice, was previously used for Time and Sales coloring. not anymore.
                     double myMeanPrice = ((theAsk - theBid) / 2);
                     double myMean = (theBid + myMeanPrice);
 
@@ -518,7 +515,6 @@ namespace IBKR_Trader
         {
             getData();
         }
-
 
         private void cbSymbol_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -894,7 +890,7 @@ namespace IBKR_Trader
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API or IB Gateway and an IBKR Pro account.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"Use $ Risk + Stop Loss,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\n\r\nTake Profit function is not enabled at this moment.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will therefore change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
+            MessageBox.Show("Welcome and thank you for trying IBKR Trader. This is intended for use with the TWS API and an IBKR Pro account with real-time data.\r\n\r\nPlease check Global Configuration > API > Settings. Enable ActiveX and Socket Clients, uncheck \"Read-Only\". Set the Socket Port #, then Apply and \"OK\".\r\nIn IBKR Trader app, set the Port # first to the same as you set in TWS.\r\nThen press Connect. Make sure the Bid/Ask/Last prices are being updated in real-time.\r\n\r\nQUICKLY SET LIMIT PRICE:\r\nYou may click the current Bid, Ask, or Last to set that price in the Price box.\r\n\r\nORDER TYPES:\r\nSNAP MKT will get you in automatically at the curret ASK for a Buy, and at the current BID for a Sell.\r\nSNAP MID will put you in the middle of the bid/ask.\r\nSNAP PRIM will put you at the current BID for a Buy, and at the current ASK for a Sell (for adding liquidity).\r\n\r\nROUTING:\r\nYou may leave the Route as SMART (default) or direct route to ISLAND (NSDQ) or EDGX.\r\n\r\nUSING $ RISK:\nIf you check the box \"$ Risk + SL,\" the Qty box will be disabled. Input the $ amount you wish to risk in the $ Risk box, and the Stop Loss price for the bracket order, after which the amount of shares will be automatically calculated once you click Buy or Sell, and will update in real-time with the approximate quantity.\r\nNOTE: The immediate calculation on clicking Buy or Sell is correct and accurate, but the Qty shown changing in the box in real-time is approximated.\r\nActivate Take Profit to also attach a take profit limit order.\r\n\r\nNEW STUFF:\r\nClose Pos with close your position at market. 50% will close half at market. 25% will close 25% of pos at market. Each will attempt to auto-adjust your stop loss quantity to your remaining qty. Stop to BE button will move your stop loss to your entry price.\r\n\r\nLINK/SYNC:\r\nThis tool is linked to TWS link Group 4, and will change the tickers within TWS windows on group 4.\r\n\r\nDISCLAIMER: I AM NOT RESPONSIBLE FOR FINANCIAL LOSS/GAIN YOU MAY INCUR DUE TO MISCLICK, MISUSE, OR MALFUNCTION OF THE TRADING APP. USE AT YOUR OWN RISK. PRACTICE IN A PAPER TRADING ACCOUNT TO VERIFY ALL FUNCTIONS BEFORE USING IN A LIVE ACCOUNT.");
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1478,45 +1474,43 @@ namespace IBKR_Trader
                         pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
                         break;
                     }
-
                 }
+
+                IBApi.Contract contract = new Contract();
+                contract.Symbol = searchValue;
+                contract.SecType = "STK";
+                contract.Exchange = "SMART";
+                contract.PrimaryExch = "ISLAND";
+                contract.Currency = "USD";
+
+                IBApi.Order order = new IBApi.Order();
+                order.OrderId = order_id;
+
+                if (pos > 0)
+                    order.Action = "Sell";
+
+                else if (pos < 0)
+                    order.Action = "Buy";
+
+                order.OrderType = "MKT";
+
+                order.TotalQuantity = Math.Abs(pos);
+
+                order.LmtPrice = Convert.ToDouble(numPrice.Value);
+                order.AuxPrice = 0.00;
+
+                // checks if Outside RTH is checked, then apply outsideRTH to the order
+                order.OutsideRth = chkOutside.Checked;
+
+                // Place the order
+                ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+                string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close.";
+                lbData.Items.Insert(0, printBox);
+
+                // increase the order id value
+                order_id++;
             }
-
-            IBApi.Contract contract = new Contract();
-            contract.Symbol = searchValue;
-            contract.SecType = "STK";
-            contract.Exchange = "SMART";
-            contract.PrimaryExch = "ISLAND";
-            contract.Currency = "USD";
-
-            IBApi.Order order = new IBApi.Order();
-            order.OrderId = order_id;
-
-            if (pos > 0)
-                order.Action = "Sell";
-
-            else if (pos < 0)
-                order.Action = "Buy";
-
-            order.OrderType = "MKT";
-
-            order.TotalQuantity = Math.Abs(pos);
-
-            order.LmtPrice = Convert.ToDouble(numPrice.Value);
-            order.AuxPrice = 0.00;
-
-            // checks if Outside RTH is checked, then apply outsideRTH to the order
-            order.OutsideRth = chkOutside.Checked;
-
-            // Place the order
-            ibClient.ClientSocket.placeOrder(order_id, contract, order);
-
-            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close.";
-            lbData.Items.Insert(0, printBox);
-
-            // increase the order id value
-            order_id++;
-
         }
         private void CloseHalfPos(object sender, EventArgs e)
         {
@@ -1554,69 +1548,43 @@ namespace IBKR_Trader
                     }
 
                 }
+                IBApi.Contract contract = new Contract();
+                contract.Symbol = searchValue;
+                contract.SecType = "STK";
+                contract.Exchange = "SMART";
+                contract.PrimaryExch = "ISLAND";
+                contract.Currency = "USD";
+
+                IBApi.Order order = new IBApi.Order();
+                order.OrderId = order_id;
+
+                if (pos > 0)
+                    order.Action = "Sell";
+
+                else if (pos < 0)
+                    order.Action = "Buy";
+
+                order.OrderType = "MKT";
+
+                order.TotalQuantity = Math.Abs(Math.Floor(pos / 2));
+
+                order.LmtPrice = Convert.ToDouble(numPrice.Value);
+                order.AuxPrice = 0.00;
+
+                // checks if Outside RTH is checked, then apply outsideRTH to the order
+                order.OutsideRth = chkOutside.Checked;
+
+                // Place the order
+                ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+                string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close half.";
+                lbData.Items.Insert(0, printBox);
+
+                // increase the order id value
+                order_id++;
             }
-
-            IBApi.Contract contract = new Contract();
-            contract.Symbol = searchValue;
-            contract.SecType = "STK";
-            contract.Exchange = "SMART";
-            contract.PrimaryExch = "ISLAND";
-            contract.Currency = "USD";
-
-            IBApi.Order order = new IBApi.Order();
-            order.OrderId = order_id;
-
-            if (pos > 0)
-                order.Action = "Sell";
-
-            else if (pos < 0)
-                order.Action = "Buy";
-
-            order.OrderType = "MKT";
-
-            order.TotalQuantity = Math.Abs(Math.Floor(pos / 2));
-
-            order.LmtPrice = Convert.ToDouble(numPrice.Value);
-            order.AuxPrice = 0.00;
-
-            // checks if Outside RTH is checked, then apply outsideRTH to the order
-            order.OutsideRth = chkOutside.Checked;
-
-            // Place the order
-            ibClient.ClientSocket.placeOrder(order_id, contract, order);
-
-            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close half.";
-            lbData.Items.Insert(0, printBox);
-
-            // increase the order id value
-            order_id++;
+            UpdateStop();
         }
-
-        delegate void SetTextCallbackGetFullName(string marketName);
-        public void GetFullName(string marketName)
-        {
-            if (labelName.InvokeRequired)
-            {
-                try
-                {
-                    SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
-                    Invoke(d, new object[] { marketName });
-                }
-                catch (Exception f)
-                {
-                    lbData.Items.Insert(0, "GetFullName Invoke error: " + f);
-                }
-            }
-            else
-            {
-                try
-                {
-                    labelName.Text = marketName;
-                }
-                catch (Exception) { }
-            }
-        }
-
         private void btnCloseQtr_Click(object sender, EventArgs e)
         {
             int countRow2 = 0;
@@ -1653,42 +1621,160 @@ namespace IBKR_Trader
                     }
 
                 }
+                IBApi.Contract contract = new Contract();
+                contract.Symbol = searchValue;
+                contract.SecType = "STK";
+                contract.Exchange = "SMART";
+                contract.PrimaryExch = "ISLAND";
+                contract.Currency = "USD";
+
+                IBApi.Order order = new IBApi.Order();
+                order.OrderId = order_id;
+
+                if (pos > 0)
+                    order.Action = "Sell";
+
+                else if (pos < 0)
+                    order.Action = "Buy";
+
+                order.OrderType = "MKT";
+
+                order.TotalQuantity = Math.Abs(Math.Floor(pos / 4));
+
+                order.LmtPrice = Convert.ToDouble(numPrice.Value);
+                order.AuxPrice = 0.00;
+
+                // checks if Outside RTH is checked, then apply outsideRTH to the order
+                order.OutsideRth = chkOutside.Checked;
+
+                // Place the order
+                ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+                string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close quarter pos.";
+                lbData.Items.Insert(0, printBox);
+
+                // increase the order id value
+                order_id++;
             }
+            UpdateStop();
+        }
 
-            IBApi.Contract contract = new Contract();
-            contract.Symbol = searchValue;
-            contract.SecType = "STK";
-            contract.Exchange = "SMART";
-            contract.PrimaryExch = "ISLAND";
-            contract.Currency = "USD";
+        private void UpdateStop()
+        {
+            int countRow2 = 0;
+            decimal pos = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+            int stopOrderId = 0;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            IBApi.Order order = new IBApi.Order();
-            order.OrderId = order_id;
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
 
-            if (pos > 0)
-                order.Action = "Sell";
+                }
+            }
+            int countRow3 = 0;
+            bool wasFound3 = false;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound3 = true;
+                        break;
+                    }
+                    countRow3++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound3)
+            {
+                try
+                {
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            else if (pos < 0)
-                order.Action = "Buy";
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
+                        {
+                            // Modify the values in the row based on the current stock symbol.
+                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
+                            break;
+                        }
+                    }
+                    IBApi.Contract contract = new Contract();
+                    contract.Symbol = searchValue;
+                    contract.SecType = "STK";
+                    contract.Exchange = "SMART";
+                    contract.PrimaryExch = "ISLAND";
+                    contract.Currency = "USD";
 
-            order.OrderType = "MKT";
+                    IBApi.Order order = new IBApi.Order();
+                    order.OrderId = stopOrderId;
 
-            order.TotalQuantity = Math.Abs(Math.Floor(pos / 4));
+                    order.TotalQuantity = Math.Abs(pos);
 
-            order.LmtPrice = Convert.ToDouble(numPrice.Value);
-            order.AuxPrice = 0.00;
+                    // Place the order
+                    ibClient.ClientSocket.placeOrder(order_id, contract, order);
+                }
+                catch (Exception ex)
+                {
+                    lbData.Items.Insert(0, "Update Stop error in wasFound3: " + ex);
+                }
+            }
+        }
 
-            // checks if Outside RTH is checked, then apply outsideRTH to the order
-            order.OutsideRth = chkOutside.Checked;
-
-            // Place the order
-            ibClient.ClientSocket.placeOrder(order_id, contract, order);
-
-            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " to close quarter pos.";
-            lbData.Items.Insert(0, printBox);
-
-            // increase the order id value
-            order_id++;
+        delegate void SetTextCallbackGetFullName(string fullName);
+        public void GetFullName(string fullName)
+        {
+            if (labelName.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
+                    Invoke(d, new object[] { fullName });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "GetFullName Invoke error: " + f);
+                }
+            }
+            else
+            {
+                try
+                {
+                    labelName.Text = fullName;
+                }
+                catch (Exception) { }
+            }
         }
 
         delegate void SetTextCallbackTickSize(decimal avgvol);
@@ -1711,6 +1797,163 @@ namespace IBKR_Trader
                 decimal AV = avgvol * 100;
                 labelAvgVol.Text = "AvgVol: " + AV.ToString("#,##0");
             }
+        }
+
+        delegate void SetTextCallbackClosePrice(double closeprice);
+        public void ClosePrice(double closeprice)
+        {
+            if (labelChange.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackClosePrice d = new SetTextCallbackClosePrice(ClosePrice);
+                    Invoke(d, new object[] { closeprice });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "ClosePrice Invoke error: " + f);
+                }
+            }
+            else
+            {
+                double percentchange = ((Convert.ToDouble(tbLast.Text) - closeprice) / closeprice) * 100;
+                labelChange.Text = percentchange.ToString("0.##") + "%";
+
+                if (percentchange > 0)
+                    labelChange.ForeColor = Color.Blue;
+
+                else if (percentchange < 0)
+                    labelChange.ForeColor = Color.Crimson;
+
+                else
+                { labelChange.ForeColor = Color.Black; }
+
+            }
+        }
+        delegate void SetTextCallbackOpenPrice(double openprice);
+        public void OpenPrice(double openprice)
+        {
+            if (labelSinceOpen.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackOpenPrice d = new SetTextCallbackOpenPrice(OpenPrice);
+                    Invoke(d, new object[] { openprice });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "OpenPrice Invoke error: " + f);
+                }
+            }
+            else
+            {
+                double percentchange = ((Convert.ToDouble(tbLast.Text) - openprice) / openprice) * 100;
+                labelSinceOpen.Text = percentchange.ToString("0.##") + "%";
+
+                if (percentchange > 0)
+                    labelSinceOpen.ForeColor = Color.Blue;
+
+                else if (percentchange < 0)
+                    labelSinceOpen.ForeColor = Color.Crimson;
+
+                else
+                { labelSinceOpen.ForeColor = Color.Black; }
+            }
+        }
+
+        private void btnS2BE_Click(object sender, EventArgs e)
+        {
+            int countRow2 = 0;
+            double entryPrice = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+            int stopOrderId = 0;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        entryPrice = Convert.ToDouble(dataGridView4.Rows[countRow2].Cells[2].Value); // Position
+                        Math.Round(entryPrice, 2);
+                        break;
+                    }
+
+                }
+            }
+            int countRow3 = 0;
+            bool wasFound3 = false;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound3 = true;
+                        break;
+                    }
+                    countRow3++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound3)
+            {
+                try
+                {
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
+                        {
+                            // Modify the values in the row based on the current stock symbol.
+                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
+                            break;
+                        }
+                    }
+                    IBApi.Contract contract = new Contract();
+                    contract.Symbol = searchValue;
+                    contract.SecType = "STK";
+                    contract.Exchange = "SMART";
+                    contract.PrimaryExch = "ISLAND";
+                    contract.Currency = "USD";
+
+                    IBApi.Order order = new IBApi.Order();
+                    order.OrderId = stopOrderId;
+
+                    order.AuxPrice = entryPrice;
+
+                    // Place the order
+                    ibClient.ClientSocket.placeOrder(order_id, contract, order);
+                }
+                catch (Exception s)
+                {
+                    lbData.Items.Insert(0, "Stop to BE Error: " + s);
+                }
+            }
+
         }
     }
 }

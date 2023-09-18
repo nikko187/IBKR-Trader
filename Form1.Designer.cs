@@ -110,8 +110,11 @@
             tooltipClosePortion = new ToolTip(components);
             panel1 = new Panel();
             panel2 = new Panel();
-            labelAvgVol = new Label();
+            labelSinceOpen = new Label();
+            labelChange = new Label();
             labelVolume = new Label();
+            labelAvgVol = new Label();
+            btnS2BE = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -515,10 +518,10 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label5.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             label5.Location = new Point(12, 325);
             label5.Name = "label5";
-            label5.Size = new Size(126, 13);
+            label5.Size = new Size(116, 13);
             label5.TabIndex = 42;
             label5.Text = "Linked to TWS Group 4";
             // 
@@ -651,7 +654,7 @@
             // cbAlwaysOnTop
             // 
             cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Location = new Point(74, 296);
+            cbAlwaysOnTop.Location = new Point(152, 322);
             cbAlwaysOnTop.Name = "cbAlwaysOnTop";
             cbAlwaysOnTop.Size = new Size(104, 19);
             cbAlwaysOnTop.TabIndex = 48;
@@ -760,18 +763,19 @@
             // 
             // tbShortable
             // 
-            tbShortable.BorderStyle = BorderStyle.None;
-            tbShortable.Location = new Point(200, 322);
+            tbShortable.BorderStyle = BorderStyle.FixedSingle;
+            tbShortable.Location = new Point(332, 321);
+            tbShortable.MaximumSize = new Size(50, 20);
             tbShortable.Name = "tbShortable";
             tbShortable.ReadOnly = true;
-            tbShortable.Size = new Size(53, 16);
+            tbShortable.Size = new Size(50, 20);
             tbShortable.TabIndex = 50;
             tbShortable.TextAlign = HorizontalAlignment.Center;
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(160, 322);
+            label11.Location = new Point(294, 326);
             label11.Name = "label11";
             label11.Size = new Size(38, 15);
             label11.TabIndex = 51;
@@ -843,30 +847,65 @@
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.Fixed3D;
-            panel2.Controls.Add(labelAvgVol);
+            panel2.Controls.Add(labelSinceOpen);
+            panel2.Controls.Add(labelChange);
             panel2.Controls.Add(labelVolume);
+            panel2.Controls.Add(labelAvgVol);
             panel2.Location = new Point(12, 43);
             panel2.Name = "panel2";
             panel2.Size = new Size(370, 24);
             panel2.TabIndex = 57;
             // 
+            // labelSinceOpen
+            // 
+            labelSinceOpen.AutoSize = true;
+            labelSinceOpen.Location = new Point(280, 2);
+            labelSinceOpen.Name = "labelSinceOpen";
+            labelSinceOpen.Size = new Size(61, 15);
+            labelSinceOpen.TabIndex = 3;
+            labelSinceOpen.Text = "SncOpn: 0";
+            labelSinceOpen.TextAlign = ContentAlignment.TopRight;
+            // 
+            // labelChange
+            // 
+            labelChange.Anchor = AnchorStyles.Right;
+            labelChange.AutoSize = true;
+            labelChange.Location = new Point(238, 2);
+            labelChange.Name = "labelChange";
+            labelChange.Size = new Size(13, 15);
+            labelChange.TabIndex = 2;
+            labelChange.Text = "0";
+            labelChange.TextAlign = ContentAlignment.TopRight;
+            // 
+            // labelVolume
+            // 
+            labelVolume.AutoSize = true;
+            labelVolume.Location = new Point(-2, 2);
+            labelVolume.Name = "labelVolume";
+            labelVolume.Size = new Size(53, 15);
+            labelVolume.TabIndex = 0;
+            labelVolume.Text = "Volume: ";
+            // 
             // labelAvgVol
             // 
             labelAvgVol.AutoSize = true;
-            labelAvgVol.Location = new Point(164, 1);
+            labelAvgVol.Location = new Point(120, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(50, 15);
             labelAvgVol.TabIndex = 1;
             labelAvgVol.Text = "AvgVol: ";
             // 
-            // labelVolume
+            // btnS2BE
             // 
-            labelVolume.AutoSize = true;
-            labelVolume.Location = new Point(3, 1);
-            labelVolume.Name = "labelVolume";
-            labelVolume.Size = new Size(53, 15);
-            labelVolume.TabIndex = 0;
-            labelVolume.Text = "Volume: ";
+            btnS2BE.BackColor = Color.SkyBlue;
+            btnS2BE.FlatStyle = FlatStyle.Flat;
+            btnS2BE.Location = new Point(106, 288);
+            btnS2BE.Name = "btnS2BE";
+            btnS2BE.Size = new Size(88, 23);
+            btnS2BE.TabIndex = 58;
+            btnS2BE.Text = "Stop to BE";
+            btnS2BE.UseVisualStyleBackColor = false;
+            btnS2BE.Click += btnS2BE_Click;
             // 
             // Form1
             // 
@@ -874,6 +913,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(633, 595);
+            Controls.Add(btnS2BE);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(btnCloseQtr);
@@ -1024,5 +1064,8 @@
         private Panel panel2;
         private Label labelVolume;
         private Label labelAvgVol;
+        private Label labelChange;
+        private Label labelSinceOpen;
+        private Button btnS2BE;
     }
 }
