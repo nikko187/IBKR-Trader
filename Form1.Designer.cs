@@ -322,7 +322,6 @@
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
-            tbLast.TextChanged += PercentChange;
             // 
             // label8
             // 
@@ -859,7 +858,7 @@
             // labelSinceOpen
             // 
             labelSinceOpen.AutoSize = true;
-            labelSinceOpen.Location = new Point(280, 2);
+            labelSinceOpen.Location = new Point(275, 2);
             labelSinceOpen.Name = "labelSinceOpen";
             labelSinceOpen.Size = new Size(61, 15);
             labelSinceOpen.TabIndex = 3;
@@ -870,7 +869,7 @@
             // 
             labelChange.Anchor = AnchorStyles.Right;
             labelChange.AutoSize = true;
-            labelChange.Location = new Point(234, 2);
+            labelChange.Location = new Point(229, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(13, 15);
             labelChange.TabIndex = 2;
@@ -889,7 +888,7 @@
             // labelAvgVol
             // 
             labelAvgVol.AutoSize = true;
-            labelAvgVol.Location = new Point(120, 2);
+            labelAvgVol.Location = new Point(118, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(50, 15);
             labelAvgVol.TabIndex = 1;

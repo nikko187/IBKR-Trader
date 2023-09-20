@@ -45,7 +45,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 5;
+        int timer1_counter = 6;
         int myContractId;
 
 
@@ -215,6 +215,8 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         this.tbLast.Text = tickerPrice[2];
+                        PercentChange(null, null);
+                        UpdateRiskQty(null, null);
 
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask 67, realtime is tickerPrice == 2
@@ -231,7 +233,7 @@ namespace IBKR_Trader
                     }
                     double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
                     labelSpread.Text = spread.ToString();
-                    UpdateRiskQty(tickerPrice[2], e: null);
+
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
@@ -778,7 +780,7 @@ namespace IBKR_Trader
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
-                    timer1_counter = 5; // reset time counter back to 5
+                    timer1_counter = 6; // reset time counter back to 5
 
                     // convert contract id from an int to a strong and add exchange
                     string strGroup = myContractId.ToString() + "@SMART";
@@ -849,26 +851,25 @@ namespace IBKR_Trader
         // THE PURPOSE OF THIS IS TO KEEP THE RISK-CALCULATED QTY UPDATED WITH LIVE PRICE CHANGES, SO USER CAN SEE VARIABLE QTY //
         private void UpdateRiskQty(object sender, EventArgs e)
         {
-            if (cbOrderType.Text is "LMT" or "STP")
-                numPrice.ReadOnly = false;
-            else
-                numPrice.ReadOnly = true;
-
             if (chkBracket.Checked)
             {
-                if (cbOrderType.Text is "LMT" or "STP")
+                if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
                 {
+                    numPrice.ReadOnly = true;
+                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                }
+
+                else if (cbOrderType.Text is "LMT" or "STP")
+                {
+                    numPrice.ReadOnly = false;
                     try
                     {
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - Convert.ToDecimal(tbStopLoss.Text))));
                     }
                     catch (Exception) { }
                 }
-                else
-                {
-                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
-                }
             }
+            else { }
         }
 
         private void chkBracket_CheckedChanged(object sender, EventArgs e)
@@ -1810,7 +1811,7 @@ namespace IBKR_Trader
                 labelChange.ForeColor = Color.Blue;
 
             else if (percentchange < 0)
-                labelChange.ForeColor = Color.Crimson;
+                labelChange.ForeColor = Color.DarkRed;
 
             else
             { labelChange.ForeColor = Color.Black; }
