@@ -20,7 +20,6 @@ using System.Security.Cryptography.X509Certificates;
 
 /* PROPOSED ADDITIONS, REVISIONS, AND FIXES
  * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
- * ADD - TRIM BUTTONS - closes 50% of position. maybe a 25% of position also.
  * */
 
 namespace IBKR_Trader
@@ -63,6 +62,7 @@ namespace IBKR_Trader
                 // Add the text string to the list box
                 this.lbData.Items.Add(text);
             }
+
         }
 
         // Create ibClient object to represent the connection
@@ -447,8 +447,8 @@ namespace IBKR_Trader
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
                     // Current traded volume for the day.
-                    double volume = Convert.ToDouble(listTimeSales[3]);
-                    string voll = volume.ToString("0.##");
+                    double volume = Convert.ToDouble(listTimeSales[3]) * 100;
+                    string voll = volume.ToString("#,##0");
                     labelVolume.Text = "Volume: " + voll;
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -775,7 +775,7 @@ namespace IBKR_Trader
                     timer1.Stop();  // stop the timer
 
                     // Add Last price to limit box
-                    numPrice.Value = Convert.ToDecimal(tbLast.Text);
+                    // numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
                     timer1_counter = 5; // reset time counter back to 5
 
@@ -1848,7 +1848,7 @@ namespace IBKR_Trader
             else
             {
                 double percentchange = ((Convert.ToDouble(tbLast.Text) - openprice) / openprice) * 100;
-                labelSinceOpen.Text = percentchange.ToString("0.##") + "%";
+                labelSinceOpen.Text = "SncOpn: " + percentchange.ToString("0.##") + "%";
 
                 if (percentchange > 0)
                     labelSinceOpen.ForeColor = Color.Blue;
