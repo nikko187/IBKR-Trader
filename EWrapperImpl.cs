@@ -98,13 +98,14 @@ namespace IBKR_Trader
             // Add this tick price to the form by calling the AddListBoxItem delegate
             myform.AddListBoxItem(strData);
 
-            if (field == 9)
+            if (field == 75)
             {
-                myform.ClosePrice(price);
+                myform.closePrice = price;
             }
+
             if (field == 14)
             {
-                myform.OpenPrice(price);
+                myform.openPrice = price;
             }
         }
         //! [tickprice]

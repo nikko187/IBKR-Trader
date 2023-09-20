@@ -211,19 +211,19 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
                         this.tbLast.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
                         this.tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
                         this.tbBid.Text = tickerPrice[2];
@@ -231,6 +231,7 @@ namespace IBKR_Trader
                     }
                     double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
                     labelSpread.Text = spread.ToString();
+                    UpdateRiskQty(tickerPrice[2], e: null);
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
@@ -388,7 +389,7 @@ namespace IBKR_Trader
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
+            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
@@ -775,7 +776,7 @@ namespace IBKR_Trader
                     timer1.Stop();  // stop the timer
 
                     // Add Last price to limit box
-                    // numPrice.Value = Convert.ToDecimal(tbLast.Text);
+                    numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
                     timer1_counter = 5; // reset time counter back to 5
 
@@ -783,6 +784,7 @@ namespace IBKR_Trader
                     string strGroup = myContractId.ToString() + "@SMART";
                     // update the display group which will change the symbol
                     ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
+
                 }
                 catch (Exception) { }
 
@@ -852,22 +854,19 @@ namespace IBKR_Trader
             else
                 numPrice.ReadOnly = true;
 
-            if (chkBracket_CheckedChanged != null)
+            if (chkBracket.Checked)
             {
-                if (chkBracket.Checked)
+                if (cbOrderType.Text is "LMT" or "STP")
                 {
-                    if (cbOrderType.Text is "LMT" or "STP")
+                    try
                     {
-                        try
-                        {
-                            numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
-                        }
-                        catch (Exception) { }
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (numPrice.Value - Convert.ToDecimal(tbStopLoss.Text))));
                     }
-                    else
-                    {
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
-                    }
+                    catch (Exception) { }
+                }
+                else
+                {
+                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
                 }
             }
         }
@@ -1496,7 +1495,7 @@ namespace IBKR_Trader
 
                 order.TotalQuantity = Math.Abs(pos);
 
-                order.LmtPrice = Convert.ToDouble(numPrice.Value);
+                order.LmtPrice = 0.00;
                 order.AuxPrice = 0.00;
 
                 // checks if Outside RTH is checked, then apply outsideRTH to the order
@@ -1799,66 +1798,34 @@ namespace IBKR_Trader
             }
         }
 
-        delegate void SetTextCallbackClosePrice(double closeprice);
-        public void ClosePrice(double closeprice)
+        public double closePrice;
+        public double openPrice;
+
+        private void PercentChange(object sender, EventArgs e)
         {
-            if (labelChange.InvokeRequired)
-            {
-                try
-                {
-                    SetTextCallbackClosePrice d = new SetTextCallbackClosePrice(ClosePrice);
-                    Invoke(d, new object[] { closeprice });
-                }
-                catch (Exception f)
-                {
-                    lbData.Items.Insert(0, "ClosePrice Invoke error: " + f);
-                }
-            }
+            double percentchange = ((Convert.ToDouble(tbLast.Text) - closePrice) / closePrice) * 100;
+            labelChange.Text = percentchange.ToString("0.##") + "%";
+
+            if (percentchange > 0)
+                labelChange.ForeColor = Color.Blue;
+
+            else if (percentchange < 0)
+                labelChange.ForeColor = Color.Crimson;
+
             else
-            {
-                double percentchange = ((Convert.ToDouble(tbLast.Text) - closeprice) / closeprice) * 100;
-                labelChange.Text = percentchange.ToString("0.##") + "%";
+            { labelChange.ForeColor = Color.Black; }
 
-                if (percentchange > 0)
-                    labelChange.ForeColor = Color.Blue;
+            double changesinceopen = ((Convert.ToDouble(tbLast.Text) - openPrice) / openPrice) * 100;
+            labelSinceOpen.Text = "SncOpn: " + changesinceopen.ToString("0.##") + "%";
 
-                else if (percentchange < 0)
-                    labelChange.ForeColor = Color.Crimson;
+            if (changesinceopen > 0)
+                labelSinceOpen.ForeColor = Color.Blue;
 
-                else
-                { labelChange.ForeColor = Color.Black; }
+            else if (changesinceopen < 0)
+                labelSinceOpen.ForeColor = Color.Crimson;
 
-            }
-        }
-        delegate void SetTextCallbackOpenPrice(double openprice);
-        public void OpenPrice(double openprice)
-        {
-            if (labelSinceOpen.InvokeRequired)
-            {
-                try
-                {
-                    SetTextCallbackOpenPrice d = new SetTextCallbackOpenPrice(OpenPrice);
-                    Invoke(d, new object[] { openprice });
-                }
-                catch (Exception f)
-                {
-                    lbData.Items.Insert(0, "OpenPrice Invoke error: " + f);
-                }
-            }
             else
-            {
-                double percentchange = ((Convert.ToDouble(tbLast.Text) - openprice) / openprice) * 100;
-                labelSinceOpen.Text = "SncOpn: " + percentchange.ToString("0.##") + "%";
-
-                if (percentchange > 0)
-                    labelSinceOpen.ForeColor = Color.Blue;
-
-                else if (percentchange < 0)
-                    labelSinceOpen.ForeColor = Color.Crimson;
-
-                else
-                { labelSinceOpen.ForeColor = Color.Black; }
-            }
+            { labelSinceOpen.ForeColor = Color.Black; }
         }
 
         private void btnS2BE_Click(object sender, EventArgs e)

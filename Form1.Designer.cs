@@ -322,7 +322,7 @@
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
-            tbLast.TextChanged += UpdateRiskQty;
+            tbLast.TextChanged += PercentChange;
             // 
             // label8
             // 
@@ -870,7 +870,7 @@
             // 
             labelChange.Anchor = AnchorStyles.Right;
             labelChange.AutoSize = true;
-            labelChange.Location = new Point(238, 2);
+            labelChange.Location = new Point(234, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(13, 15);
             labelChange.TabIndex = 2;
@@ -1002,7 +1002,6 @@
         private TextBox tbAsk;
         private Label B;
         private Label label7;
-        private TextBox tbLast;
         private Label label8;
         private Button btnDisconnect;
         private Button btnSell;
@@ -1067,5 +1066,6 @@
         private Label labelChange;
         private Label labelSinceOpen;
         private Button btnS2BE;
+        public TextBox tbLast;
     }
 }
