@@ -1445,6 +1445,8 @@ namespace IBKR_Trader
             decimal pos = 0;
             bool wasFound2 = false;
             string searchValue = cbSymbol.Text;
+            int orderIds = 0;
+            int countRow3 = 0;
 
             try
             {
@@ -1475,7 +1477,6 @@ namespace IBKR_Trader
                         break;
                     }
                 }
-
                 IBApi.Contract contract = new Contract();
                 contract.Symbol = searchValue;
                 contract.SecType = "STK";
@@ -1493,12 +1494,9 @@ namespace IBKR_Trader
                     order.Action = "Buy";
 
                 order.OrderType = "MKT";
-
                 order.TotalQuantity = Math.Abs(pos);
-
                 order.LmtPrice = 0.00;
                 order.AuxPrice = 0.00;
-
                 // checks if Outside RTH is checked, then apply outsideRTH to the order
                 order.OutsideRth = chkOutside.Checked;
 
@@ -1511,6 +1509,20 @@ namespace IBKR_Trader
                 // increase the order id value
                 order_id++;
             }
+            bool wasFound3 = false;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells[0].Value != null && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
+                {
+                    orderIds = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
+                    ibClient.ClientSocket.cancelOrder(orderIds, "");
+                    wasFound3 = true;
+                }
+                countRow3++;
+            }
+            if (wasFound3)
+                lbData.Items.Insert(0, "Canceled all open orders for " + searchValue);
+
         }
         private void CloseHalfPos(object sender, EventArgs e)
         {
@@ -1565,12 +1577,9 @@ namespace IBKR_Trader
                     order.Action = "Buy";
 
                 order.OrderType = "MKT";
-
                 order.TotalQuantity = Math.Abs(Math.Floor(pos / 2));
-
                 order.LmtPrice = Convert.ToDouble(numPrice.Value);
                 order.AuxPrice = 0.00;
-
                 // checks if Outside RTH is checked, then apply outsideRTH to the order
                 order.OutsideRth = chkOutside.Checked;
 
@@ -1582,8 +1591,8 @@ namespace IBKR_Trader
 
                 // increase the order id value
                 order_id++;
+                UpdateStop();
             }
-            UpdateStop();
         }
         private void btnCloseQtr_Click(object sender, EventArgs e)
         {
@@ -1655,8 +1664,8 @@ namespace IBKR_Trader
 
                 // increase the order id value
                 order_id++;
+                UpdateStop();
             }
-            UpdateStop();
         }
 
         private void UpdateStop()
@@ -1666,6 +1675,8 @@ namespace IBKR_Trader
             bool wasFound2 = false;
             string searchValue = cbSymbol.Text;
             int stopOrderId = 0;
+            double stopPrice = 0;
+            string side = "";
             try
             {
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
@@ -1726,10 +1737,14 @@ namespace IBKR_Trader
                         if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
                         {
                             // Modify the values in the row based on the current stock symbol.
-                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
+                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
+                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[3].Value);
+                            side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
                             break;
                         }
                     }
+                    string newside = side.ToLower();
+
                     IBApi.Contract contract = new Contract();
                     contract.Symbol = searchValue;
                     contract.SecType = "STK";
@@ -1737,17 +1752,18 @@ namespace IBKR_Trader
                     contract.PrimaryExch = "ISLAND";
                     contract.Currency = "USD";
 
-                    IBApi.Order order = new IBApi.Order();
-                    order.OrderId = stopOrderId;
-
-                    order.TotalQuantity = Math.Abs(pos);
+                    IBApi.Order stopLoss = new Order();
+                    stopLoss.OrderId = stopOrderId;
+                    stopLoss.Action = char.ToUpper(newside[0]) + newside.Substring(1);
+                    stopLoss.OrderType = "STP";
+                    stopLoss.TotalQuantity = pos;
 
                     // Place the order
-                    ibClient.ClientSocket.placeOrder(order_id, contract, order);
+                    ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
                 }
-                catch (Exception ex)
+                catch (Exception s)
                 {
-                    lbData.Items.Insert(0, "Update Stop error in wasFound3: " + ex);
+                    lbData.Items.Insert(0, "UpdateStop error: " + s);
                 }
             }
         }
@@ -1836,6 +1852,8 @@ namespace IBKR_Trader
             bool wasFound2 = false;
             string searchValue = cbSymbol.Text;
             int stopOrderId = 0;
+            decimal pos = 0;
+            string side = "";
             try
             {
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
@@ -1861,8 +1879,9 @@ namespace IBKR_Trader
                     if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
                     {
                         // Modify the values in the row based on the current stock symbol.
-                        entryPrice = Convert.ToDouble(dataGridView4.Rows[countRow2].Cells[2].Value); // Position
-                        Math.Round(entryPrice, 2);
+                        entryPrice = Math.Round(Convert.ToDouble(dataGridView4.Rows[countRow2].Cells[2].Value), 2); // Position
+                        pos = Math.Abs(Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value));
+
                         break;
                     }
 
@@ -1870,6 +1889,7 @@ namespace IBKR_Trader
             }
             int countRow3 = 0;
             bool wasFound3 = false;
+            bool wasFound4 = false;
             try
             {
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
@@ -1885,6 +1905,7 @@ namespace IBKR_Trader
             }
             catch (Exception)
             {
+                lbData.Items.Insert(0, "Error in counting Rows");
             }
             if (wasFound3)
             {
@@ -1898,6 +1919,8 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
+                            side = (string)dataGridView1.Rows[countRow3].Cells[6].Value;
+                            wasFound4 = true;
                             break;
                         }
                     }
@@ -1908,13 +1931,23 @@ namespace IBKR_Trader
                     contract.PrimaryExch = "ISLAND";
                     contract.Currency = "USD";
 
-                    IBApi.Order order = new IBApi.Order();
-                    order.OrderId = stopOrderId;
-
-                    order.AuxPrice = entryPrice;
+                    IBApi.Order stopLoss = new Order();
+                    stopLoss.OrderId = stopOrderId;
+                    stopLoss.Action = side;
+                    stopLoss.OrderType = "STP";
+                    stopLoss.TotalQuantity = pos;
+                    if (side == "Buy")
+                        stopLoss.AuxPrice = entryPrice + 0.01;
+                    else
+                        stopLoss.AuxPrice = entryPrice - 0.01;
 
                     // Place the order
-                    ibClient.ClientSocket.placeOrder(order_id, contract, order);
+                    ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
+                    if (wasFound4)
+                    {
+                        lbData.Items.Insert(0, "Stop Loss modified to avg price " + stopLoss.AuxPrice);
+
+                    }
                 }
                 catch (Exception s)
                 {
