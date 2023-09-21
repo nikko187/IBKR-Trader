@@ -98,12 +98,12 @@ namespace IBKR_Trader
             // Add this tick price to the form by calling the AddListBoxItem delegate
             myform.AddListBoxItem(strData);
 
-            if (field == 75)
+            if (field == 9)     // 9 real-time close price. 75 delayed close
             {
                 myform.closePrice = price;
             }
 
-            if (field == 14)
+            if (field == 14)        // 14 realtime open tick. No delayed open tick.
             {
                 myform.openPrice = price;
             }
@@ -119,7 +119,7 @@ namespace IBKR_Trader
             Console.WriteLine(strData);
             myform.AddListBoxItem(strData);
 
-            if (field == 21)
+            if (field == 21)        // avg daily volume over 90 days
             {
                 myform.AverageVolume(size);
             }
@@ -877,6 +877,16 @@ namespace IBKR_Trader
         {
             Console.WriteLine("Tick-By-Tick. Request Id: {0}, TickType: {1}, Time: {2}, Price: {3}, Size: {4}, Exchange: {5}, Special Conditions: {6}, PastLimit: {7}, Unreported: {8}",
                 reqId, tickType == 1 ? "Last" : "AllLast", Util.UnixSecondsToString(time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(price), Util.DecimalMaxString(size), exchange, specialConditions, tickAttribLast.PastLimit, tickAttribLast.Unreported);
+
+            /*
+            string newTime = Util.UnixSecondsToString(time, "HH:mm:ss:ff");
+
+            if (size >= 100)
+            {
+                decimal newsize = size;
+                myform.TickByTick(newTime, price, newsize);
+            }
+            */
         }
         //! [tickbytickalllast]
 

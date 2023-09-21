@@ -211,7 +211,7 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 68)// Delayed Last 68, realtime is tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
                         this.tbLast.Text = tickerPrice[2];
@@ -219,13 +219,13 @@ namespace IBKR_Trader
                         UpdateRiskQty(null, null);
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 67)  // Delayed Ask 67, realtime is tickerPrice == 2
+                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
                         this.tbAsk.Text = tickerPrice[2];
 
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 66)  // Delayed Bid 66, realtime is tickerPrice == 1
+                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
                         this.tbBid.Text = tickerPrice[2];
@@ -369,6 +369,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
 
+            // ibClient.ClientSocket.cancelTickByTickData(1);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
             ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
@@ -391,10 +392,13 @@ namespace IBKR_Trader
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(3);  // delayed data = 3 live = 1
+            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
+
+            // Tick by tick TESTING -- SUCCESS!
+            // ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0,false);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -405,6 +409,99 @@ namespace IBKR_Trader
             timer1.Start();
 
         }
+
+        /*
+        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
+        public void TickByTick(string time, double price, decimal size)
+        {
+            if (listViewTns.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackTickByTick d = new SetTextCallbackTickByTick(TickByTick);
+                    this.Invoke(d, new object[] { time, price, size });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "TickByTick Invoke error: " + f);
+                }
+            }
+            else
+            {
+                try
+                {
+                    // get the bid price from the textbox Bid
+                    double theBid = Convert.ToDouble(tbBid.Text);
+                    // gets the ask price from the textbox Ask
+                    double theAsk = Convert.ToDouble(tbAsk.Text);
+
+                    // get the first value form the list convert it to a double this value is the last price
+
+                    // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
+                    string strShareSize = size.ToString("0.##");
+
+                    // TIME from tickstring data value
+
+                    //DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                    //epoch = epoch.AddMilliseconds(time);
+                    //epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
+
+                    string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
+
+                    // used to get midprice, was previously used for Time and Sales coloring. not anymore.
+                    double myMeanPrice = ((theAsk - theBid) / 2);
+                    double myMean = (theBid + myMeanPrice);
+
+                    ListViewItem lx = new ListViewItem();
+
+                    // if the last price is the same as the ask change the color to lime
+                    if (price >= theAsk)
+                    {
+                        lx.BackColor = Color.OliveDrab; // listview foreground color
+                        lx.Text = price.ToString(); // last price
+                        lx.SubItems.Add(strShareSize); // share size
+                        lx.SubItems.Add(strSaleTime); // time
+                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
+                    }
+                    // if the last price is the same as the bid change the color to red
+                    else if (price <= theBid)
+                    {
+                        lx.BackColor = Color.DarkRed;
+                        lx.Text = price.ToString();
+                        lx.SubItems.Add(strShareSize);
+                        lx.SubItems.Add(strSaleTime);
+                        listViewTns.Items.Insert(0, lx);
+
+                        // lbData.Items.Insert(0, strSaleTime);
+                    }
+                    // if the last price in greater than the mean price and
+                    // less than the ask price change the color to lime green
+                    else if (price > theBid && price < theAsk)
+                    {
+                        lx.ForeColor = Color.LightGray;
+                        lx.Text = price.ToString();
+                        lx.SubItems.Add(strShareSize);
+                        lx.SubItems.Add(strSaleTime);
+                        listViewTns.Items.Insert(0, lx);
+
+                        // lbData.Items.Add(epoch);
+                    }
+                    else
+                    {
+                        lx.ForeColor = Color.White;
+                        lx.Text = price.ToString();
+                        lx.SubItems.Add(strShareSize);
+                        lx.SubItems.Add(strSaleTime);
+                        listViewTns.Items.Insert(0, lx);
+                    }
+                }
+                catch (Exception)
+                {
+                    // lbData.Items.Insert(0, "TnS error: " + g);
+                }
+            }
+        }
+        */
 
         delegate void SetTextCallbackTickString(string _tickString);
         // TIME AND SALES CONFIG
@@ -461,15 +558,15 @@ namespace IBKR_Trader
                     string strSaleTime = epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     // used to get midprice, was previously used for Time and Sales coloring. not anymore.
-                    double myMeanPrice = ((theAsk - theBid) / 2);
-                    double myMean = (theBid + myMeanPrice);
+                    //double myMeanPrice = ((theAsk - theBid) / 2);
+                    //double myMean = (theBid + myMeanPrice);
 
                     ListViewItem lx = new ListViewItem();
 
                     // if the last price is the same as the ask change the color to lime
                     if (last_price >= theAsk)
                     {
-                        lx.ForeColor = Color.Lime; // listview foreground color
+                        lx.BackColor = Color.OliveDrab; // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -478,7 +575,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (last_price <= theBid)
                     {
-                        lx.ForeColor = Color.Crimson;
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -1591,7 +1688,7 @@ namespace IBKR_Trader
 
                 // increase the order id value
                 order_id++;
-                UpdateStop();
+                UpdateStop(order.TotalQuantity);
             }
         }
         private void btnCloseQtr_Click(object sender, EventArgs e)
@@ -1664,11 +1761,11 @@ namespace IBKR_Trader
 
                 // increase the order id value
                 order_id++;
-                UpdateStop();
+                UpdateStop(order.TotalQuantity);
             }
         }
 
-        private void UpdateStop()
+        private void UpdateStop(decimal orderQty)
         {
             int countRow2 = 0;
             decimal pos = 0;
@@ -1738,12 +1835,11 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[3].Value);
+                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
                             side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
                             break;
                         }
                     }
-                    string newside = side.ToLower();
 
                     IBApi.Contract contract = new Contract();
                     contract.Symbol = searchValue;
@@ -1754,9 +1850,10 @@ namespace IBKR_Trader
 
                     IBApi.Order stopLoss = new Order();
                     stopLoss.OrderId = stopOrderId;
-                    stopLoss.Action = char.ToUpper(newside[0]) + newside.Substring(1);
+                    stopLoss.Action = side;
                     stopLoss.OrderType = "STP";
-                    stopLoss.TotalQuantity = pos;
+                    stopLoss.TotalQuantity = Math.Abs(pos) - orderQty;
+                    stopLoss.AuxPrice = stopPrice;
 
                     // Place the order
                     ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
@@ -1839,7 +1936,7 @@ namespace IBKR_Trader
                 labelSinceOpen.ForeColor = Color.Blue;
 
             else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.Crimson;
+                labelSinceOpen.ForeColor = Color.DarkRed;
 
             else
             { labelSinceOpen.ForeColor = Color.Black; }
@@ -1945,7 +2042,7 @@ namespace IBKR_Trader
                     ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
                     if (wasFound4)
                     {
-                        lbData.Items.Insert(0, "Stop Loss modified to avg price " + stopLoss.AuxPrice);
+                        lbData.Items.Insert(0, "Stop Loss modified to avg price " + Math.Round(stopLoss.AuxPrice, 2));
 
                     }
                 }
