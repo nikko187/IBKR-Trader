@@ -18,9 +18,8 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 
 
-/* PROPOSED ADDITIONS, REVISIONS, AND FIXES
- * ADD - CLOSE POSITION BUTTON - will close the position (and cancel pending orders) for selected ticker
- * */
+/****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
+
 
 namespace IBKR_Trader
 {
