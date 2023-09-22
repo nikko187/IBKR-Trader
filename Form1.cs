@@ -538,9 +538,8 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    string size = listTimeSales[1];
-                    double shares = Convert.ToDouble(size);
-                    string strShareSize = shares.ToString("0.##");
+                    double shares = Convert.ToDouble(listTimeSales[1]);
+                    string strShareSize = shares.ToString("##0.##");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
@@ -548,13 +547,13 @@ namespace IBKR_Trader
                     // Current traded volume for the day.
                     double volume = Convert.ToDouble(listTimeSales[3]) * 100;
                     string voll = volume.ToString("#,##0");
-                    labelVolume.Text = "Volume: " + voll;
+                    labelVolume.Text = "Vol: " + voll;
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("h:mm:ss:ff");  // formatting for time
+                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
 
                     // used to get midprice, was previously used for Time and Sales coloring. not anymore.
                     //double myMeanPrice = ((theAsk - theBid) / 2);

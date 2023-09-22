@@ -140,6 +140,7 @@
             // 
             // cbSymbol
             // 
+            cbSymbol.AllowDrop = true;
             cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
@@ -405,10 +406,12 @@
             // columnHeader2
             // 
             columnHeader2.Text = "Shares";
+            columnHeader2.TextAlign = HorizontalAlignment.Right;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Time";
+            columnHeader3.TextAlign = HorizontalAlignment.Right;
             columnHeader3.Width = 90;
             // 
             // tbTakeProfit
@@ -424,7 +427,7 @@
             // tbStopLoss
             // 
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbStopLoss.Location = new Point(294, 259);
+            tbStopLoss.Location = new Point(294, 253);
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
@@ -492,7 +495,7 @@
             chkBracket.AutoSize = true;
             chkBracket.CheckAlign = ContentAlignment.MiddleRight;
             chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(207, 264);
+            chkBracket.Location = new Point(207, 258);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(84, 19);
@@ -667,6 +670,7 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Location = new Point(12, 411);
+            tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(614, 180);
@@ -790,7 +794,7 @@
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(88, 25);
             btnClose.TabIndex = 52;
-            btnClose.Text = "Close Pos";
+            btnClose.Text = "CLOSE POS";
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += ClosePosition;
             // 
@@ -799,7 +803,7 @@
             btnCloseHalf.BackColor = Color.Salmon;
             btnCloseHalf.FlatStyle = FlatStyle.Flat;
             btnCloseHalf.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseHalf.Location = new Point(106, 259);
+            btnCloseHalf.Location = new Point(106, 258);
             btnCloseHalf.Name = "btnCloseHalf";
             btnCloseHalf.Size = new Size(88, 23);
             btnCloseHalf.TabIndex = 53;
@@ -826,7 +830,7 @@
             btnCloseQtr.BackColor = Color.Salmon;
             btnCloseQtr.FlatStyle = FlatStyle.Flat;
             btnCloseQtr.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseQtr.Location = new Point(12, 259);
+            btnCloseQtr.Location = new Point(12, 258);
             btnCloseQtr.Name = "btnCloseQtr";
             btnCloseQtr.Size = new Size(88, 23);
             btnCloseQtr.TabIndex = 55;
@@ -870,7 +874,7 @@
             // 
             labelChange.Anchor = AnchorStyles.Right;
             labelChange.AutoSize = true;
-            labelChange.Location = new Point(229, 2);
+            labelChange.Location = new Point(225, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(13, 15);
             labelChange.TabIndex = 2;
@@ -882,14 +886,14 @@
             labelVolume.AutoSize = true;
             labelVolume.Location = new Point(-2, 2);
             labelVolume.Name = "labelVolume";
-            labelVolume.Size = new Size(53, 15);
+            labelVolume.Size = new Size(29, 15);
             labelVolume.TabIndex = 0;
-            labelVolume.Text = "Volume: ";
+            labelVolume.Text = "Vol: ";
             // 
             // labelAvgVol
             // 
             labelAvgVol.AutoSize = true;
-            labelAvgVol.Location = new Point(118, 2);
+            labelAvgVol.Location = new Point(108, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(50, 15);
             labelAvgVol.TabIndex = 1;
@@ -901,7 +905,7 @@
             btnS2BE.FlatStyle = FlatStyle.Flat;
             btnS2BE.Location = new Point(106, 288);
             btnS2BE.Name = "btnS2BE";
-            btnS2BE.Size = new Size(88, 27);
+            btnS2BE.Size = new Size(88, 24);
             btnS2BE.TabIndex = 58;
             btnS2BE.Text = "Stop to BE";
             btnS2BE.UseVisualStyleBackColor = false;
