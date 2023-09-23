@@ -2049,7 +2049,46 @@ namespace IBKR_Trader
                     lbData.Items.Insert(0, "Stop to BE Error: " + s);
                 }
             }
+        }
+        private void btnPosition_Click(object sender, EventArgs e)
+        {
+            bool wasFound2 = false;
+            int countRow2 = 0;
+            decimal pos = 0;
+            string searchValue = cbSymbol.Text;
 
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception h)
+            {
+                lbData.Items.Insert(0, "Position click: " + h);
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
+                }
+                numQuantity.Value = pos;
+            }
         }
     }
 }

@@ -115,6 +115,7 @@
             labelVolume = new Label();
             labelAvgVol = new Label();
             btnS2BE = new Button();
+            btnPosition = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -176,9 +177,10 @@
             // 
             numQuantity.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             numQuantity.Location = new Point(106, 86);
+            numQuantity.Margin = new Padding(1);
             numQuantity.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numQuantity.Name = "numQuantity";
-            numQuantity.Size = new Size(88, 25);
+            numQuantity.Size = new Size(66, 25);
             numQuantity.TabIndex = 4;
             numQuantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -911,12 +913,26 @@
             btnS2BE.UseVisualStyleBackColor = false;
             btnS2BE.Click += btnS2BE_Click;
             // 
+            // btnPosition
+            // 
+            btnPosition.FlatStyle = FlatStyle.System;
+            btnPosition.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnPosition.Location = new Point(173, 86);
+            btnPosition.Margin = new Padding(0);
+            btnPosition.Name = "btnPosition";
+            btnPosition.Size = new Size(21, 25);
+            btnPosition.TabIndex = 59;
+            btnPosition.Text = "P";
+            btnPosition.UseVisualStyleBackColor = true;
+            btnPosition.Click += btnPosition_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(633, 595);
+            Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
             Controls.Add(panel2);
             Controls.Add(panel1);
@@ -1071,5 +1087,6 @@
         private Label labelSinceOpen;
         private Button btnS2BE;
         public TextBox tbLast;
+        private Button btnPosition;
     }
 }
