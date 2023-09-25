@@ -116,6 +116,8 @@
             labelAvgVol = new Label();
             btnS2BE = new Button();
             btnPosition = new Button();
+            contextFormRightClick = new ContextMenuStrip(components);
+            toolstripBorderToggle = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -127,6 +129,7 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            contextFormRightClick.SuspendLayout();
             SuspendLayout();
             // 
             // btnConnect
@@ -429,7 +432,7 @@
             // tbStopLoss
             // 
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbStopLoss.Location = new Point(294, 253);
+            tbStopLoss.Location = new Point(294, 256);
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
@@ -497,7 +500,7 @@
             chkBracket.AutoSize = true;
             chkBracket.CheckAlign = ContentAlignment.MiddleRight;
             chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(207, 258);
+            chkBracket.Location = new Point(207, 261);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(84, 19);
@@ -781,7 +784,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(294, 326);
+            label11.Location = new Point(294, 323);
             label11.Name = "label11";
             label11.Size = new Size(38, 15);
             label11.TabIndex = 51;
@@ -876,7 +879,7 @@
             // 
             labelChange.Anchor = AnchorStyles.Right;
             labelChange.AutoSize = true;
-            labelChange.Location = new Point(225, 2);
+            labelChange.Location = new Point(220, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(13, 15);
             labelChange.TabIndex = 2;
@@ -895,7 +898,7 @@
             // labelAvgVol
             // 
             labelAvgVol.AutoSize = true;
-            labelAvgVol.Location = new Point(108, 2);
+            labelAvgVol.Location = new Point(98, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(50, 15);
             labelAvgVol.TabIndex = 1;
@@ -926,12 +929,27 @@
             btnPosition.UseVisualStyleBackColor = true;
             btnPosition.Click += btnPosition_Click;
             // 
+            // contextFormRightClick
+            // 
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle });
+            contextFormRightClick.Name = "contextFormRightClick";
+            contextFormRightClick.Size = new Size(148, 26);
+            // 
+            // toolstripBorderToggle
+            // 
+            toolstripBorderToggle.CheckOnClick = true;
+            toolstripBorderToggle.Name = "toolstripBorderToggle";
+            toolstripBorderToggle.Size = new Size(147, 22);
+            toolstripBorderToggle.Text = "Toggle Border";
+            toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(633, 595);
+            ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
             Controls.Add(panel2);
@@ -999,6 +1017,7 @@
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            contextFormRightClick.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1088,5 +1107,7 @@
         private Button btnS2BE;
         public TextBox tbLast;
         private Button btnPosition;
+        private ContextMenuStrip contextFormRightClick;
+        private ToolStripMenuItem toolstripBorderToggle;
     }
 }

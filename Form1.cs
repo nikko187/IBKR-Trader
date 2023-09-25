@@ -714,7 +714,6 @@ namespace IBKR_Trader
                 lbData.Items.Insert(0, printBox);
 
             }
-
             else
             {
                 order_id += 2;
@@ -723,6 +722,7 @@ namespace IBKR_Trader
             }
 
             BracketOrderExecuted = true;
+            chkBracket.Checked = false;
         }
 
         public static List<Order> BracketOrder(int parentOrderId, string action, double quantity, double limitPrice, double takeProfitLimitPrice, double stopLossPrice, string order_type, bool takeProfitEnabled)
@@ -2089,6 +2089,15 @@ namespace IBKR_Trader
                 }
                 numQuantity.Value = pos;
             }
+        }
+
+        private void ToolstripBorderToggle_Click(object sender, EventArgs e)
+        {
+            if (toolstripBorderToggle.Checked)
+            {
+                FormBorderStyle = FormBorderStyle.None;
+            }
+            else { FormBorderStyle = FormBorderStyle.Sizable; }
         }
     }
 }
