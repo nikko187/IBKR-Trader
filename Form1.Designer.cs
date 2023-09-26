@@ -397,9 +397,9 @@
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
-            listViewTns.Location = new Point(407, 150);
+            listViewTns.Location = new Point(410, 150);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(230, 392);
+            listViewTns.Size = new Size(230, 395);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -907,9 +907,9 @@
             // 
             btnS2BE.BackColor = Color.SkyBlue;
             btnS2BE.FlatStyle = FlatStyle.Flat;
-            btnS2BE.Location = new Point(522, 116);
+            btnS2BE.Location = new Point(523, 116);
             btnS2BE.Name = "btnS2BE";
-            btnS2BE.Size = new Size(107, 24);
+            btnS2BE.Size = new Size(106, 24);
             btnS2BE.TabIndex = 58;
             btnS2BE.Text = "Stop to BE";
             btnS2BE.UseVisualStyleBackColor = false;
@@ -948,7 +948,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(644, 544);
+            ClientSize = new Size(645, 548);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
