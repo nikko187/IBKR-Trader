@@ -397,7 +397,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
-            // ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0,false);
+            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -539,7 +539,7 @@ namespace IBKR_Trader
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
                     double shares = Convert.ToDouble(listTimeSales[1]);
-                    string strShareSize = shares.ToString("##0.##");
+                    string strShareSize = shares.ToString("##0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);

@@ -399,7 +399,7 @@
             listViewTns.ForeColor = Color.White;
             listViewTns.Location = new Point(388, 5);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(238, 400);
+            listViewTns.Size = new Size(234, 400);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -411,7 +411,6 @@
             // columnHeader2
             // 
             columnHeader2.Text = "Shares";
-            columnHeader2.TextAlign = HorizontalAlignment.Right;
             // 
             // columnHeader3
             // 
@@ -595,7 +594,7 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(600, 146);
+            dataGridView1.Size = new Size(596, 146);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -678,7 +677,7 @@
             tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(614, 180);
+            tabControl1.Size = new Size(610, 180);
             tabControl1.TabIndex = 49;
             // 
             // tabPage1
@@ -687,7 +686,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(606, 152);
+            tabPage1.Size = new Size(602, 152);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Orders";
             tabPage1.UseVisualStyleBackColor = true;
@@ -699,7 +698,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(606, 152);
+            tabPage2.Size = new Size(602, 152);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Positions";
             tabPage2.UseVisualStyleBackColor = true;
@@ -734,7 +733,7 @@
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.RowTemplate.Height = 25;
             dataGridView4.ShowCellToolTips = false;
-            dataGridView4.Size = new Size(600, 124);
+            dataGridView4.Size = new Size(596, 124);
             dataGridView4.TabIndex = 0;
             dataGridView4.CellFormatting += dataGridView4_CellFormatting;
             // 
@@ -948,7 +947,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(633, 595);
+            ClientSize = new Size(629, 595);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
@@ -1037,8 +1036,6 @@
         private Label label4;
         private ComboBox cbTif;
         private Label label6;
-        private TextBox tbBid;
-        private TextBox tbAsk;
         private Label B;
         private Label label7;
         private Label label8;
@@ -1109,5 +1106,7 @@
         private Button btnPosition;
         private ContextMenuStrip contextFormRightClick;
         private ToolStripMenuItem toolstripBorderToggle;
+        public TextBox tbBid;
+        public TextBox tbAsk;
     }
 }
