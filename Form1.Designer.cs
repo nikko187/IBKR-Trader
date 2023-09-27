@@ -397,7 +397,7 @@
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
-            listViewTns.Location = new Point(410, 150);
+            listViewTns.Location = new Point(410, 154);
             listViewTns.Name = "listViewTns";
             listViewTns.Size = new Size(230, 395);
             listViewTns.TabIndex = 30;
