@@ -950,13 +950,13 @@ namespace IBKR_Trader
             {
                 if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
                 {
-                    numPrice.ReadOnly = true;
+                    // numPrice.ReadOnly = true;
                     numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
                 }
 
                 else if (cbOrderType.Text is "LMT" or "STP")
                 {
-                    numPrice.ReadOnly = false;
+                    // numPrice.ReadOnly = false;
                     try
                     {
                         numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - Convert.ToDecimal(tbStopLoss.Text))));
