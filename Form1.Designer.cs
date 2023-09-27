@@ -276,23 +276,24 @@
             // tbBid
             // 
             tbBid.BackColor = SystemColors.ControlLight;
-            tbBid.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            tbBid.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             tbBid.Location = new Point(106, 174);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
-            tbBid.Size = new Size(88, 27);
+            tbBid.Size = new Size(88, 25);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
+            tbBid.TextAlign = HorizontalAlignment.Right;
             tbBid.Click += tbBid_Click;
             // 
             // tbAsk
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
-            tbAsk.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            tbAsk.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             tbAsk.Location = new Point(200, 174);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
-            tbAsk.Size = new Size(88, 27);
+            tbAsk.Size = new Size(88, 25);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
             tbAsk.Click += tbAsk_Click;
@@ -321,7 +322,7 @@
             // 
             tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbLast.Location = new Point(200, 222);
+            tbLast.Location = new Point(200, 220);
             tbLast.Name = "tbLast";
             tbLast.ReadOnly = true;
             tbLast.Size = new Size(88, 25);
@@ -333,7 +334,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(200, 204);
+            label8.Location = new Point(200, 202);
             label8.Name = "label8";
             label8.Size = new Size(28, 15);
             label8.TabIndex = 23;
@@ -355,7 +356,7 @@
             btnSell.FlatStyle = FlatStyle.Flat;
             btnSell.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnSell.ForeColor = Color.Black;
-            btnSell.Location = new Point(12, 170);
+            btnSell.Location = new Point(12, 168);
             btnSell.Name = "btnSell";
             btnSell.Size = new Size(88, 31);
             btnSell.TabIndex = 27;
@@ -369,7 +370,7 @@
             btnBuy.FlatStyle = FlatStyle.Flat;
             btnBuy.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBuy.ForeColor = Color.Black;
-            btnBuy.Location = new Point(294, 170);
+            btnBuy.Location = new Point(294, 168);
             btnBuy.Name = "btnBuy";
             btnBuy.Size = new Size(88, 31);
             btnBuy.TabIndex = 28;
@@ -421,7 +422,7 @@
             // tbTakeProfit
             // 
             tbTakeProfit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTakeProfit.Location = new Point(294, 290);
+            tbTakeProfit.Location = new Point(294, 282);
             tbTakeProfit.Name = "tbTakeProfit";
             tbTakeProfit.ReadOnly = true;
             tbTakeProfit.Size = new Size(88, 25);
@@ -431,7 +432,7 @@
             // tbStopLoss
             // 
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbStopLoss.Location = new Point(294, 256);
+            tbStopLoss.Location = new Point(294, 251);
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(88, 25);
@@ -444,7 +445,7 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(12, 222);
+            btnCancelLast.Location = new Point(12, 220);
             btnCancelLast.Name = "btnCancelLast";
             btnCancelLast.Size = new Size(88, 25);
             btnCancelLast.TabIndex = 35;
@@ -457,7 +458,7 @@
             btnCancelAll.BackColor = Color.FromArgb(255, 192, 128);
             btnCancelAll.FlatStyle = FlatStyle.Flat;
             btnCancelAll.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelAll.Location = new Point(294, 222);
+            btnCancelAll.Location = new Point(294, 220);
             btnCancelAll.Name = "btnCancelAll";
             btnCancelAll.Size = new Size(88, 25);
             btnCancelAll.TabIndex = 36;
@@ -499,7 +500,7 @@
             chkBracket.AutoSize = true;
             chkBracket.CheckAlign = ContentAlignment.MiddleRight;
             chkBracket.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(207, 261);
+            chkBracket.Location = new Point(207, 256);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(84, 19);
@@ -513,7 +514,7 @@
             cbTakeProfit.AutoSize = true;
             cbTakeProfit.CheckAlign = ContentAlignment.MiddleRight;
             cbTakeProfit.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            cbTakeProfit.Location = new Point(209, 293);
+            cbTakeProfit.Location = new Point(209, 285);
             cbTakeProfit.Name = "cbTakeProfit";
             cbTakeProfit.Size = new Size(82, 19);
             cbTakeProfit.TabIndex = 41;
@@ -661,7 +662,7 @@
             // cbAlwaysOnTop
             // 
             cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Location = new Point(152, 322);
+            cbAlwaysOnTop.Location = new Point(152, 319);
             cbAlwaysOnTop.Name = "cbAlwaysOnTop";
             cbAlwaysOnTop.Size = new Size(104, 19);
             cbAlwaysOnTop.TabIndex = 48;
@@ -772,7 +773,7 @@
             // tbShortable
             // 
             tbShortable.BorderStyle = BorderStyle.FixedSingle;
-            tbShortable.Location = new Point(332, 321);
+            tbShortable.Location = new Point(332, 318);
             tbShortable.MaximumSize = new Size(50, 20);
             tbShortable.Name = "tbShortable";
             tbShortable.ReadOnly = true;
@@ -783,7 +784,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(294, 323);
+            label11.Location = new Point(294, 320);
             label11.Name = "label11";
             label11.Size = new Size(38, 15);
             label11.TabIndex = 51;
@@ -794,7 +795,7 @@
             btnClose.BackColor = Color.Chocolate;
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnClose.Location = new Point(106, 222);
+            btnClose.Location = new Point(106, 220);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(88, 25);
             btnClose.TabIndex = 52;
@@ -807,7 +808,7 @@
             btnCloseHalf.BackColor = Color.Salmon;
             btnCloseHalf.FlatStyle = FlatStyle.Flat;
             btnCloseHalf.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseHalf.Location = new Point(106, 258);
+            btnCloseHalf.Location = new Point(106, 251);
             btnCloseHalf.Name = "btnCloseHalf";
             btnCloseHalf.Size = new Size(88, 23);
             btnCloseHalf.TabIndex = 53;
@@ -834,7 +835,7 @@
             btnCloseQtr.BackColor = Color.Salmon;
             btnCloseQtr.FlatStyle = FlatStyle.Flat;
             btnCloseQtr.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseQtr.Location = new Point(12, 258);
+            btnCloseQtr.Location = new Point(12, 251);
             btnCloseQtr.Name = "btnCloseQtr";
             btnCloseQtr.Size = new Size(88, 23);
             btnCloseQtr.TabIndex = 55;
@@ -907,7 +908,7 @@
             // 
             btnS2BE.BackColor = Color.SkyBlue;
             btnS2BE.FlatStyle = FlatStyle.Flat;
-            btnS2BE.Location = new Point(106, 288);
+            btnS2BE.Location = new Point(106, 280);
             btnS2BE.Name = "btnS2BE";
             btnS2BE.Size = new Size(88, 24);
             btnS2BE.TabIndex = 58;
