@@ -276,7 +276,7 @@
             // tbBid
             // 
             tbBid.BackColor = SystemColors.ControlLight;
-            tbBid.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            tbBid.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             tbBid.Location = new Point(200, 92);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
@@ -288,11 +288,11 @@
             // tbAsk
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
-            tbAsk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            tbAsk.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             tbAsk.Location = new Point(275, 92);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
-            tbAsk.Size = new Size(75, 25);
+            tbAsk.Size = new Size(69, 25);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
             tbAsk.Click += tbAsk_Click;
@@ -311,7 +311,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(325, 78);
+            label7.Location = new Point(319, 78);
             label7.Name = "label7";
             label7.Size = new Size(25, 13);
             label7.TabIndex = 21;

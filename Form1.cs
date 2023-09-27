@@ -131,7 +131,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, 1);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -214,9 +214,6 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         this.tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
-                        UpdateRiskQty(null, null);
-
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -228,11 +225,11 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         this.tbBid.Text = tickerPrice[2];
-
                     }
                     double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
                     labelSpread.Text = spread.ToString();
-
+                    PercentChange(null, null);
+                    UpdateRiskQty(null, null);
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
