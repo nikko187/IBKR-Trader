@@ -63,7 +63,6 @@
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             tbTakeProfit = new TextBox();
-            tbStopLoss = new TextBox();
             btnCancelLast = new Button();
             btnCancelAll = new Button();
             label10 = new Label();
@@ -118,6 +117,7 @@
             btnPosition = new Button();
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
+            tbStopLoss = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -130,6 +130,7 @@
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             contextFormRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)tbStopLoss).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -283,7 +284,6 @@
             tbBid.Size = new Size(88, 25);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
-            tbBid.TextAlign = HorizontalAlignment.Right;
             tbBid.Click += tbBid_Click;
             // 
             // tbAsk
@@ -428,17 +428,6 @@
             tbTakeProfit.Size = new Size(88, 25);
             tbTakeProfit.TabIndex = 33;
             tbTakeProfit.Text = "0.00";
-            // 
-            // tbStopLoss
-            // 
-            tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbStopLoss.Location = new Point(294, 251);
-            tbStopLoss.Name = "tbStopLoss";
-            tbStopLoss.ReadOnly = true;
-            tbStopLoss.Size = new Size(88, 25);
-            tbStopLoss.TabIndex = 34;
-            tbStopLoss.Text = "1.00";
-            tbStopLoss.TextChanged += UpdateRiskQty;
             // 
             // btnCancelLast
             // 
@@ -943,6 +932,18 @@
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
+            // tbStopLoss
+            // 
+            tbStopLoss.DecimalPlaces = 2;
+            tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            tbStopLoss.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            tbStopLoss.Location = new Point(294, 250);
+            tbStopLoss.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
+            tbStopLoss.Name = "tbStopLoss";
+            tbStopLoss.Size = new Size(88, 25);
+            tbStopLoss.TabIndex = 60;
+            tbStopLoss.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -950,6 +951,7 @@
             BackColor = Color.Gainsboro;
             ClientSize = new Size(629, 595);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(tbStopLoss);
             Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
             Controls.Add(panel2);
@@ -972,7 +974,6 @@
             Controls.Add(label2);
             Controls.Add(btnCancelAll);
             Controls.Add(btnCancelLast);
-            Controls.Add(tbStopLoss);
             Controls.Add(tbTakeProfit);
             Controls.Add(chkOutside);
             Controls.Add(btnBuy);
@@ -1018,6 +1019,7 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             contextFormRightClick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)tbStopLoss).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1050,7 +1052,6 @@
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
         private TextBox tbTakeProfit;
-        private TextBox tbStopLoss;
         private Button btnCancelLast;
         private Button btnCancelAll;
         private Label label10;
@@ -1109,5 +1110,6 @@
         private ToolStripMenuItem toolstripBorderToggle;
         public TextBox tbBid;
         public TextBox tbAsk;
+        private NumericUpDown tbStopLoss;
     }
 }

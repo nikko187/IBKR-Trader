@@ -385,7 +385,7 @@ namespace IBKR_Trader
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "";
+            contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
 
@@ -951,7 +951,7 @@ namespace IBKR_Trader
                 if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
                 {
                     // numPrice.ReadOnly = true;
-                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - decimal.Parse(tbStopLoss.Text))));
                 }
 
                 else if (cbOrderType.Text is "LMT" or "STP")
@@ -959,7 +959,7 @@ namespace IBKR_Trader
                     // numPrice.ReadOnly = false;
                     try
                     {
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - Convert.ToDecimal(tbStopLoss.Text))));
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - decimal.Parse(tbStopLoss.Text))));
                     }
                     catch (Exception) { }
                 }
