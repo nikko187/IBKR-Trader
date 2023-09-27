@@ -135,7 +135,7 @@
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(253, 5);
+            btnConnect.Location = new Point(381, 4);
             btnConnect.Name = "btnConnect";
             btnConnect.Size = new Size(78, 23);
             btnConnect.TabIndex = 0;
@@ -149,12 +149,14 @@
             cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
-            cbSymbol.Location = new Point(12, 48);
+            cbSymbol.Location = new Point(14, 49);
+            cbSymbol.MaxLength = 6;
             cbSymbol.Name = "cbSymbol";
-            cbSymbol.Size = new Size(59, 25);
+            cbSymbol.Size = new Size(68, 25);
             cbSymbol.TabIndex = 1;
             cbSymbol.Text = "TSLA";
             cbSymbol.SelectedIndexChanged += cbSymbol_SelectedIndexChanged;
+            cbSymbol.DragDrop += cbSymbol_DragDrop;
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
@@ -164,7 +166,7 @@
             lbData.ItemHeight = 15;
             lbData.Location = new Point(12, 230);
             lbData.Name = "lbData";
-            lbData.Size = new Size(370, 64);
+            lbData.Size = new Size(392, 64);
             lbData.TabIndex = 2;
             // 
             // label1
@@ -180,7 +182,7 @@
             // numQuantity
             // 
             numQuantity.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            numQuantity.Location = new Point(77, 49);
+            numQuantity.Location = new Point(86, 49);
             numQuantity.Margin = new Padding(1);
             numQuantity.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numQuantity.Name = "numQuantity";
@@ -215,7 +217,7 @@
             cbMarket.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbMarket.FormattingEnabled = true;
             cbMarket.Items.AddRange(new object[] { "SMART", "ISLAND", "EDGX" });
-            cbMarket.Location = new Point(317, 48);
+            cbMarket.Location = new Point(326, 48);
             cbMarket.Name = "cbMarket";
             cbMarket.Size = new Size(71, 25);
             cbMarket.TabIndex = 8;
@@ -225,7 +227,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(317, 33);
+            label3.Location = new Point(326, 33);
             label3.Name = "label3";
             label3.Size = new Size(38, 13);
             label3.TabIndex = 9;
@@ -258,7 +260,7 @@
             cbTif.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbTif.FormattingEnabled = true;
             cbTif.Items.AddRange(new object[] { "DAY", "GTC" });
-            cbTif.Location = new Point(394, 48);
+            cbTif.Location = new Point(403, 48);
             cbTif.Name = "cbTif";
             cbTif.Size = new Size(54, 25);
             cbTif.TabIndex = 16;
@@ -268,7 +270,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(394, 33);
+            label6.Location = new Point(403, 33);
             label6.Name = "label6";
             label6.Size = new Size(22, 13);
             label6.TabIndex = 17;
@@ -342,7 +344,7 @@
             // 
             // btnDisconnect
             // 
-            btnDisconnect.Location = new Point(337, 5);
+            btnDisconnect.Location = new Point(465, 4);
             btnDisconnect.Name = "btnDisconnect";
             btnDisconnect.Size = new Size(79, 23);
             btnDisconnect.TabIndex = 26;
@@ -381,7 +383,7 @@
             // chkOutside
             // 
             chkOutside.AutoSize = true;
-            chkOutside.Location = new Point(454, 49);
+            chkOutside.Location = new Point(463, 49);
             chkOutside.Name = "chkOutside";
             chkOutside.Size = new Size(56, 19);
             chkOutside.TabIndex = 29;
@@ -471,7 +473,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(77, 32);
+            label2.Location = new Point(86, 32);
             label2.Name = "label2";
             label2.Size = new Size(51, 13);
             label2.TabIndex = 38;
@@ -491,7 +493,7 @@
             // 
             chkBracket.AutoSize = true;
             chkBracket.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(234, 31);
+            chkBracket.Location = new Point(243, 31);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(64, 17);
@@ -536,7 +538,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label9.Location = new Point(164, 33);
+            label9.Location = new Point(173, 33);
             label9.Name = "label9";
             label9.Size = new Size(37, 13);
             label9.TabIndex = 44;
@@ -545,7 +547,7 @@
             // numRisk
             // 
             numRisk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            numRisk.Location = new Point(164, 49);
+            numRisk.Location = new Point(173, 49);
             numRisk.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
             numRisk.Name = "numRisk";
             numRisk.ReadOnly = true;
@@ -585,7 +587,7 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(596, 146);
+            dataGridView1.Size = new Size(381, 146);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -652,7 +654,7 @@
             // cbAlwaysOnTop
             // 
             cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Location = new Point(431, 7);
+            cbAlwaysOnTop.Location = new Point(68, 187);
             cbAlwaysOnTop.Name = "cbAlwaysOnTop";
             cbAlwaysOnTop.Size = new Size(104, 19);
             cbAlwaysOnTop.TabIndex = 48;
@@ -668,7 +670,7 @@
             tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(370, 180);
+            tabControl1.Size = new Size(392, 180);
             tabControl1.TabIndex = 49;
             // 
             // tabPage1
@@ -677,7 +679,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(362, 152);
+            tabPage1.Size = new Size(384, 152);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Orders";
             tabPage1.UseVisualStyleBackColor = true;
@@ -689,7 +691,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(362, 152);
+            tabPage2.Size = new Size(384, 152);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Positions";
             tabPage2.UseVisualStyleBackColor = true;
@@ -724,7 +726,7 @@
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.RowTemplate.Height = 25;
             dataGridView4.ShowCellToolTips = false;
-            dataGridView4.Size = new Size(596, 124);
+            dataGridView4.Size = new Size(381, 124);
             dataGridView4.TabIndex = 0;
             dataGridView4.CellFormatting += dataGridView4_CellFormatting;
             // 
@@ -812,7 +814,7 @@
             labelName.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             labelName.Location = new Point(0, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(228, 19);
+            labelName.Size = new Size(361, 19);
             labelName.TabIndex = 54;
             labelName.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -840,7 +842,7 @@
             panel1.Controls.Add(labelName);
             panel1.Location = new Point(12, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(235, 23);
+            panel1.Size = new Size(363, 23);
             panel1.TabIndex = 56;
             // 
             // panel2
@@ -852,13 +854,13 @@
             panel2.Controls.Add(labelAvgVol);
             panel2.Location = new Point(12, 157);
             panel2.Name = "panel2";
-            panel2.Size = new Size(370, 24);
+            panel2.Size = new Size(392, 24);
             panel2.TabIndex = 57;
             // 
             // labelSinceOpen
             // 
             labelSinceOpen.AutoSize = true;
-            labelSinceOpen.Location = new Point(275, 2);
+            labelSinceOpen.Location = new Point(300, 2);
             labelSinceOpen.Name = "labelSinceOpen";
             labelSinceOpen.Size = new Size(61, 15);
             labelSinceOpen.TabIndex = 3;
@@ -869,7 +871,7 @@
             // 
             labelChange.Anchor = AnchorStyles.Right;
             labelChange.AutoSize = true;
-            labelChange.Location = new Point(220, 2);
+            labelChange.Location = new Point(242, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(13, 15);
             labelChange.TabIndex = 2;
@@ -911,7 +913,7 @@
             btnPosition.FlatAppearance.BorderColor = Color.Gray;
             btnPosition.FlatStyle = FlatStyle.Flat;
             btnPosition.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPosition.Location = new Point(138, 49);
+            btnPosition.Location = new Point(147, 49);
             btnPosition.Margin = new Padding(0);
             btnPosition.Name = "btnPosition";
             btnPosition.Size = new Size(21, 25);
@@ -939,7 +941,7 @@
             tbStopLoss.DecimalPlaces = 2;
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbStopLoss.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            tbStopLoss.Location = new Point(230, 48);
+            tbStopLoss.Location = new Point(239, 48);
             tbStopLoss.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
@@ -949,6 +951,7 @@
             // 
             // Form1
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;

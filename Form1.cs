@@ -382,7 +382,7 @@ namespace IBKR_Trader
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "";
+            contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
 
@@ -1860,15 +1860,15 @@ namespace IBKR_Trader
             }
         }
 
-        delegate void SetTextCallbackGetFullName(string fullName);
-        public void GetFullName(string fullName)
+        delegate void SetTextCallbackGetFullName(string fullName, string industry);
+        public void GetFullName(string fullName, string industry)
         {
             if (labelName.InvokeRequired)
             {
                 try
                 {
                     SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
-                    Invoke(d, new object[] { fullName });
+                    Invoke(d, new object[] { fullName, industry });
                 }
                 catch (Exception f)
                 {
@@ -1879,7 +1879,7 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    labelName.Text = fullName;
+                    labelName.Text = fullName + " || " + industry;
                 }
                 catch (Exception) { }
             }
@@ -2095,6 +2095,23 @@ namespace IBKR_Trader
                 FormBorderStyle = FormBorderStyle.None;
             }
             else { FormBorderStyle = FormBorderStyle.Sizable; }
+        }
+
+        private void cbSymbol_DragDrop(object sender, DragEventArgs e)
+        {
+            cbSymbol.SelectionStart = 0;
+            cbSymbol.SelectionLength = cbSymbol.Text.Length;
+
+            string name = cbSymbol.Text;
+
+            // adds the security symbol to the dropdown list in the symbol combobox
+            if (!cbSymbol.Items.Contains(name))
+            {
+                cbSymbol.Items.Add(name);
+            }
+            cbSymbol.SelectAll();
+
+            getData();
         }
     }
 }

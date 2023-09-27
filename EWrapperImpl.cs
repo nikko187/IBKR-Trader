@@ -307,7 +307,7 @@ namespace IBKR_Trader
             printContractDetailsMsg(contractDetails);
             Console.WriteLine("ContractDetails end. ReqId: " + reqId);
 
-            myform.GetFullName(contractDetails.LongName);
+            myform.GetFullName(contractDetails.LongName, contractDetails.Industry);
         }
         //! [contractdetails]
 
