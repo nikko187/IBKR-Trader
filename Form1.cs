@@ -131,7 +131,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 1);
+                    ibClient.ClientSocket.eConnect("", port, 0);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -634,7 +634,7 @@ namespace IBKR_Trader
             if (cbOrderType.Text is "SNAP MKT" or "MKT")
                 numPrice.Value = Convert.ToDecimal(tbBid.Text);
             else if (cbOrderType.Text == "SNAP MID")
-                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
+                numPrice.Value = Math.Round((Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2, 2);
             else if (cbOrderType.Text == "SNAP PRIM")
                 numPrice.Value = Convert.ToDecimal(tbAsk.Text);
 
@@ -655,7 +655,7 @@ namespace IBKR_Trader
             if (cbOrderType.Text is "SNAP MKT" or "MKT")
                 numPrice.Value = Convert.ToDecimal(tbAsk.Text);
             else if (cbOrderType.Text == "SNAP MID")
-                numPrice.Value = (Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2;
+                numPrice.Value = Math.Round((Convert.ToDecimal(tbAsk.Text) + Convert.ToDecimal(tbBid.Text)) / 2, 2);
             else if (cbOrderType.Text == "SNAP PRIM")
                 numPrice.Value = Convert.ToDecimal(tbBid.Text);
 
@@ -2084,7 +2084,7 @@ namespace IBKR_Trader
                         break;
                     }
                 }
-                numQuantity.Value = pos;
+                numQuantity.Value = Math.Abs(pos);
             }
         }
 
