@@ -16,6 +16,8 @@ using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Diagnostics;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
@@ -131,7 +133,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, 1);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -213,21 +215,20 @@ namespace IBKR_Trader
                     if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
-                        this.tbLast.Text = tickerPrice[2];
+                        //this.tbLast.Text = tickerPrice[2];
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
-                        this.tbAsk.Text = tickerPrice[2];
+                        //this.tbAsk.Text = tickerPrice[2];
 
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
-                        this.tbBid.Text = tickerPrice[2];
+                        //this.tbBid.Text = tickerPrice[2];
                     }
-                    double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
-                    labelSpread.Text = spread.ToString();
+
                     PercentChange(null, null);
                     UpdateRiskQty(null, null);
                 }
@@ -365,9 +366,10 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
 
-            // ibClient.ClientSocket.cancelTickByTickData(1);
+            ibClient.ClientSocket.cancelTickByTickData(1);
+            ibClient.ClientSocket.cancelTickByTickData(2);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -391,10 +393,11 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
-            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
+            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0,false);
+            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -406,7 +409,31 @@ namespace IBKR_Trader
 
         }
 
-        /*
+        delegate void SetTextCallbackBidAskTicks(double bidTick, double askTick);
+        public void BidAskTick(double bidTick, double askTick)
+        {
+            if (tbBid.InvokeRequired && tbAsk.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackBidAskTicks d = new SetTextCallbackBidAskTicks(BidAskTick);
+                    this.Invoke(d, new object[] { bidTick, askTick });
+                }
+                catch (Exception f)
+                {
+                    lbData.Items.Insert(0, "TickByTick Invoke error: " + f);
+                }
+            }
+            else
+            {
+                tbBid.Text = bidTick.ToString();
+                tbAsk.Text = askTick.ToString();
+
+                double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
+                labelSpread.Text = spread.ToString();
+            }
+        }
+        
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
         {
@@ -426,27 +453,14 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    // get the bid price from the textbox Bid
+                    tbLast.Text = price.ToString();
                     double theBid = Convert.ToDouble(tbBid.Text);
-                    // gets the ask price from the textbox Ask
                     double theAsk = Convert.ToDouble(tbAsk.Text);
-
-                    // get the first value form the list convert it to a double this value is the last price
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
                     string strShareSize = size.ToString("0.##");
 
-                    // TIME from tickstring data value
-
-                    //DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    //epoch = epoch.AddMilliseconds(time);
-                    //epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
-
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
-
-                    // used to get midprice, was previously used for Time and Sales coloring. not anymore.
-                    double myMeanPrice = ((theAsk - theBid) / 2);
-                    double myMean = (theBid + myMeanPrice);
 
                     ListViewItem lx = new ListViewItem();
 
@@ -497,8 +511,8 @@ namespace IBKR_Trader
                 }
             }
         }
-        */
-
+        
+        /*
         delegate void SetTextCallbackTickString(string _tickString);
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
@@ -605,7 +619,7 @@ namespace IBKR_Trader
                 }
             }
         }
-
+        */
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
