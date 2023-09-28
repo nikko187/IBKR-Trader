@@ -2087,7 +2087,7 @@ namespace IBKR_Trader
                         break;
                     }
                 }
-                numQuantity.Value = pos;
+                numQuantity.Value = Math.Abs(pos);
             }
         }
 
