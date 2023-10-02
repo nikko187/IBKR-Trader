@@ -881,11 +881,8 @@ namespace IBKR_Trader
             
             string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
 
-            if (size > 99)
-            {
-                decimal newsize = size;
-                myform.TickByTick(newTime, price, newsize);
-            }
+            myform.TickByTick(newTime, price, size);
+
             
         }
         //! [tickbytickalllast]

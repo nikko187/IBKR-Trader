@@ -458,51 +458,53 @@ namespace IBKR_Trader
                     double theAsk = Convert.ToDouble(tbAsk.Text);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    string strShareSize = size.ToString("0.##");
+                    string strShareSize = size.ToString("##0");
 
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
-
-                    ListViewItem lx = new ListViewItem();
-
-                    // if the last price is the same as the ask change the color to lime
-                    if (price >= theAsk)
+                    if (size > 99)
                     {
-                        lx.BackColor = Color.OliveDrab; // listview foreground color
-                        lx.Text = price.ToString(); // last price
-                        lx.SubItems.Add(strShareSize); // share size
-                        lx.SubItems.Add(strSaleTime); // time
-                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
-                    }
-                    // if the last price is the same as the bid change the color to red
-                    else if (price <= theBid)
-                    {
-                        lx.BackColor = Color.DarkRed;
-                        lx.Text = price.ToString();
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
+                        ListViewItem lx = new ListViewItem();
 
-                        // lbData.Items.Insert(0, strSaleTime);
-                    }
-                    // if the last price in greater than the mean price and
-                    // less than the ask price change the color to lime green
-                    else if (price > theBid && price < theAsk)
-                    {
-                        lx.ForeColor = Color.LightGray;
-                        lx.Text = price.ToString();
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
+                        // if the last price is the same as the ask change the color to lime
+                        if (price >= theAsk)
+                        {
+                            lx.BackColor = Color.OliveDrab; // listview foreground color
+                            lx.Text = price.ToString(); // last price
+                            lx.SubItems.Add(strShareSize); // share size
+                            lx.SubItems.Add(strSaleTime); // time
+                            listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
+                        }
+                        // if the last price is the same as the bid change the color to red
+                        else if (price <= theBid)
+                        {
+                            lx.BackColor = Color.DarkRed;
+                            lx.Text = price.ToString();
+                            lx.SubItems.Add(strShareSize);
+                            lx.SubItems.Add(strSaleTime);
+                            listViewTns.Items.Insert(0, lx);
 
-                        // lbData.Items.Add(epoch);
-                    }
-                    else
-                    {
-                        lx.ForeColor = Color.White;
-                        lx.Text = price.ToString();
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
+                            // lbData.Items.Insert(0, strSaleTime);
+                        }
+                        // if the last price in greater than the mean price and
+                        // less than the ask price change the color to lime green
+                        else if (price > theBid && price < theAsk)
+                        {
+                            lx.ForeColor = Color.LightGray;
+                            lx.Text = price.ToString();
+                            lx.SubItems.Add(strShareSize);
+                            lx.SubItems.Add(strSaleTime);
+                            listViewTns.Items.Insert(0, lx);
+
+                            // lbData.Items.Add(epoch);
+                        }
+                        else
+                        {
+                            lx.ForeColor = Color.White;
+                            lx.Text = price.ToString();
+                            lx.SubItems.Add(strShareSize);
+                            lx.SubItems.Add(strSaleTime);
+                            listViewTns.Items.Insert(0, lx);
+                        }
                     }
                 }
                 catch (Exception)
