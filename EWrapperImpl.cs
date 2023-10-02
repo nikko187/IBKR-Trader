@@ -132,10 +132,10 @@ namespace IBKR_Trader
             Console.WriteLine("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
 
             // used for time and sales ticktype = 48 RT Volume
-            string tickStringData = ("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
+            // string tickStringData = ("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flag true or false
-           
+
             if (tickType == 48)     //used for time and sales (RTVolume)
             {
                 string _tickString = value;

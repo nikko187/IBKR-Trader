@@ -17,6 +17,7 @@ using System.Security.Policy;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics.Contracts;
+using System.Diagnostics;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
@@ -132,7 +133,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, 2);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -523,7 +524,7 @@ namespace IBKR_Trader
                     double theBid = Convert.ToDouble(tbBid.Text);
                     // gets the ask price from the textbox Ask
                     double theAsk = Convert.ToDouble(tbAsk.Text);
-
+                    Debug.WriteLine(_tickString);
                     // Contains Last Price, Trade Size, Trade Time, Total Volume, VWAP, 
                     // single trade flag true, or false.
                     // 6 items all together
@@ -535,8 +536,8 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    double shares = Convert.ToDouble(listTimeSales[1]);
-                    string strShareSize = shares.ToString("##0");
+                    string strShareSize = (Convert.ToDouble(listTimeSales[1])).ToString("##0");
+                    //string strShareSize = shares.ToString("#0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
@@ -550,7 +551,7 @@ namespace IBKR_Trader
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
+                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
 
                     // used to get midprice, was previously used for Time and Sales coloring. not anymore.
                     //double myMeanPrice = ((theAsk - theBid) / 2);
@@ -601,7 +602,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception)
                 {
-                    // lbData.Items.Insert(0, "TnS error: " + g);
+                    // Debug.WriteLine("TnS error: " + e);
                 }
             }
         }
@@ -1912,7 +1913,9 @@ namespace IBKR_Trader
         private void PercentChange(object sender, EventArgs e)
         {
             double percentchange = ((Convert.ToDouble(tbLast.Text) - closePrice) / closePrice) * 100;
-            labelChange.Text = percentchange.ToString("#0.00") + "%";
+            double change = Convert.ToDouble(tbLast.Text) - closePrice;
+
+            labelChange.Text = percentchange.ToString("#0.00") + "%   " + Math.Round(change, 2);
 
             if (percentchange > 0)
                 labelChange.ForeColor = Color.Blue;
@@ -2028,9 +2031,9 @@ namespace IBKR_Trader
                     stopLoss.OrderType = "STP";
                     stopLoss.TotalQuantity = pos;
                     if (side == "Buy")
-                        stopLoss.AuxPrice = entryPrice + 0.01;
+                        stopLoss.AuxPrice = entryPrice + 0.00;
                     else
-                        stopLoss.AuxPrice = entryPrice - 0.01;
+                        stopLoss.AuxPrice = entryPrice - 0.00;
 
                     // Place the order
                     ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
