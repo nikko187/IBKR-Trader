@@ -123,7 +123,7 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
             }
-            else if (ibClient.ClientSocket.IsConnected() == false)
+            else
             {
                 try
                 {
@@ -1918,16 +1918,30 @@ namespace IBKR_Trader
             double percentchange = ((Convert.ToDouble(tbLast.Text) - closePrice) / closePrice) * 100;
             double change = Convert.ToDouble(tbLast.Text) - closePrice;
 
-            labelChange.Text = percentchange.ToString("#0.00") + "%   " + Math.Round(change, 2);
+            labelChange.Text = percentchange.ToString("#0.00") + "%   " + (Math.Round(change, 2)).ToString("#0.00");
 
-            if (percentchange > 0)
-                labelChange.ForeColor = Color.Blue;
+            if (toolstripDarkMode.Checked)
+            {
+                if (percentchange > 0)
+                    labelChange.ForeColor = Color.LightBlue;
 
-            else if (percentchange < 0)
-                labelChange.ForeColor = Color.DarkRed;
+                else if (percentchange < 0)
+                    labelChange.ForeColor = Color.LightCoral;
 
+                else
+                { labelChange.ForeColor = Color.White; }
+            }
             else
-            { labelChange.ForeColor = Color.Black; }
+            {
+                if (percentchange > 0)
+                    labelChange.ForeColor = Color.Blue;
+
+                else if (percentchange < 0)
+                    labelChange.ForeColor = Color.Crimson;
+
+                else
+                { labelChange.ForeColor = Color.Black; }
+            }
 
             double changesinceopen = ((Convert.ToDouble(tbLast.Text) - openPrice) / openPrice) * 100;
             labelSinceOpen.Text = "sOpn: " + changesinceopen.ToString("#0.00") + "%";
@@ -1936,7 +1950,7 @@ namespace IBKR_Trader
                 labelSinceOpen.ForeColor = Color.Blue;
 
             else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.DarkRed;
+                labelSinceOpen.ForeColor = Color.Crimson;
 
             else
             { labelSinceOpen.ForeColor = Color.Black; }
@@ -2100,6 +2114,46 @@ namespace IBKR_Trader
                 FormBorderStyle = FormBorderStyle.None;
             }
             else { FormBorderStyle = FormBorderStyle.Sizable; }
+        }
+
+        private void ToolstripDarkModeToggle_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(20, 30, 40);
+            btnPosition.ForeColor = Color.White;
+
+            foreach (Panel p in Controls.OfType<Panel>())
+            {
+                foreach (Label label in p.Controls.OfType<Label>())
+                    label.ForeColor = Color.White;
+            }
+            foreach (Label l in Controls.OfType<Label>())
+            {
+                l.ForeColor = Color.White;
+            }
+            foreach (TextBox T in Controls.OfType<TextBox>())
+            {
+                T.BackColor = Color.Black;
+                T.ForeColor = Color.White;
+            }
+            foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
+            {
+                N.BackColor = Color.Black;
+                N.ForeColor = Color.White;
+            }
+            foreach (ComboBox CB in Controls.OfType<ComboBox>())
+            {
+                CB.BackColor = Color.Black;
+                CB.ForeColor = Color.White;
+            }
+            foreach (CheckBox check in Controls.OfType<CheckBox>())
+            {
+                check.ForeColor = Color.White;
+            }
+        }
+
+        private void FormState(object sender, EventArgs e)
+        {
+
         }
 
         private void cbSymbol_DragDrop(object sender, DragEventArgs e)

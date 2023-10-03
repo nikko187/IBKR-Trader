@@ -118,6 +118,7 @@
             btnPosition = new Button();
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
+            toolstripDarkMode = new ToolStripMenuItem();
             tbStopLoss = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
@@ -727,7 +728,7 @@
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.RowTemplate.Height = 25;
             dataGridView4.ShowCellToolTips = false;
-            dataGridView4.Size = new Size(381, 124);
+            dataGridView4.Size = new Size(381, 202);
             dataGridView4.TabIndex = 0;
             dataGridView4.CellFormatting += dataGridView4_CellFormatting;
             // 
@@ -864,14 +865,15 @@
             // 
             // labelChange
             // 
-            labelChange.Anchor = AnchorStyles.Right;
+            labelChange.Anchor = AnchorStyles.Left;
             labelChange.AutoSize = true;
+            labelChange.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelChange.Location = new Point(370, 2);
             labelChange.Name = "labelChange";
-            labelChange.Size = new Size(13, 15);
+            labelChange.Size = new Size(14, 15);
             labelChange.TabIndex = 2;
             labelChange.Text = "0";
-            labelChange.TextAlign = ContentAlignment.TopRight;
+            labelChange.TextAlign = ContentAlignment.MiddleRight;
             // 
             // panel2
             // 
@@ -887,9 +889,10 @@
             // labelSinceOpen
             // 
             labelSinceOpen.AutoSize = true;
+            labelSinceOpen.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelSinceOpen.Location = new Point(300, 2);
             labelSinceOpen.Name = "labelSinceOpen";
-            labelSinceOpen.Size = new Size(61, 15);
+            labelSinceOpen.Size = new Size(63, 15);
             labelSinceOpen.TabIndex = 3;
             labelSinceOpen.Text = "SncOpn: 0";
             labelSinceOpen.TextAlign = ContentAlignment.TopRight;
@@ -897,18 +900,20 @@
             // labelVolume
             // 
             labelVolume.AutoSize = true;
+            labelVolume.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelVolume.Location = new Point(-2, 2);
             labelVolume.Name = "labelVolume";
-            labelVolume.Size = new Size(29, 15);
+            labelVolume.Size = new Size(30, 15);
             labelVolume.TabIndex = 0;
             labelVolume.Text = "Vol: ";
             // 
             // labelAvgVol
             // 
             labelAvgVol.AutoSize = true;
+            labelAvgVol.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelAvgVol.Location = new Point(98, 2);
             labelAvgVol.Name = "labelAvgVol";
-            labelAvgVol.Size = new Size(50, 15);
+            labelAvgVol.Size = new Size(51, 15);
             labelAvgVol.TabIndex = 1;
             labelAvgVol.Text = "AvgVol: ";
             // 
@@ -940,17 +945,25 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(148, 26);
+            contextFormRightClick.Size = new Size(171, 48);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(147, 22);
+            toolstripBorderToggle.Size = new Size(170, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
+            // 
+            // toolstripDarkMode
+            // 
+            toolstripDarkMode.CheckOnClick = true;
+            toolstripDarkMode.Name = "toolstripDarkMode";
+            toolstripDarkMode.Size = new Size(170, 22);
+            toolstripDarkMode.Text = "Toggle Dark Mode";
+            toolstripDarkMode.Click += ToolstripDarkModeToggle_Click;
             // 
             // tbStopLoss
             // 
@@ -1136,5 +1149,6 @@
         public TextBox tbAsk;
         private NumericUpDown tbStopLoss;
         private Button btnTenPercent;
+        private ToolStripMenuItem toolstripDarkMode;
     }
 }
