@@ -560,11 +560,11 @@
             // labelSpread
             // 
             labelSpread.AutoSize = true;
-            labelSpread.Location = new Point(254, 74);
+            labelSpread.Location = new Point(251, 74);
             labelSpread.Name = "labelSpread";
-            labelSpread.Size = new Size(22, 15);
+            labelSpread.Size = new Size(28, 15);
             labelSpread.TabIndex = 46;
-            labelSpread.Text = "0.0";
+            labelSpread.Text = "0.00";
             labelSpread.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // dataGridView1
@@ -692,7 +692,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(384, 152);
+            tabPage2.Size = new Size(384, 208);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Positions";
             tabPage2.UseVisualStyleBackColor = true;
