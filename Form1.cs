@@ -122,7 +122,6 @@ namespace IBKR_Trader
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
-                return;
             }
             else if (ibClient.ClientSocket.IsConnected() == false)
             {
@@ -397,6 +396,10 @@ namespace IBKR_Trader
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
+            //ibClient.ClientSocket.reqMktDepthExchanges();
+            //List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
+            //ibClient.ClientSocket.reqMarketDepth(1, contract, 5, true, mktDepthOptions);
+
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
 
@@ -625,6 +628,7 @@ namespace IBKR_Trader
             btnConnect.Text = "Connect";
             btnConnect.BackColor = Color.Gainsboro;
             numPort.ReadOnly = false;
+            ibClient.ClientSocket.IsConnected();
         }
 
         private void btnSell_Click(object sender, EventArgs e)
