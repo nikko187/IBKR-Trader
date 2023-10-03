@@ -118,13 +118,13 @@ namespace IBKR_Trader
             numPort.ReadOnly = true;
 
             // fixes crash on clicking connect when already connected.
-            if (ibClient.ClientSocket.IsConnected())
+            if (ibClient.ClientSocket.IsConnected() == true)
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
                 return;
             }
-            else
+            else if (ibClient.ClientSocket.IsConnected() == false)
             {
                 try
                 {
@@ -133,7 +133,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 2);
+                    ibClient.ClientSocket.eConnect("", port, 0);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -174,7 +174,7 @@ namespace IBKR_Trader
 
         public void AddTextBoxItemConId(int contractId)
         {
-            if (this.cbSymbol.InvokeRequired)
+            if (cbSymbol.InvokeRequired)
             {
                 try
                 {
@@ -193,7 +193,7 @@ namespace IBKR_Trader
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
         {
-            if (this.tbLast.InvokeRequired)
+            if (tbLast.InvokeRequired)
             {
                 SetTextCallbackTickPrice d = new SetTextCallbackTickPrice(AddTextBoxItemTickPrice);
                 try
@@ -215,21 +215,20 @@ namespace IBKR_Trader
                     if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
-                        this.tbLast.Text = tickerPrice[2];
+                        tbLast.Text = tickerPrice[2];
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
-                        this.tbAsk.Text = tickerPrice[2];
-
+                        tbAsk.Text = tickerPrice[2];
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
-                        this.tbBid.Text = tickerPrice[2];
+                        tbBid.Text = tickerPrice[2];
                     }
-                    double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
-                    labelSpread.Text = spread.ToString();
+                    double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
+                    labelSpread.Text = spread.ToString("#0.00");
                     PercentChange(null, null);
                     UpdateRiskQty(null, null);
                 }
