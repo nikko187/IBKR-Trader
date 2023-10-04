@@ -118,10 +118,11 @@ namespace IBKR_Trader
             numPort.ReadOnly = true;
 
             // fixes crash on clicking connect when already connected.
-            if (ibClient.ClientSocket.IsConnected() == true)
+            if (ibClient.ClientSocket.IsConnected())
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
+                return;
             }
             else
             {
