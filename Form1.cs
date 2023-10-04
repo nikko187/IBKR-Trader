@@ -2125,7 +2125,7 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(30, 31, 35);
+                this.BackColor = Color.FromArgb(35, 35, 40);
                 btnPosition.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())
