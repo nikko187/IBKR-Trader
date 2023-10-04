@@ -549,7 +549,7 @@ namespace IBKR_Trader
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
+                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
 
                     // used to get midprice, was previously used for Time and Sales coloring. not anymore.
                     //double myMeanPrice = ((theAsk - theBid) / 2);
