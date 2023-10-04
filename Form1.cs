@@ -132,7 +132,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, 1);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -396,9 +396,9 @@ namespace IBKR_Trader
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
-            //ibClient.ClientSocket.reqMktDepthExchanges();
-            //List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
-            //ibClient.ClientSocket.reqMarketDepth(1, contract, 5, true, mktDepthOptions);
+            // ibClient.ClientSocket.reqMktDepthExchanges();
+            // List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
+            // ibClient.ClientSocket.reqMarketDepth(1, contract, 10, true, mktDepthOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -408,6 +408,11 @@ namespace IBKR_Trader
 
             timer1.Start();
         }
+
+        /* public void MktDepth(int position, int operation, int side, double price, decimal size)
+        {
+            Debug.WriteLine("position: " + position + " Op: " + operation + " Side: " + side + " Price: " + price + " Size: " + size);
+        }*/
 
         /*
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
@@ -526,7 +531,7 @@ namespace IBKR_Trader
                     double theBid = Convert.ToDouble(tbBid.Text);
                     // gets the ask price from the textbox Ask
                     double theAsk = Convert.ToDouble(tbAsk.Text);
-                    Debug.WriteLine(_tickString);
+
                     // Contains Last Price, Trade Size, Trade Time, Total Volume, VWAP, 
                     // single trade flag true, or false.
                     // 6 items all together
@@ -2118,42 +2123,74 @@ namespace IBKR_Trader
 
         private void ToolstripDarkModeToggle_Click(object sender, EventArgs e)
         {
-            this.BackColor = Color.FromArgb(20, 30, 40);
-            btnPosition.ForeColor = Color.White;
+            if (toolstripDarkMode.Checked)
+            {
+                this.BackColor = Color.FromArgb(30, 31, 35);
+                btnPosition.ForeColor = Color.White;
 
-            foreach (Panel p in Controls.OfType<Panel>())
-            {
-                foreach (Label label in p.Controls.OfType<Label>())
-                    label.ForeColor = Color.White;
+                foreach (Panel p in Controls.OfType<Panel>())
+                {
+                    foreach (Label label in p.Controls.OfType<Label>())
+                        label.ForeColor = Color.White;
+                }
+                foreach (Label l in Controls.OfType<Label>())
+                {
+                    l.ForeColor = Color.White;
+                }
+                foreach (TextBox T in Controls.OfType<TextBox>())
+                {
+                    T.BackColor = Color.Black;
+                    T.ForeColor = Color.White;
+                }
+                foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
+                {
+                    N.BackColor = Color.Black;
+                    N.ForeColor = Color.White;
+                }
+                foreach (ComboBox CB in Controls.OfType<ComboBox>())
+                {
+                    CB.BackColor = Color.Black;
+                    CB.ForeColor = Color.White;
+                }
+                foreach (CheckBox check in Controls.OfType<CheckBox>())
+                {
+                    check.ForeColor = Color.White;
+                }
             }
-            foreach (Label l in Controls.OfType<Label>())
+            else
             {
-                l.ForeColor = Color.White;
-            }
-            foreach (TextBox T in Controls.OfType<TextBox>())
-            {
-                T.BackColor = Color.Black;
-                T.ForeColor = Color.White;
-            }
-            foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
-            {
-                N.BackColor = Color.Black;
-                N.ForeColor = Color.White;
-            }
-            foreach (ComboBox CB in Controls.OfType<ComboBox>())
-            {
-                CB.BackColor = Color.Black;
-                CB.ForeColor = Color.White;
-            }
-            foreach (CheckBox check in Controls.OfType<CheckBox>())
-            {
-                check.ForeColor = Color.White;
-            }
-        }
+                this.BackColor = Color.LightGray;
+                btnPosition.ForeColor = Color.Black;
 
-        private void FormState(object sender, EventArgs e)
-        {
-
+                foreach (Panel p in Controls.OfType<Panel>())
+                {
+                    foreach (Label label in p.Controls.OfType<Label>())
+                        label.ForeColor = Color.Black;
+                }
+                foreach (Label l in Controls.OfType<Label>())
+                {
+                    l.ForeColor = Color.Black;
+                }
+                foreach (TextBox T in Controls.OfType<TextBox>())
+                {
+                    T.BackColor = SystemColors.Control;
+                    T.ForeColor = Color.Black;
+                }
+                foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
+                {
+                    N.BackColor = SystemColors.Window;
+                    N.ForeColor = Color.Black;
+                }
+                foreach (ComboBox CB in Controls.OfType<ComboBox>())
+                {
+                    CB.BackColor = SystemColors.Window;
+                    CB.ForeColor = Color.Black;
+                }
+                foreach (CheckBox check in Controls.OfType<CheckBox>())
+                {
+                    check.ForeColor = SystemColors.ControlText;
+                }
+            }
         }
 
         private void cbSymbol_DragDrop(object sender, DragEventArgs e)

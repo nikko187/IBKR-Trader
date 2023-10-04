@@ -474,6 +474,8 @@ namespace IBKR_Trader
         public virtual void updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             Console.WriteLine("UpdateMarketDepth. " + tickerId + " - Position: " + position + ", Operation: " + operation + ", Side: " + side + ", Price: " + Util.DoubleMaxString(price) + ", Size: " + Util.DecimalMaxString(size));
+
+            // myform.MktDepth(position, operation, side, price, size);
         }
         //! [updatemktdepth]
 
@@ -481,6 +483,8 @@ namespace IBKR_Trader
         public virtual void updateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
         {
             Console.WriteLine("UpdateMarketDepthL2. " + tickerId + " - Position: " + position + ", Operation: " + operation + ", Side: " + side + ", Price: " + Util.DoubleMaxString(price) + ", Size: " + Util.DecimalMaxString(size) + ", isSmartDepth: " + isSmartDepth);
+
+            // myform.MktDepth(position, marketMaker, operation, side, price, size);
         }
         //! [updatemktdepthl2]
 

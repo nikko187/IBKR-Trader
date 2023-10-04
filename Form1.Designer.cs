@@ -983,7 +983,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Gainsboro;
+            BackColor = Color.LightGray;
             ClientSize = new Size(645, 548);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnTenPercent);
