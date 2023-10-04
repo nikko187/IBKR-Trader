@@ -634,7 +634,6 @@ namespace IBKR_Trader
             btnConnect.Text = "Connect";
             btnConnect.BackColor = Color.Gainsboro;
             numPort.ReadOnly = false;
-            ibClient.ClientSocket.IsConnected();
         }
 
         private void btnSell_Click(object sender, EventArgs e)
