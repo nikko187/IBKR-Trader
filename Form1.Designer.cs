@@ -1097,7 +1097,6 @@
         private CheckBox chkBracket;
         private CheckBox cbTakeProfit;
         private Label label5;
-        private ListBox lbHelp;
         private Button btnHelp;
         private Label label9;
         private NumericUpDown numRisk;
