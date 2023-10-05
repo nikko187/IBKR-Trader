@@ -133,7 +133,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, 1);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -227,6 +227,15 @@ namespace IBKR_Trader
                         // Add the text string to the list box
                         tbBid.Text = tickerPrice[2];
                     }
+                    else if (Convert.ToInt32(tickerPrice[1]) == 6)
+                    {
+                        labelHi.Text = "H: " + tickerPrice[2];
+                    }
+                    else if (Convert.ToInt32(tickerPrice[1]) == 7)
+                    {
+                        labelLo.Text = "L: " + tickerPrice[2];
+                    }
+
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
                     PercentChange(null, null);
@@ -415,8 +424,7 @@ namespace IBKR_Trader
             Debug.WriteLine("position: " + position + " Op: " + operation + " Side: " + side + " Price: " + price + " Size: " + size);
         }*/
 
-        /*
-        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
+        /*        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
         {
             if (listViewTns.InvokeRequired)
@@ -570,7 +578,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the ask change the color to lime
                     if (last_price >= theAsk)
                     {
-                        lx.BackColor = Color.OliveDrab; // listview foreground color
+                        lx.BackColor = Color.FromArgb(75, 165, 50); // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -2125,8 +2133,9 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(35, 35, 40);
+                this.BackColor = Color.FromArgb(40, 40, 40);
                 btnPosition.ForeColor = Color.White;
+                tbShortable.ForeColor = Color.Black;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {
@@ -2161,6 +2170,7 @@ namespace IBKR_Trader
             {
                 this.BackColor = Color.LightGray;
                 btnPosition.ForeColor = Color.Black;
+                tbShortable.ForeColor = SystemColors.WindowText;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {

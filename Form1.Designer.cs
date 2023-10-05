@@ -109,6 +109,8 @@
             tooltipClosePortion = new ToolTip(components);
             btnTenPercent = new Button();
             panel1 = new Panel();
+            labelLo = new Label();
+            labelHi = new Label();
             labelChange = new Label();
             panel2 = new Panel();
             labelSinceOpen = new Label();
@@ -856,19 +858,38 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(labelLo);
+            panel1.Controls.Add(labelHi);
             panel1.Controls.Add(labelName);
-            panel1.Controls.Add(labelChange);
             panel1.Location = new Point(12, 5);
             panel1.Name = "panel1";
             panel1.Size = new Size(457, 23);
             panel1.TabIndex = 56;
+            // 
+            // labelLo
+            // 
+            labelLo.AutoSize = true;
+            labelLo.Location = new Point(404, 2);
+            labelLo.Name = "labelLo";
+            labelLo.Size = new Size(13, 15);
+            labelLo.TabIndex = 56;
+            labelLo.Text = "0";
+            // 
+            // labelHi
+            // 
+            labelHi.AutoSize = true;
+            labelHi.Location = new Point(355, 2);
+            labelHi.Name = "labelHi";
+            labelHi.Size = new Size(13, 15);
+            labelHi.TabIndex = 55;
+            labelHi.Text = "0";
             // 
             // labelChange
             // 
             labelChange.Anchor = AnchorStyles.Left;
             labelChange.AutoSize = true;
             labelChange.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelChange.Location = new Point(370, 2);
+            labelChange.Location = new Point(225, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(14, 15);
             labelChange.TabIndex = 2;
@@ -879,6 +900,7 @@
             // 
             panel2.BorderStyle = BorderStyle.Fixed3D;
             panel2.Controls.Add(labelSinceOpen);
+            panel2.Controls.Add(labelChange);
             panel2.Controls.Add(labelVolume);
             panel2.Controls.Add(labelAvgVol);
             panel2.Location = new Point(12, 157);
@@ -1149,5 +1171,7 @@
         private NumericUpDown tbStopLoss;
         private Button btnTenPercent;
         private ToolStripMenuItem toolstripDarkMode;
+        private Label labelHi;
+        private Label labelLo;
     }
 }
