@@ -552,9 +552,8 @@
             // 
             numRisk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             numRisk.Location = new Point(173, 47);
-            numRisk.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
+            numRisk.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numRisk.Name = "numRisk";
-            numRisk.ReadOnly = true;
             numRisk.Size = new Size(61, 25);
             numRisk.TabIndex = 45;
             numRisk.Value = new decimal(new int[] { 10, 0, 0, 0 });
@@ -878,7 +877,7 @@
             // labelHi
             // 
             labelHi.AutoSize = true;
-            labelHi.Location = new Point(355, 2);
+            labelHi.Location = new Point(352, 2);
             labelHi.Name = "labelHi";
             labelHi.Size = new Size(13, 15);
             labelHi.TabIndex = 55;
@@ -889,7 +888,7 @@
             labelChange.Anchor = AnchorStyles.Left;
             labelChange.AutoSize = true;
             labelChange.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelChange.Location = new Point(225, 2);
+            labelChange.Location = new Point(205, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(14, 15);
             labelChange.TabIndex = 2;

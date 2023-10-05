@@ -46,7 +46,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 6;
+        int timer1_counter = 5;
         int myContractId;
 
 
@@ -189,6 +189,10 @@ namespace IBKR_Trader
             else
             {
                 myContractId = contractId;
+                // convert contract id from an int to a string and add exchange
+                string strGroup = myContractId.ToString() + "@SMART";
+                // update the display group which will change the symbol
+                ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
             }
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
@@ -216,6 +220,7 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
+                        PercentChange(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -238,7 +243,7 @@ namespace IBKR_Trader
 
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
-                    PercentChange(null, null);
+
                     UpdateRiskQty(null, null);
                 }
 
@@ -889,12 +894,7 @@ namespace IBKR_Trader
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
-                    timer1_counter = 6; // reset time counter back to 5
-
-                    // convert contract id from an int to a strong and add exchange
-                    string strGroup = myContractId.ToString() + "@SMART";
-                    // update the display group which will change the symbol
-                    ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
+                    timer1_counter = 5; // reset time counter back to 5
                 }
                 catch (Exception) { }
 
@@ -919,8 +919,8 @@ namespace IBKR_Trader
                     cbSymbol.Items.Add(name);
                 }
                 cbSymbol.SelectAll();
-
                 getData();
+
             }
         }
 
@@ -986,13 +986,11 @@ namespace IBKR_Trader
             {
                 tbStopLoss.ReadOnly = false;
                 numQuantity.ReadOnly = true;
-                numRisk.ReadOnly = false;
             }
             else
             {
                 tbStopLoss.ReadOnly = true;
                 numQuantity.ReadOnly = false;
-                numRisk.ReadOnly = true;
             }
         }
 
@@ -2135,7 +2133,6 @@ namespace IBKR_Trader
             {
                 this.BackColor = Color.FromArgb(40, 40, 40);
                 btnPosition.ForeColor = Color.White;
-                tbShortable.ForeColor = Color.Black;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {
@@ -2165,12 +2162,13 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = Color.White;
                 }
+                tbShortable.ForeColor = Color.Black;
+
             }
             else
             {
                 this.BackColor = Color.LightGray;
                 btnPosition.ForeColor = Color.Black;
-                tbShortable.ForeColor = SystemColors.WindowText;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {
@@ -2200,6 +2198,8 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = SystemColors.ControlText;
                 }
+                tbShortable.ForeColor = SystemColors.WindowText;
+
             }
         }
 
