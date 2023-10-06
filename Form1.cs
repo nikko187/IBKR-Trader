@@ -60,7 +60,7 @@ namespace IBKR_Trader
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, string lParam);
         const int WM_SETTEXT = 0x000C; // Windows message for setting text
-        
+
         private void TickerCopy()
         {
             string windowTitle = "0x0000000000240964";
@@ -585,8 +585,8 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    string strShareSize = (Convert.ToDouble(listTimeSales[1])).ToString("##0");
-                    //string strShareSize = shares.ToString("#0");
+                    double size = Convert.ToDouble(listTimeSales[1]) * 100;
+                    string strShareSize = size.ToString("#,##0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);

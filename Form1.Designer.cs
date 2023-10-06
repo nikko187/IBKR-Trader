@@ -420,13 +420,13 @@
             // columnHeader2
             // 
             columnHeader2.Text = "Shares";
-            columnHeader2.Width = 55;
+            columnHeader2.Width = 70;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Time";
             columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 86;
+            columnHeader3.Width = 76;
             // 
             // tbTakeProfit
             // 
