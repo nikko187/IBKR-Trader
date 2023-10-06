@@ -49,6 +49,32 @@ namespace IBKR_Trader
         int timer1_counter = 5;
         int myContractId;
 
+        /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, string lParam);
+        const int WM_SETTEXT = 0x000C; // Windows message for setting text
+        
+        private void TickerCopy()
+        {
+            string windowTitle = "0x0000000000240964";
+            string className = "Afx:0000000140000000:0:0000000000010009:0000000000000000:0000000000000000";
+            string textBoxClass = "Afx:0000000140000000:2b"; // The class name of the text box control
+            string newText = cbSymbol.Text;
+
+            IntPtr targetWindow = FindWindow(className, windowTitle);
+            IntPtr textBox = FindWindowEx(targetWindow, IntPtr.Zero, textBoxClass, null);
+
+            SendMessage(textBox, WM_SETTEXT, 0, newText);
+        }
+
+        /********* ~~~~~ END TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
         public void AddListBoxItem(string text)
         {
@@ -133,7 +159,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 1);
+                    ibClient.ClientSocket.eConnect("", port, 0);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -189,6 +215,7 @@ namespace IBKR_Trader
             else
             {
                 myContractId = contractId;
+
                 // convert contract id from an int to a string and add exchange
                 string strGroup = myContractId.ToString() + "@SMART";
                 // update the display group which will change the symbol
@@ -422,6 +449,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAllOpenOrders();
 
             timer1.Start();
+
         }
 
         /* public void MktDepth(int position, int operation, int side, double price, decimal size)
@@ -895,6 +923,7 @@ namespace IBKR_Trader
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
                     timer1_counter = 5; // reset time counter back to 5
+                    // TickerCopy();
                 }
                 catch (Exception) { }
 
@@ -919,8 +948,8 @@ namespace IBKR_Trader
                     cbSymbol.Items.Add(name);
                 }
                 cbSymbol.SelectAll();
-                getData();
 
+                getData();
             }
         }
 
