@@ -50,7 +50,7 @@ namespace IBKR_Trader
         int myContractId;
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
-
+        /*
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -60,12 +60,12 @@ namespace IBKR_Trader
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, string lParam);
         const int WM_SETTEXT = 0x000C; // Windows message for setting text
-
+        
         private void TickerCopy()
         {
-            string windowTitle = "0x0000000000240964";
-            string className = "Afx:0000000140000000:0:0000000000010009:0000000000000000:0000000000000000";
-            string textBoxClass = "Afx:0000000140000000:2b"; // The class name of the text box control
+            string windowTitle = "";
+            string className = "";
+            string textBoxClass = ""; // The class name of the text box control
             string newText = cbSymbol.Text;
 
             IntPtr targetWindow = FindWindow(className, windowTitle);
@@ -73,7 +73,7 @@ namespace IBKR_Trader
 
             SendMessage(textBox, WM_SETTEXT, 0, newText);
         }
-
+        */
         /********* ~~~~~ END TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
         public void AddListBoxItem(string text)
@@ -259,7 +259,7 @@ namespace IBKR_Trader
                         // Add the text string to the list box
                         tbBid.Text = tickerPrice[2];
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 6)
+                    if (Convert.ToInt32(tickerPrice[1]) == 6)
                     {
                         labelHi.Text = "H: " + tickerPrice[2];
                     }
@@ -387,12 +387,12 @@ namespace IBKR_Trader
         }
         private void getData()
         {
-            if (ibClient.ClientSocket.IsConnected() == true)
+            if (ibClient.ClientSocket.IsConnected())
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
             }
-            else if (ibClient.ClientSocket.IsConnected() == false)
+            else
             {
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
@@ -400,7 +400,6 @@ namespace IBKR_Trader
 
             // clears contents of TnS when changing
             listViewTns.Items.Clear();
-            DateTime now = DateTime.Now;
 
             // account info and request account updates and current positions.
             string account_number = "D005";
@@ -409,7 +408,7 @@ namespace IBKR_Trader
 
             // ibClient.ClientSocket.cancelTickByTickData(1);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -585,8 +584,8 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    double size = Convert.ToDouble(listTimeSales[1]) * 100;
-                    string strShareSize = size.ToString("#,##0");
+                    double size = Convert.ToDouble(listTimeSales[1]);
+                    string strShareSize = size.ToString("#0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
@@ -596,11 +595,11 @@ namespace IBKR_Trader
                     string voll = volume.ToString("#,##0");
                     labelVolume.Text = "Vol: " + voll;
 
-                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local);
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
+                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
 
                     // used to get midprice, was previously used for Time and Sales coloring. not anymore.
                     //double myMeanPrice = ((theAsk - theBid) / 2);
@@ -608,16 +607,16 @@ namespace IBKR_Trader
 
                     ListViewItem lx = new ListViewItem();
 
-                    // if the last price is the same as the ask change the color to lime
+                    // if the last price is the same as the ask
                     if (last_price >= theAsk)
                     {
-                        lx.BackColor = Color.FromArgb(75, 165, 50); // listview foreground color
+                        lx.BackColor = Color.FromArgb(50, 170, 70); // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
                         listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
                     }
-                    // if the last price is the same as the bid change the color to red
+                    // if the last price is the same as the bid
                     else if (last_price <= theBid)
                     {
                         lx.BackColor = Color.DarkRed;
@@ -628,8 +627,7 @@ namespace IBKR_Trader
 
                         // lbData.Items.Insert(0, strSaleTime);
                     }
-                    // if the last price in greater than the mean price and
-                    // less than the ask price change the color to lime green
+                    // if the last price in between the bid and ask.
                     else if (last_price > theBid && last_price < theAsk)
                     {
                         lx.ForeColor = Color.LightGray;
@@ -899,11 +897,13 @@ namespace IBKR_Trader
         private void tbBid_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbBid.Text);
+            cbOrderType.Text = "LMT";
         }
 
         private void tbAsk_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbAsk.Text);
+            cbOrderType.Text = "LMT";
         }
 
         private void tbLast_Click(object sender, EventArgs e)
@@ -2160,7 +2160,7 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(40, 40, 40);
+                this.BackColor = Color.FromArgb(35, 35, 45);
                 btnPosition.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())

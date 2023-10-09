@@ -407,7 +407,7 @@
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(410, 154);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(230, 395);
+            listViewTns.Size = new Size(232, 400);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -420,13 +420,12 @@
             // columnHeader2
             // 
             columnHeader2.Text = "Shares";
-            columnHeader2.Width = 70;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Time";
             columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 76;
+            columnHeader3.Width = 85;
             // 
             // tbTakeProfit
             // 
@@ -820,7 +819,7 @@
             labelName.Name = "labelName";
             labelName.Size = new Size(361, 19);
             labelName.TabIndex = 54;
-            labelName.TextAlign = ContentAlignment.MiddleCenter;
+            labelName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tooltipPort
             // 
@@ -1005,7 +1004,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(645, 548);
+            ClientSize = new Size(645, 554);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
