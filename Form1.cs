@@ -46,7 +46,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 4;
+        int timer1_counter = 5;
         int myContractId;
 
 
@@ -189,6 +189,10 @@ namespace IBKR_Trader
             else
             {
                 myContractId = contractId;
+                // convert contract id from an int to a strong and add exchange
+                string strGroup = myContractId.ToString() + "@SMART";
+                // update the display group which will change the symbol
+                ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
             }
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
@@ -216,9 +220,8 @@ namespace IBKR_Trader
                     if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
-                        // this.tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
-                        // UpdateRiskQty(null, null);
+                        this.tbLast.Text = tickerPrice[2];
+                        UpdateRiskQty(null, null);
                     }
                     /*else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -427,9 +430,6 @@ namespace IBKR_Trader
             {
                 tbBid.Text = bidTick.ToString();
                 tbAsk.Text = askTick.ToString();
-
-                double spread = Math.Round(askTick - bidTick, 2);
-                labelSpread.Text = spread.ToString();
             }
         }
 
@@ -452,8 +452,6 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    tbLast.Text = price.ToString();
-
                     double theBid = Convert.ToDouble(tbBid.Text);
                     double theAsk = Convert.ToDouble(tbAsk.Text);
 
@@ -463,11 +461,11 @@ namespace IBKR_Trader
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
-
+                    
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.ForeColor = Color.Lime; // listview foreground color
+                        lx.BackColor = Color.FromArgb(0, 200, 0); // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -476,7 +474,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.ForeColor = Color.FromArgb(200, 0, 0);
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -488,7 +486,7 @@ namespace IBKR_Trader
                     // less than the ask price change the color to lime green
                     else if (price > theBid && price < theAsk)
                     {
-                        lx.ForeColor = Color.LightGray;
+                        lx.ForeColor = Color.Silver;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -889,12 +887,7 @@ namespace IBKR_Trader
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
-                    timer1_counter = 4; // reset time counter back to 5
-
-                    // convert contract id from an int to a strong and add exchange
-                    string strGroup = myContractId.ToString() + "@SMART";
-                    // update the display group which will change the symbol
-                    ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
+                    timer1_counter = 5; // reset time counter back to 5
 
                 }
                 catch (Exception) { }
@@ -1922,36 +1915,6 @@ namespace IBKR_Trader
                 decimal AV = avgvol * 100;
                 labelAvgVol.Text = "AvgVol: " + AV.ToString("#,##0");
             }
-        }
-
-        public double closePrice;
-        public double openPrice;
-
-        private void PercentChange(object sender, EventArgs e)
-        {
-            double percentchange = ((Convert.ToDouble(tbLast.Text) - closePrice) / closePrice) * 100;
-            labelChange.Text = percentchange.ToString("0.##") + "%";
-
-            if (percentchange > 0)
-                labelChange.ForeColor = Color.Blue;
-
-            else if (percentchange < 0)
-                labelChange.ForeColor = Color.DarkRed;
-
-            else
-            { labelChange.ForeColor = Color.Black; }
-
-            double changesinceopen = ((Convert.ToDouble(tbLast.Text) - openPrice) / openPrice) * 100;
-            labelSinceOpen.Text = "SncOpn: " + changesinceopen.ToString("0.##") + "%";
-
-            if (changesinceopen > 0)
-                labelSinceOpen.ForeColor = Color.Blue;
-
-            else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.DarkRed;
-
-            else
-            { labelSinceOpen.ForeColor = Color.Black; }
         }
 
         private void btnS2BE_Click(object sender, EventArgs e)

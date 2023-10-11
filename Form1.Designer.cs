@@ -74,7 +74,6 @@
             btnHelp = new Button();
             label9 = new Label();
             numRisk = new NumericUpDown();
-            labelSpread = new Label();
             dataGridView1 = new DataGridView();
             colTime = new DataGridViewTextBoxColumn();
             colid = new DataGridViewTextBoxColumn();
@@ -108,9 +107,7 @@
             btnCloseQtr = new Button();
             tooltipClosePortion = new ToolTip(components);
             panel1 = new Panel();
-            labelChange = new Label();
             panel2 = new Panel();
-            labelSinceOpen = new Label();
             labelVolume = new Label();
             labelAvgVol = new Label();
             btnS2BE = new Button();
@@ -555,16 +552,6 @@
             numRisk.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numRisk.ValueChanged += UpdateRiskQty;
             // 
-            // labelSpread
-            // 
-            labelSpread.AutoSize = true;
-            labelSpread.Location = new Point(258, 72);
-            labelSpread.Name = "labelSpread";
-            labelSpread.Size = new Size(22, 15);
-            labelSpread.TabIndex = 46;
-            labelSpread.Text = "0.0";
-            labelSpread.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // dataGridView1
             // 
             dataGridViewCellStyle1.BackColor = Color.Black;
@@ -811,11 +798,11 @@
             // labelName
             // 
             labelName.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            labelName.Location = new Point(0, 0);
+            labelName.Location = new Point(2, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(306, 19);
+            labelName.Size = new Size(354, 19);
             labelName.TabIndex = 54;
-            labelName.TextAlign = ContentAlignment.MiddleCenter;
+            labelName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tooltipPort
             // 
@@ -839,43 +826,20 @@
             // 
             panel1.BorderStyle = BorderStyle.Fixed3D;
             panel1.Controls.Add(labelName);
-            panel1.Controls.Add(labelChange);
             panel1.Location = new Point(12, 5);
             panel1.Name = "panel1";
             panel1.Size = new Size(363, 23);
             panel1.TabIndex = 56;
             // 
-            // labelChange
-            // 
-            labelChange.Anchor = AnchorStyles.Right;
-            labelChange.AutoSize = true;
-            labelChange.Location = new Point(312, 2);
-            labelChange.Name = "labelChange";
-            labelChange.Size = new Size(13, 15);
-            labelChange.TabIndex = 2;
-            labelChange.Text = "0";
-            labelChange.TextAlign = ContentAlignment.TopRight;
-            // 
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.Fixed3D;
-            panel2.Controls.Add(labelSinceOpen);
             panel2.Controls.Add(labelVolume);
             panel2.Controls.Add(labelAvgVol);
             panel2.Location = new Point(12, 157);
             panel2.Name = "panel2";
             panel2.Size = new Size(392, 24);
             panel2.TabIndex = 57;
-            // 
-            // labelSinceOpen
-            // 
-            labelSinceOpen.AutoSize = true;
-            labelSinceOpen.Location = new Point(300, 2);
-            labelSinceOpen.Name = "labelSinceOpen";
-            labelSinceOpen.Size = new Size(61, 15);
-            labelSinceOpen.TabIndex = 3;
-            labelSinceOpen.Text = "SncOpn: 0";
-            labelSinceOpen.TextAlign = ContentAlignment.TopRight;
             // 
             // labelVolume
             // 
@@ -968,7 +932,6 @@
             Controls.Add(tabControl1);
             Controls.Add(cbAlwaysOnTop);
             Controls.Add(listViewTns);
-            Controls.Add(labelSpread);
             Controls.Add(numRisk);
             Controls.Add(label9);
             Controls.Add(btnHelp);
@@ -1021,7 +984,6 @@
             tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             contextFormRightClick.ResumeLayout(false);
@@ -1070,7 +1032,6 @@
         private Button btnHelp;
         private Label label9;
         private NumericUpDown numRisk;
-        private Label labelSpread;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn colTime;
         private DataGridViewTextBoxColumn colid;
@@ -1108,7 +1069,6 @@
         private Label labelVolume;
         private Label labelAvgVol;
         private Label labelChange;
-        private Label labelSinceOpen;
         private Button btnS2BE;
         public TextBox tbLast;
         private Button btnPosition;
