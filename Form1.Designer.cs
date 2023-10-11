@@ -161,6 +161,8 @@
             cbSymbol.Text = "TSLA";
             cbSymbol.SelectedIndexChanged += cbSymbol_SelectedIndexChanged;
             cbSymbol.DragDrop += cbSymbol_DragDrop;
+            cbSymbol.DragEnter += cbSymbol_DragEnter;
+            cbSymbol.DragLeave += cbSymbol_DragLeave;
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 

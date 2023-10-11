@@ -595,22 +595,18 @@ namespace IBKR_Trader
                     string voll = volume.ToString("#,##0");
                     labelVolume.Text = "Vol: " + voll;
 
-                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local);
+                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
-
-                    // used to get midprice, was previously used for Time and Sales coloring. not anymore.
-                    //double myMeanPrice = ((theAsk - theBid) / 2);
-                    //double myMean = (theBid + myMeanPrice);
+                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
 
                     // if the last price is the same as the ask
                     if (last_price >= theAsk)
                     {
-                        lx.BackColor = Color.FromArgb(50, 170, 70); // listview foreground color
+                        lx.BackColor = Color.FromArgb(0,160,50); // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -619,7 +615,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid
                     else if (last_price <= theBid)
                     {
-                        lx.BackColor = Color.DarkRed;
+                        lx.BackColor = Color.FromArgb(130,0,0);
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -2232,23 +2228,6 @@ namespace IBKR_Trader
             }
         }
 
-        private void cbSymbol_DragDrop(object sender, DragEventArgs e)
-        {
-            cbSymbol.SelectionStart = 0;
-            cbSymbol.SelectionLength = cbSymbol.Text.Length;
-
-            string name = cbSymbol.Text;
-
-            // adds the security symbol to the dropdown list in the symbol combobox
-            if (!cbSymbol.Items.Contains(name))
-            {
-                cbSymbol.Items.Add(name);
-            }
-            cbSymbol.SelectAll();
-
-            getData();
-        }
-
         private void btnTenPercent_Click(object sender, EventArgs e)
         {
             int countRow2 = 0;
@@ -2321,6 +2300,38 @@ namespace IBKR_Trader
                 order_id++;
                 UpdateStop(order.TotalQuantity);
             }
+        }
+
+        private void cbSymbol_DragDrop(object sender, DragEventArgs e)
+        {
+            // Copies dragged ticker into Symbol field
+            cbSymbol.Text = e.Data.GetData(DataFormats.Text).ToString();
+
+            string name = cbSymbol.Text;
+
+            // adds the security symbol to the dropdown list in the symbol combobox
+            if (!cbSymbol.Items.Contains(name))
+            {
+                cbSymbol.Items.Add(name);
+            }
+            cbSymbol.SelectAll();
+            getData();  // Gets market data via IB API
+        }
+
+        private void cbSymbol_DragEnter(object sender, DragEventArgs e)
+        {
+            // Checks if dragged object can be Text.
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void cbSymbol_DragLeave(object sender, EventArgs e)
+        {
+            cbSymbol.SelectAll();
+            string symbol = cbSymbol.Text;
+            System.Windows.Forms.Clipboard.SetText(symbol);
         }
     }
 }
