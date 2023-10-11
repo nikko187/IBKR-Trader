@@ -214,6 +214,7 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         this.tbLast.Text = tickerPrice[2];
+                        UpdateRiskQty(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -228,7 +229,7 @@ namespace IBKR_Trader
                     double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
                     labelSpread.Text = spread.ToString("#0.00");
                     PercentChange(null, null);
-                    UpdateRiskQty(null, null);
+
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
