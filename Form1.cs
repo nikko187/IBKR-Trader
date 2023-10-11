@@ -248,6 +248,7 @@ namespace IBKR_Trader
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
                         PercentChange(null, null);
+                        UpdateRiskQty(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -270,8 +271,6 @@ namespace IBKR_Trader
 
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
-
-                    UpdateRiskQty(null, null);
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
@@ -606,7 +605,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the ask
                     if (last_price >= theAsk)
                     {
-                        lx.BackColor = Color.FromArgb(0,160,50); // listview foreground color
+                        lx.BackColor = Color.FromArgb(0,200,0); // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -615,7 +614,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid
                     else if (last_price <= theBid)
                     {
-                        lx.BackColor = Color.FromArgb(130,0,0);
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -626,7 +625,7 @@ namespace IBKR_Trader
                     // if the last price in between the bid and ask.
                     else if (last_price > theBid && last_price < theAsk)
                     {
-                        lx.ForeColor = Color.LightGray;
+                        lx.ForeColor = Color.Silver;
                         lx.Text = listTimeSales[0];
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
