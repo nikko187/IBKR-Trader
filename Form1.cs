@@ -46,7 +46,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 6;
+        int timer1_counter = 4;
         int myContractId;
 
 
@@ -212,25 +212,25 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
+                    // Normal 250ms snapshot Bid/Ask/Last prices
                     if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
                     {
                         // Add the text string to the list box
-                        //this.tbLast.Text = tickerPrice[2];
+                        // this.tbLast.Text = tickerPrice[2];
+                        PercentChange(null, null);
+                        // UpdateRiskQty(null, null);
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
+                    /*else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
                         // Add the text string to the list box
-                        //this.tbAsk.Text = tickerPrice[2];
+                        this.tbAsk.Text = tickerPrice[2];
 
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         // Add the text string to the list box
-                        //this.tbBid.Text = tickerPrice[2];
-                    }
-
-                    PercentChange(null, null);
-                    UpdateRiskQty(null, null);
+                        this.tbBid.Text = tickerPrice[2];
+                    }*/
                 }
 
                 switch (Convert.ToInt32(tickerPrice[0]))
@@ -357,9 +357,8 @@ namespace IBKR_Trader
                 btnConnect.BackColor = Color.Gainsboro;
             }
 
-            // clears contents of TnS when changing
+            // clears contents of TnS when changing tickers
             listViewTns.Items.Clear();
-            DateTime now = DateTime.Now;
 
             // account info and request account updates and current positions.
             string account_number = "D005";
@@ -396,7 +395,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
-            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0,false);
+            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0, false);
             ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above
@@ -412,7 +411,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackBidAskTicks(double bidTick, double askTick);
         public void BidAskTick(double bidTick, double askTick)
         {
-            if (tbBid.InvokeRequired && tbAsk.InvokeRequired)
+            if (tbBid.InvokeRequired)
             {
                 try
                 {
@@ -421,7 +420,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception f)
                 {
-                    lbData.Items.Insert(0, "TickByTick Invoke error: " + f);
+                    lbData.Items.Insert(0, "TickByTick BidAsk Invoke error: " + f);
                 }
             }
             else
@@ -429,11 +428,11 @@ namespace IBKR_Trader
                 tbBid.Text = bidTick.ToString();
                 tbAsk.Text = askTick.ToString();
 
-                double spread = Math.Round(Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text), 2);
+                double spread = Math.Round(askTick - bidTick, 2);
                 labelSpread.Text = spread.ToString();
             }
         }
-        
+
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
         {
@@ -446,7 +445,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception f)
                 {
-                    lbData.Items.Insert(0, "TickByTick Invoke error: " + f);
+                    lbData.Items.Insert(0, "TickByTick TnS Invoke error: " + f);
                 }
             }
             else
@@ -468,7 +467,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.BackColor = Color.OliveDrab; // listview foreground color
+                        lx.ForeColor = Color.Lime; // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -477,7 +476,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.BackColor = Color.DarkRed;
+                        lx.ForeColor = Color.FromArgb(200, 0, 0);
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -512,8 +511,8 @@ namespace IBKR_Trader
                 }
             }
         }
-        
-        /*
+
+        /* Snapshot Time and Sales
         delegate void SetTextCallbackTickString(string _tickString);
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
@@ -864,16 +863,19 @@ namespace IBKR_Trader
         private void tbBid_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbBid.Text);
+            cbOrderType.Text = "LMT";
         }
 
         private void tbAsk_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbAsk.Text);
+            cbOrderType.Text = "LMT";
         }
 
         private void tbLast_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbLast.Text);
+            cbOrderType.Text = "LMT";
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -887,7 +889,7 @@ namespace IBKR_Trader
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
 
-                    timer1_counter = 6; // reset time counter back to 5
+                    timer1_counter = 4; // reset time counter back to 5
 
                     // convert contract id from an int to a strong and add exchange
                     string strGroup = myContractId.ToString() + "@SMART";
@@ -985,13 +987,13 @@ namespace IBKR_Trader
             {
                 tbStopLoss.ReadOnly = false;
                 numQuantity.ReadOnly = true;
-                numRisk.ReadOnly = false;
+                //numRisk.ReadOnly = false;
             }
             else
             {
                 tbStopLoss.ReadOnly = true;
                 numQuantity.ReadOnly = false;
-                numRisk.ReadOnly = true;
+                //numRisk.ReadOnly = true;
             }
         }
 
