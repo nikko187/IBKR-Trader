@@ -880,8 +880,8 @@ namespace IBKR_Trader
 
             
             string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
-
-            myform.TickByTick(newTime, price, size);
+            if (size >= 100)
+                myform.TickByTick(newTime, price, size);
 
             
         }
