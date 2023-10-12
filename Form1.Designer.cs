@@ -999,6 +999,7 @@
             tbStopLoss.Size = new Size(81, 25);
             tbStopLoss.TabIndex = 60;
             tbStopLoss.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            tbStopLoss.ValueChanged += UpdateRiskQty;
             // 
             // Form1
             // 
