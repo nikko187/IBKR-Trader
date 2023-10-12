@@ -46,7 +46,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 5;
+        int timer1_counter = 4;
         int myContractId;
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
@@ -215,11 +215,6 @@ namespace IBKR_Trader
             else
             {
                 myContractId = contractId;
-
-                // convert contract id from an int to a string and add exchange
-                string strGroup = myContractId.ToString() + "@SMART";
-                // update the display group which will change the symbol
-                ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
             }
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
@@ -431,7 +426,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "233, 236, 165", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "375, 236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
@@ -916,9 +911,15 @@ namespace IBKR_Trader
 
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
+                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text);
 
-                    timer1_counter = 5; // reset time counter back to 5
+                    timer1_counter = 4; // reset time counter back to 5
                     // TickerCopy();
+
+                    // convert contract id from an int to a string and add exchange
+                    string strGroup = myContractId.ToString() + "@SMART";
+                    // update the display group which will change the symbol
+                    ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
                 }
                 catch (Exception) { }
 
@@ -1010,6 +1011,7 @@ namespace IBKR_Trader
             {
                 tbStopLoss.ReadOnly = false;
                 numQuantity.ReadOnly = true;
+                tbStopLoss.Value = Convert.ToDecimal(tbLast.Text);
             }
             else
             {

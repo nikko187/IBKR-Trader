@@ -136,7 +136,7 @@ namespace IBKR_Trader
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flag true or false
 
-            if (tickType == 48)     //used for time and sales (RTVolume)
+            if (tickType == 77)     //used for time and sales (RTVolume)
             {
                 string _tickString = value;
                 myform.AddListViewItemTickString(_tickString);
