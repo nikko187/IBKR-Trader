@@ -123,6 +123,10 @@ namespace IBKR_Trader
             {
                 myform.AverageVolume(size);
             }
+            if (field == 8)
+            {
+                myform.Volume(size);
+            }
         }
         //! [ticksize]
         

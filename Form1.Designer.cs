@@ -889,7 +889,7 @@
             labelChange.Anchor = AnchorStyles.Left;
             labelChange.AutoSize = true;
             labelChange.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelChange.Location = new Point(205, 2);
+            labelChange.Location = new Point(209, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(14, 15);
             labelChange.TabIndex = 2;
@@ -933,7 +933,7 @@
             // 
             labelAvgVol.AutoSize = true;
             labelAvgVol.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelAvgVol.Location = new Point(98, 2);
+            labelAvgVol.Location = new Point(96, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(51, 15);
             labelAvgVol.TabIndex = 1;

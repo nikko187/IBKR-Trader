@@ -547,6 +547,20 @@ namespace IBKR_Trader
         }
         */
 
+        delegate void CallbackVolume(decimal size);
+        public void Volume(decimal size)
+        {
+            if (labelVolume.InvokeRequired)
+            {
+                CallbackVolume d = new CallbackVolume(Volume);
+                this.Invoke(d, new object[] { size });
+            }
+            else
+            {
+
+                labelVolume.Text = "Vol: " + (size*100).ToString("#,##0");
+            }
+        }
         delegate void SetTextCallbackTickString(string _tickString);
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
@@ -590,9 +604,9 @@ namespace IBKR_Trader
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
                     // Current traded volume for the day.
-                    double volume = Convert.ToDouble(listTimeSales[3]) * 100;
-                    string voll = volume.ToString("#,##0");
-                    labelVolume.Text = "Vol: " + voll;
+                    //double volume = Convert.ToDouble(listTimeSales[3]) * 100;
+                    //string voll = volume.ToString("#,##0");
+                    //labelVolume.Text = "Vol: " + voll;
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
@@ -916,7 +930,7 @@ namespace IBKR_Trader
 
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
-                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text);
+                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.10m;
 
                     timer1_counter = 5; // reset time counter back to 5
                     // TickerCopy();
@@ -989,7 +1003,11 @@ namespace IBKR_Trader
                 if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
                 {
                     // numPrice.ReadOnly = true;
-                    numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - decimal.Parse(tbStopLoss.Text))));
+                    try
+                    {
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - decimal.Parse(tbStopLoss.Text))));
+                    }
+                    catch (Exception) { }
                 }
 
                 else if (cbOrderType.Text is "LMT" or "STP")
