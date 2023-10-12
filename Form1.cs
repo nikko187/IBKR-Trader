@@ -154,7 +154,7 @@ namespace IBKR_Trader
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // Tick by tick TESTING -- SUCCESS!
-            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0, false);
+            ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
             ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above

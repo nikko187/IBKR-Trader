@@ -831,7 +831,7 @@ namespace IBKR_Trader
 
             
             string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
-            if (size >= 100)
+            //if (size >= 100)
                 myform.TickByTick(newTime, price, size);
 
             
