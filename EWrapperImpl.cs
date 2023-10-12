@@ -90,13 +90,6 @@ namespace IBKR_Trader
             string strData = "Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
                       ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
 
-            string _tickPrice = tickerId + "," + field + "," + price + "," + attribs.CanAutoExecute;
-
-            // Write this string to console
-            myform.AddTextBoxItemTickPrice(_tickPrice);
-
-            // Add this tick price to the form by calling the AddListBoxItem delegate
-            myform.AddListBoxItem(strData);
 
         }
         //! [tickprice]
@@ -105,15 +98,7 @@ namespace IBKR_Trader
         public virtual void tickSize(int tickerId, int field, decimal size)
         {
             Console.WriteLine("Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + Util.DecimalMaxString(size));
-            
-            string strData = "Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + size;
-            Console.WriteLine(strData);
-            myform.AddListBoxItem(strData);
 
-            if (field == 21)        // avg daily volume over 90 days
-            {
-                myform.AverageVolume(size);
-            }
         }
         //! [ticksize]
         
@@ -140,12 +125,6 @@ namespace IBKR_Trader
         {
             Console.WriteLine("Tick Generic. Ticker Id:" + tickerId + ", Field: " + field + ", Value: " + Util.DoubleMaxString(value));
 
-            if (field == 46)
-            {
-                double shortableshares = value;
-                string shortable = shortableshares.ToString();
-                myform.BtnShortable(shortable);
-            }
         }
         //! [tickgeneric]
 
@@ -223,12 +202,6 @@ namespace IBKR_Trader
                 ", AverageCost: " + Util.DoubleMaxString(averageCost) + ", UnrealizedPNL: " + Util.DoubleMaxString(unrealizedPNL) + ", RealizedPNL: " + Util.DoubleMaxString(realizedPNL) + 
                 ", AccountName: " + accountName);
 
-            string my_portfolioUpdate = contract.Symbol + ", " + contract.SecType + "," + contract.Exchange + "," + position + "," + marketPrice + "," + marketValue + "," + averageCost + "," + unrealizedPNL + "," + realizedPNL + "," + accountName;
-
-            string symbol = contract.Symbol;
-
-            myform.AddTextBoxItemUpdatePortfolio(symbol, position, marketPrice, averageCost, unrealizedPNL, realizedPNL);
-
         }
         //! [updateportfolio]
 
@@ -253,11 +226,6 @@ namespace IBKR_Trader
                 + ", AvgFillPrice: " + Util.DoubleMaxString(avgFillPrice) + ", PermId: " + Util.IntMaxString(permId) + ", ParentId: " + Util.IntMaxString(parentId) + 
                 ", LastFillPrice: " + Util.DoubleMaxString(lastFillPrice) + ", ClientId: " + Util.IntMaxString(clientId) + ", WhyHeld: " + whyHeld + ", MktCapPrice: " + Util.DoubleMaxString(mktCapPrice));
 
-            try
-            {
-                myform?.AddDataGridViewItemOrderStatus(orderId, status, (double)filled, (double)remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice);
-            }
-            catch (Exception) { }
         }
         //! [orderstatus]
 
@@ -273,13 +241,6 @@ namespace IBKR_Trader
                 ", MidOffsetAtWhole: " + Util.DoubleMaxString(order.MidOffsetAtWhole) + ", MidOffsetAtHalf: " + Util.DoubleMaxString(order.MidOffsetAtHalf) +
                 ", FAGroup: " + order.FaGroup + ", FAMethod: " + order.FaMethod);
 
-            string open_order = (order.PermId + "," + order.ClientId + "," + orderId + "," + order.Account + "," + contract.Symbol + "," + contract.SecType + "," + contract.Exchange + "," + order.Action + "," + order.OrderType + "," + order.TotalQuantity + "," + order.CashQty + "," + order.LmtPrice + "," + order.AuxPrice + "," + orderState.Status);
-
-            try
-            {
-                myform?.AddListBoxItemOpenOrder(open_order);
-            }
-            catch (Exception) { }
         }
         //! [openorder]
 
@@ -298,7 +259,6 @@ namespace IBKR_Trader
             printContractDetailsMsg(contractDetails);
             Console.WriteLine("ContractDetails end. ReqId: " + reqId);
 
-            myform.GetFullName(contractDetails.LongName, contractDetails.Industry);
         }
         //! [contractdetails]
 
@@ -308,7 +268,7 @@ namespace IBKR_Trader
             try
             {
                 int contractId = contract.ConId;
-                myform.AddTextBoxItemConId(contractId);
+              
             }
             catch (Exception) { }
 
