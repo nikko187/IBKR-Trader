@@ -397,9 +397,6 @@ namespace IBKR_Trader
                 btnConnect.BackColor = Color.Gainsboro;
             }
 
-            // clears contents of TnS when changing
-            listViewTns.Items.Clear();
-
             // account info and request account updates and current positions.
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
@@ -431,7 +428,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "375, 236, 165", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
@@ -558,108 +555,7 @@ namespace IBKR_Trader
             else
             {
 
-                labelVolume.Text = "Vol: " + (size*100).ToString("#,##0");
-            }
-        }
-        delegate void SetTextCallbackTickString(string _tickString);
-        // TIME AND SALES CONFIG
-        public void AddListViewItemTickString(string _tickString)
-        {
-            if (listViewTns.InvokeRequired)
-            {
-                try
-                {
-                    SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
-                    this.Invoke(d, new object[] { _tickString });
-                }
-                catch (Exception f)
-                {
-                    lbData.Items.Insert(0, "TickString Invoke error: " + f);
-                }
-            }
-            else
-            {
-                try
-                {
-                    // get the bid price from the textbox Bid
-                    double theBid = Convert.ToDouble(tbBid.Text);
-                    // gets the ask price from the textbox Ask
-                    double theAsk = Convert.ToDouble(tbAsk.Text);
-
-                    // Contains Last Price, Trade Size, Trade Time, Total Volume, VWAP, 
-                    // single trade flag true, or false.
-                    // 6 items all together
-                    // example 701.28;1;1348075471534;67854;701.46918464;true
-                    // extract each value from string and store it in a string list
-                    string[] listTimeSales = _tickString.Split(';');
-
-                    // get the first value form the list convert it to a double this value is the last price
-                    double last_price = Convert.ToDouble(listTimeSales[0]);
-
-                    // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    double size = Convert.ToDouble(listTimeSales[1]);
-                    string strShareSize = size.ToString("#0");
-
-                    // TIME from tickstring data value
-                    double trade_time = Convert.ToDouble(listTimeSales[2]);
-
-                    // Current traded volume for the day.
-                    //double volume = Convert.ToDouble(listTimeSales[3]) * 100;
-                    //string voll = volume.ToString("#,##0");
-                    //labelVolume.Text = "Vol: " + voll;
-
-                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    epoch = epoch.AddMilliseconds(trade_time);
-                    epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
-
-                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
-
-                    ListViewItem lx = new ListViewItem();
-
-                    // if the last price is the same as the ask
-                    if (last_price >= theAsk)
-                    {
-                        lx.BackColor = Color.FromArgb(0, 200, 0); // listview foreground color
-                        lx.Text = listTimeSales[0]; // last price
-                        lx.SubItems.Add(strShareSize); // share size
-                        lx.SubItems.Add(strSaleTime); // time
-                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
-                    }
-                    // if the last price is the same as the bid
-                    else if (last_price <= theBid)
-                    {
-                        lx.BackColor = Color.DarkRed;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Insert(0, strSaleTime);
-                    }
-                    // if the last price in between the bid and ask.
-                    else if (last_price > theBid && last_price < theAsk)
-                    {
-                        lx.ForeColor = Color.Silver;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Add(epoch);
-                    }
-                    else
-                    {
-                        lx.ForeColor = Color.White;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-                    }
-                }
-                catch (Exception)
-                {
-                    // Debug.WriteLine("TnS error: " + e);
-                }
+                labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
             }
         }
 

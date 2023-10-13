@@ -58,10 +58,6 @@
             btnBuy = new Button();
             chkOutside = new CheckBox();
             timer1 = new System.Windows.Forms.Timer(components);
-            listViewTns = new ListView();
-            columnHeader1 = new ColumnHeader();
-            columnHeader2 = new ColumnHeader();
-            columnHeader3 = new ColumnHeader();
             tbTakeProfit = new TextBox();
             btnCancelLast = new Button();
             btnCancelAll = new Button();
@@ -170,9 +166,9 @@
             // 
             lbData.FormattingEnabled = true;
             lbData.ItemHeight = 15;
-            lbData.Location = new Point(12, 230);
+            lbData.Location = new Point(12, 200);
             lbData.Name = "lbData";
-            lbData.Size = new Size(392, 64);
+            lbData.Size = new Size(626, 64);
             lbData.TabIndex = 2;
             // 
             // label1
@@ -350,7 +346,7 @@
             // 
             // btnDisconnect
             // 
-            btnDisconnect.Location = new Point(178, 186);
+            btnDisconnect.Location = new Point(559, 157);
             btnDisconnect.Name = "btnDisconnect";
             btnDisconnect.Size = new Size(79, 23);
             btnDisconnect.TabIndex = 26;
@@ -399,35 +395,6 @@
             // timer1
             // 
             timer1.Tick += timer1_Tick;
-            // 
-            // listViewTns
-            // 
-            listViewTns.BackColor = Color.Black;
-            listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listViewTns.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            listViewTns.ForeColor = Color.White;
-            listViewTns.HeaderStyle = ColumnHeaderStyle.None;
-            listViewTns.Location = new Point(410, 154);
-            listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(232, 400);
-            listViewTns.TabIndex = 30;
-            listViewTns.UseCompatibleStateImageBehavior = false;
-            listViewTns.View = View.Details;
-            // 
-            // columnHeader1
-            // 
-            columnHeader1.Text = "Price";
-            columnHeader1.Width = 65;
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Shares";
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "Time";
-            columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 85;
             // 
             // tbTakeProfit
             // 
@@ -523,7 +490,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
-            label5.Location = new Point(12, 214);
+            label5.Location = new Point(12, 184);
             label5.Name = "label5";
             label5.Size = new Size(116, 13);
             label5.TabIndex = 42;
@@ -531,7 +498,7 @@
             // 
             // btnHelp
             // 
-            btnHelp.Location = new Point(12, 186);
+            btnHelp.Location = new Point(403, 157);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(47, 23);
             btnHelp.TabIndex = 43;
@@ -587,11 +554,11 @@
             dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridView1.Location = new Point(3, 3);
+            dataGridView1.Location = new Point(0, 3);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(381, 202);
+            dataGridView1.Size = new Size(615, 148);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -658,9 +625,10 @@
             // cbAlwaysOnTop
             // 
             cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Location = new Point(68, 187);
+            cbAlwaysOnTop.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            cbAlwaysOnTop.Location = new Point(456, 159);
             cbAlwaysOnTop.Name = "cbAlwaysOnTop";
-            cbAlwaysOnTop.Size = new Size(104, 19);
+            cbAlwaysOnTop.Size = new Size(102, 17);
             cbAlwaysOnTop.TabIndex = 48;
             cbAlwaysOnTop.Text = "Always On Top";
             cbAlwaysOnTop.UseVisualStyleBackColor = true;
@@ -670,11 +638,11 @@
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
-            tabControl1.Location = new Point(12, 300);
+            tabControl1.Location = new Point(12, 270);
             tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(392, 236);
+            tabControl1.Size = new Size(626, 189);
             tabControl1.TabIndex = 49;
             // 
             // tabPage1
@@ -683,7 +651,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(384, 208);
+            tabPage1.Size = new Size(618, 161);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Orders";
             tabPage1.UseVisualStyleBackColor = true;
@@ -695,7 +663,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(384, 208);
+            tabPage2.Size = new Size(618, 161);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Positions";
             tabPage2.UseVisualStyleBackColor = true;
@@ -705,7 +673,7 @@
             tbTotalPnl.BackColor = Color.Black;
             tbTotalPnl.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             tbTotalPnl.ForeColor = Color.White;
-            tbTotalPnl.Location = new Point(503, 129);
+            tbTotalPnl.Location = new Point(517, 138);
             tbTotalPnl.Name = "tbTotalPnl";
             tbTotalPnl.Size = new Size(100, 23);
             tbTotalPnl.TabIndex = 1;
@@ -730,7 +698,7 @@
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.RowTemplate.Height = 25;
             dataGridView4.ShowCellToolTips = false;
-            dataGridView4.Size = new Size(381, 202);
+            dataGridView4.Size = new Size(614, 137);
             dataGridView4.TabIndex = 0;
             dataGridView4.CellFormatting += dataGridView4_CellFormatting;
             // 
@@ -1007,7 +975,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(645, 554);
+            ClientSize = new Size(641, 157);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
@@ -1021,7 +989,6 @@
             Controls.Add(tbShortable);
             Controls.Add(tabControl1);
             Controls.Add(cbAlwaysOnTop);
-            Controls.Add(listViewTns);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
             Controls.Add(label9);
@@ -1107,10 +1074,6 @@
         private Button btnBuy;
         private CheckBox chkOutside;
         private System.Windows.Forms.Timer timer1;
-        private ListView listViewTns;
-        private ColumnHeader columnHeader1;
-        private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private TextBox tbTakeProfit;
         private Button btnCancelLast;
         private Button btnCancelAll;
