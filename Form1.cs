@@ -558,7 +558,7 @@ namespace IBKR_Trader
             else
             {
 
-                labelVolume.Text = "Vol: " + (size*100).ToString("#,##0");
+                labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
             }
         }
         delegate void SetTextCallbackTickString(string _tickString);
