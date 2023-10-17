@@ -120,7 +120,7 @@ namespace IBKR_Trader
             dataGridView1.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
 
             // Columns
-            dataGridView1.Columns[0].Width = 60;
+            /*dataGridView1.Columns[0].Width = 60;
             dataGridView1.Columns[1].Width = 50;
             dataGridView1.Columns[2].Width = 55;
             dataGridView1.Columns[3].Width = 60;
@@ -129,7 +129,7 @@ namespace IBKR_Trader
             dataGridView1.Columns[6].Width = 50;
             dataGridView1.Columns[7].Width = 60;
             dataGridView1.Columns[8].Width = 60;
-            dataGridView1.Columns[9].Width = 60;
+            dataGridView1.Columns[9].Width = 60;*/
             dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
             dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
             dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;

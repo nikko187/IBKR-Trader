@@ -118,6 +118,7 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripDarkMode = new ToolStripMenuItem();
             tbStopLoss = new NumericUpDown();
+            btnBuyLmtBid = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -385,7 +386,7 @@
             // chkOutside
             // 
             chkOutside.AutoSize = true;
-            chkOutside.Location = new Point(463, 49);
+            chkOutside.Location = new Point(463, 46);
             chkOutside.Name = "chkOutside";
             chkOutside.Size = new Size(56, 19);
             chkOutside.TabIndex = 29;
@@ -399,7 +400,7 @@
             // tbTakeProfit
             // 
             tbTakeProfit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTakeProfit.Location = new Point(295, 123);
+            tbTakeProfit.Location = new Point(407, 123);
             tbTakeProfit.Name = "tbTakeProfit";
             tbTakeProfit.ReadOnly = true;
             tbTakeProfit.Size = new Size(69, 25);
@@ -411,9 +412,9 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(375, 123);
+            btnCancelLast.Location = new Point(480, 123);
             btnCancelLast.Name = "btnCancelLast";
-            btnCancelLast.Size = new Size(69, 24);
+            btnCancelLast.Size = new Size(73, 24);
             btnCancelLast.TabIndex = 35;
             btnCancelLast.Text = "CXL Last";
             btnCancelLast.UseVisualStyleBackColor = false;
@@ -424,9 +425,9 @@
             btnCancelAll.BackColor = Color.FromArgb(255, 192, 128);
             btnCancelAll.FlatStyle = FlatStyle.Flat;
             btnCancelAll.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelAll.Location = new Point(450, 123);
+            btnCancelAll.Location = new Point(503, 64);
             btnCancelAll.Name = "btnCancelAll";
-            btnCancelAll.Size = new Size(76, 24);
+            btnCancelAll.Size = new Size(63, 24);
             btnCancelAll.TabIndex = 36;
             btnCancelAll.Text = "CXL ALL";
             btnCancelAll.UseVisualStyleBackColor = false;
@@ -478,7 +479,7 @@
             // 
             cbTakeProfit.AutoSize = true;
             cbTakeProfit.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            cbTakeProfit.Location = new Point(254, 127);
+            cbTakeProfit.Location = new Point(428, 104);
             cbTakeProfit.Name = "cbTakeProfit";
             cbTakeProfit.Size = new Size(40, 19);
             cbTakeProfit.TabIndex = 41;
@@ -760,11 +761,11 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(532, 63);
+            btnClose.Location = new Point(572, 63);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(106, 25);
+            btnClose.Size = new Size(66, 25);
             btnClose.TabIndex = 52;
-            btnClose.Text = "CLOSE POS";
+            btnClose.Text = "CLOSE";
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += ClosePosition;
             // 
@@ -911,9 +912,9 @@
             // 
             btnS2BE.BackColor = Color.LightBlue;
             btnS2BE.FlatStyle = FlatStyle.Flat;
-            btnS2BE.Location = new Point(532, 123);
+            btnS2BE.Location = new Point(559, 123);
             btnS2BE.Name = "btnS2BE";
-            btnS2BE.Size = new Size(106, 24);
+            btnS2BE.Size = new Size(79, 24);
             btnS2BE.TabIndex = 58;
             btnS2BE.Text = "Stop to BE";
             btnS2BE.UseVisualStyleBackColor = false;
@@ -969,6 +970,17 @@
             tbStopLoss.Value = new decimal(new int[] { 1, 0, 0, 0 });
             tbStopLoss.ValueChanged += UpdateRiskQty;
             // 
+            // btnBuyLmtBid
+            // 
+            btnBuyLmtBid.BackColor = Color.PaleGreen;
+            btnBuyLmtBid.FlatStyle = FlatStyle.Flat;
+            btnBuyLmtBid.Location = new Point(192, 123);
+            btnBuyLmtBid.Name = "btnBuyLmtBid";
+            btnBuyLmtBid.Size = new Size(75, 26);
+            btnBuyLmtBid.TabIndex = 62;
+            btnBuyLmtBid.Text = "BuyLmtBid";
+            btnBuyLmtBid.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -977,6 +989,7 @@
             BackColor = Color.LightGray;
             ClientSize = new Size(641, 157);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(btnBuyLmtBid);
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
             Controls.Add(btnPosition);
@@ -1137,5 +1150,6 @@
         private ToolStripMenuItem toolstripDarkMode;
         private Label labelHi;
         private Label labelLo;
+        private Button btnBuyLmtBid;
     }
 }
