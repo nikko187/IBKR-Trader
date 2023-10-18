@@ -43,6 +43,7 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripTicks = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
+            toolstripAlwaysOnTop = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             SuspendLayout();
@@ -115,22 +116,22 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripTicks });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripTicks, toolstripAlwaysOnTop });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(148, 48);
+            contextFormRightClick.Size = new Size(181, 92);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(147, 22);
+            toolstripBorderToggle.Size = new Size(180, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
             // toolstripTicks
             // 
             toolstripTicks.Name = "toolstripTicks";
-            toolstripTicks.Size = new Size(147, 22);
+            toolstripTicks.Size = new Size(180, 22);
             toolstripTicks.Text = "Tick by tick";
             toolstripTicks.Click += ToolstripTickByTick;
             // 
@@ -150,6 +151,12 @@
             cbSymbol.DragDrop += cbSymbol_DragDrop;
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
+            // 
+            // toolstripAlwaysOnTop
+            // 
+            toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
+            toolstripAlwaysOnTop.Size = new Size(180, 22);
+            toolstripAlwaysOnTop.Text = "Always On Top";
             // 
             // Form1
             // 
@@ -196,5 +203,6 @@
         private ComboBox cbSymbol;
         private ToolStripMenuItem toolstripTicks;
         public ListView listViewTns;
+        private ToolStripMenuItem toolstripAlwaysOnTop;
     }
 }
