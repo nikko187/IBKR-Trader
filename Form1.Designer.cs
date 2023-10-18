@@ -82,6 +82,7 @@
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
+            listViewTns.VirtualListSize = 100;
             // 
             // columnHeader1
             // 

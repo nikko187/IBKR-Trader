@@ -200,11 +200,11 @@ namespace IBKR_Trader
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
-                    //listViewTns.BeginUpdate();
+                    listViewTns.BeginUpdate();
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.ForeColor = Color.SeaGreen; // listview foreground color
+                        lx.BackColor = Color.SeaGreen; // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -213,7 +213,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.ForeColor = Color.DarkRed;
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -241,7 +241,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
-                    //listViewTns.EndUpdate();
+                    listViewTns.EndUpdate();
                 }
                 catch (Exception)
                 {
