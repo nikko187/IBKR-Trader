@@ -153,10 +153,10 @@ namespace IBKR_Trader
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
-
+            ibClient.ClientSocket.reqMktData(1, contract, "375", false, false, mktDataOptions);
             // Tick by tick TESTING -- SUCCESS!
-            ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
-            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
+            //ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
+            //ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
 
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);

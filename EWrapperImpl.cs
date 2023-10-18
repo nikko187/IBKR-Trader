@@ -111,12 +111,12 @@ namespace IBKR_Trader
             string tickStringData = ("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flag true or false
-           /*
-            if (tickType == 48)     //used for time and sales (RTVolume)
+           
+            if (tickType == 77)     //used for time and sales (RTVolume)
             {
                 string _tickString = value;
                 myform.AddListViewItemTickString(_tickString);
-            }*/
+            }
         }
         //! [tickstring]
 
@@ -830,9 +830,9 @@ namespace IBKR_Trader
                 reqId, tickType == 1 ? "Last" : "AllLast", Util.UnixSecondsToString(time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(price), Util.DecimalMaxString(size), exchange, specialConditions, tickAttribLast.PastLimit, tickAttribLast.Unreported);
 
             
-            string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
+            //string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
             //if (size >= 100)
-                myform.TickByTick(newTime, price, size);
+                //myform.TickByTick(newTime, price, size);
 
             
         }
@@ -844,7 +844,7 @@ namespace IBKR_Trader
             Console.WriteLine("Tick-By-Tick. Request Id: {0}, TickType: BidAsk, Time: {1}, BidPrice: {2}, AskPrice: {3}, BidSize: {4}, AskSize: {5}, BidPastLow: {6}, AskPastHigh: {7}",
                 reqId, Util.UnixSecondsToString(time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(bidPrice), Util.DoubleMaxString(askPrice), Util.DecimalMaxString(bidSize), Util.DecimalMaxString(askSize), tickAttribBidAsk.BidPastLow, tickAttribBidAsk.AskPastHigh);
 
-            myform.BidAskTick(bidPrice, askPrice);
+            //myform.BidAskTick(bidPrice, askPrice);
         }
         //! [tickbytickbidask]
 
