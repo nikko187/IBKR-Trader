@@ -42,6 +42,7 @@
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
+            toolstripTicks = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             SuspendLayout();
@@ -71,7 +72,7 @@
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Dock = DockStyle.Bottom;
-            listViewTns.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(0, 36);
@@ -113,9 +114,9 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripTicks });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(148, 26);
+            contextFormRightClick.Size = new Size(148, 48);
             // 
             // toolstripBorderToggle
             // 
@@ -142,6 +143,13 @@
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
+            // toolstripTicks
+            // 
+            toolstripTicks.Name = "toolstripTicks";
+            toolstripTicks.Size = new Size(147, 22);
+            toolstripTicks.Text = "Tick by tick";
+            toolstripTicks.Click += ToolstripTickByTick;
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -165,6 +173,11 @@
             ResumeLayout(false);
         }
 
+        private void ToolstripTicks_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         private Button btnConnect;
@@ -181,5 +194,6 @@
         private ContextMenuStrip contextFormRightClick;
         private ToolStripMenuItem toolstripBorderToggle;
         private ComboBox cbSymbol;
+        private ToolStripMenuItem toolstripTicks;
     }
 }
