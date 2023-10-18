@@ -50,7 +50,7 @@ namespace IBKR_Trader
         int myContractId;
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
-        /*
+        
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -63,17 +63,18 @@ namespace IBKR_Trader
         
         private void TickerCopy()
         {
-            string windowTitle = "";
-            string className = "";
-            string textBoxClass = ""; // The class name of the text box control
+            string windowTitle = "IBKR Trader T&S";
+            string className = "WindowsForms10.Window.8.app.0.33c0d9d_r3_ad1";
+            string textBoxClass = "WindowsForms10.ComboBox.app.0.33c0d9d_r3_ad1"; // The class name of the text box control
             string newText = cbSymbol.Text;
 
             IntPtr targetWindow = FindWindow(className, windowTitle);
             IntPtr textBox = FindWindowEx(targetWindow, IntPtr.Zero, textBoxClass, null);
 
-            SendMessage(textBox, WM_SETTEXT, 0, newText);
+            SendMessage(textBox, WM_SETTEXT, 0, newText);          
+
         }
-        */
+        
         /********* ~~~~~ END TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
         public void AddListBoxItem(string text)
@@ -396,7 +397,7 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
             }
-
+            //TickerCopy();
             // account info and request account updates and current positions.
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
@@ -562,6 +563,7 @@ namespace IBKR_Trader
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
+
         }
 
         private void cbSymbol_KeyPress(object sender, KeyPressEventArgs e)
@@ -829,7 +831,7 @@ namespace IBKR_Trader
                     tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.10m;
 
                     timer1_counter = 5; // reset time counter back to 5
-                    // TickerCopy();
+
                 }
                 catch (Exception) { }
 
