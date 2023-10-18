@@ -78,8 +78,9 @@ namespace IBKR_Trader
                     // host       - IP address or host name of the host running TWS
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
+                    //ibClient.ClientSocket.SetConnectOptions("+PACEAPI");
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 13);
+                    ibClient.ClientSocket.eConnect("", port, 15);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -200,7 +201,7 @@ namespace IBKR_Trader
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
-                    listViewTns.BeginUpdate();
+                    //listViewTns.BeginUpdate();
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
@@ -241,7 +242,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
-                    listViewTns.EndUpdate();
+                    //listViewTns.EndUpdate();
                 }
                 catch (Exception)
                 {
