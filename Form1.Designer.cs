@@ -119,6 +119,7 @@
             toolstripDarkMode = new ToolStripMenuItem();
             tbStopLoss = new NumericUpDown();
             btnBuyLmtBid = new Button();
+            btnUpdateStop = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -403,7 +404,7 @@
             tbTakeProfit.Location = new Point(407, 123);
             tbTakeProfit.Name = "tbTakeProfit";
             tbTakeProfit.ReadOnly = true;
-            tbTakeProfit.Size = new Size(69, 25);
+            tbTakeProfit.Size = new Size(61, 25);
             tbTakeProfit.TabIndex = 33;
             tbTakeProfit.Text = "0.00";
             // 
@@ -412,9 +413,9 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(480, 123);
+            btnCancelLast.Location = new Point(342, 123);
             btnCancelLast.Name = "btnCancelLast";
-            btnCancelLast.Size = new Size(73, 24);
+            btnCancelLast.Size = new Size(59, 25);
             btnCancelLast.TabIndex = 35;
             btnCancelLast.Text = "CXL Last";
             btnCancelLast.UseVisualStyleBackColor = false;
@@ -976,10 +977,24 @@
             btnBuyLmtBid.FlatStyle = FlatStyle.Flat;
             btnBuyLmtBid.Location = new Point(192, 123);
             btnBuyLmtBid.Name = "btnBuyLmtBid";
-            btnBuyLmtBid.Size = new Size(75, 26);
+            btnBuyLmtBid.Size = new Size(69, 26);
             btnBuyLmtBid.TabIndex = 62;
-            btnBuyLmtBid.Text = "BuyLmtBid";
+            btnBuyLmtBid.Text = "Buy Bid";
             btnBuyLmtBid.UseVisualStyleBackColor = false;
+            btnBuyLmtBid.Visible = false;
+            // 
+            // btnUpdateStop
+            // 
+            btnUpdateStop.BackColor = Color.LightSkyBlue;
+            btnUpdateStop.FlatStyle = FlatStyle.Flat;
+            btnUpdateStop.Location = new Point(474, 123);
+            btnUpdateStop.Name = "btnUpdateStop";
+            btnUpdateStop.Size = new Size(79, 24);
+            btnUpdateStop.TabIndex = 63;
+            btnUpdateStop.Text = "UpdateStop";
+            btnUpdateStop.TextAlign = ContentAlignment.TopCenter;
+            btnUpdateStop.UseVisualStyleBackColor = false;
+            btnUpdateStop.Click += btnUpdateStop_Click;
             // 
             // Form1
             // 
@@ -989,6 +1004,7 @@
             BackColor = Color.LightGray;
             ClientSize = new Size(641, 157);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(btnUpdateStop);
             Controls.Add(btnBuyLmtBid);
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
@@ -1151,5 +1167,6 @@
         private Label labelHi;
         private Label labelLo;
         private Button btnBuyLmtBid;
+        private Button btnUpdateStop;
     }
 }
