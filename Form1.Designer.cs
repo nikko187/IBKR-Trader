@@ -78,7 +78,7 @@
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(0, 31);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(229, 854);
+            listViewTns.Size = new Size(218, 854);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -87,18 +87,17 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Price";
-            columnHeader1.Width = 65;
+            columnHeader1.Width = 64;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Shares";
-            columnHeader2.Width = 55;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Time";
             columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 86;
+            columnHeader3.Width = 70;
             // 
             // numPort
             // 
@@ -158,7 +157,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(229, 885);
+            ClientSize = new Size(218, 885);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(listViewTns);
             Controls.Add(numPort);

@@ -37,8 +37,8 @@ namespace IBKR_Trader
 
 
         // DELEGATE ENABLES ASYNCHRONOUS CALLS FOR SETTING TEXT PROPERTY ON LISTBOX
-        delegate void SetTextCallback(string text);
-        delegate void SetTextCallbackTickPrice(string _tickPrice);
+        //delegate void SetTextCallback(string text);
+        //delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
@@ -78,7 +78,8 @@ namespace IBKR_Trader
                     // host       - IP address or host name of the host running TWS
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
-                    //ibClient.ClientSocket.SetConnectOptions("+PACEAPI");
+
+                    ibClient.ClientSocket.SetConnectOptions("+PACEAPI");    // Option to pace msgs to 50/second.
                     int port = (int)numPort.Value;
                     ibClient.ClientSocket.eConnect("", port, 15);
 
@@ -117,22 +118,22 @@ namespace IBKR_Trader
 
         private void getData()
         {
-            if (ibClient.ClientSocket.IsConnected() == true)
+            if (ibClient.ClientSocket.IsConnected())
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
             }
-            else if (ibClient.ClientSocket.IsConnected() == false)
+            else
             {
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
             }
 
-            // clears contents of TnS when changing tickers
-            listViewTns.Items.Clear();
-
             ibClient.ClientSocket.cancelTickByTickData(1);
             ibClient.ClientSocket.cancelTickByTickData(2);
+
+            // clears contents of TnS when changing tickers
+            listViewTns.Items.Clear();
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -164,20 +165,17 @@ namespace IBKR_Trader
 
         }
 
-        double theBid = 0;
-        double theAsk = 0;
+        private double theBid = 0;  // decalring variables to be used in the scope.
+        private double theAsk = 0;
         delegate void SetTextCallbackBidAskTicks(double bidTick, double askTick);
-
-
-        public void BidAskTick(double bidTick, double askTick)
+        public void BidAskTick(double bidTick, double askTick)  // the only variables I need from TickByTickBidAsk
         {
             theAsk = askTick;
             theBid = bidTick;
-
         }
 
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
-        public void TickByTick(string time, double price, decimal size)
+        public void TickByTick(string time, double price, decimal size)  // variables for actual Last prices on tickbytick basis.
         {
             if (listViewTns.InvokeRequired)
             {
@@ -188,7 +186,6 @@ namespace IBKR_Trader
                 }
                 catch (Exception)
                 {
-
                 }
             }
             else
@@ -219,8 +216,6 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Insert(0, strSaleTime);
                     }
                     // if the last price in greater than the mean price and
                     // less than the ask price change the color to lime green
@@ -231,8 +226,6 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Add(epoch);
                     }
                     else
                     {

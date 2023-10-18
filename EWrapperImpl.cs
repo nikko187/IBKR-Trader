@@ -827,14 +827,13 @@ namespace IBKR_Trader
         public void tickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
         {
             //Console.WriteLine("Tick-By-Tick. Request Id: {0}, TickType: {1}, Time: {2}, Price: {3}, Size: {4}, Exchange: {5}, Special Conditions: {6}, PastLimit: {7}, Unreported: {8}", reqId, tickType == 1 ? "Last" : "AllLast", Util.UnixSecondsToString(time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(price), Util.DecimalMaxString(size), exchange, specialConditions, tickAttribLast.PastLimit, tickAttribLast.Unreported);
-            Console.WriteLine(time + ", " + price + ", " + size + ", " + exchange);
+            //Console.WriteLine(time + ", " + price + ", " + size + ", " + exchange);
 
             
             string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
-            //if (size >= 100)
-                myform.TickByTick(newTime, price, size);
 
-            
+            myform.TickByTick(newTime, price, size);
+ 
         }
         //! [tickbytickalllast]
 
