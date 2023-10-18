@@ -13,6 +13,7 @@ using System.Threading;
 using System.Drawing.Text;
 using IBApi;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 /**** Simplified TickByTick Time and Sales ONLY ****/
 
@@ -155,7 +156,7 @@ namespace IBKR_Trader
 
             // Tick by tick TESTING -- SUCCESS!
             ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
-            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
+            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
 
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -201,7 +202,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.BackColor = Color.FromArgb(0, 200, 0); // listview foreground color
+                        lx.BackColor = Color.FromArgb(0, 170, 0); // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -210,7 +211,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.BackColor = Color.DarkRed;
+                        lx.BackColor = Color.FromArgb(150,0,0);
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);

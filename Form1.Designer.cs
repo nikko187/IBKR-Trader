@@ -75,7 +75,7 @@
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(5, 35);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(230, 395);
+            listViewTns.Size = new Size(230, 682);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -147,7 +147,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(238, 435);
+            ClientSize = new Size(238, 718);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(listViewTns);
             Controls.Add(numPort);
