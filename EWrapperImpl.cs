@@ -90,7 +90,10 @@ namespace IBKR_Trader
             string strData = "Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
                       ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
 
+            string _tickPrice = tickerId + "," + field + "," + price + "," + attribs.CanAutoExecute;
 
+            // Write this string to console
+            myform.AddTextBoxItemTickPrice(_tickPrice);
         }
         //! [tickprice]
         
