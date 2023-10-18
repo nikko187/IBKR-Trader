@@ -72,7 +72,7 @@
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Dock = DockStyle.Bottom;
-            listViewTns.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(0, 36);
