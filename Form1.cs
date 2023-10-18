@@ -211,7 +211,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.BackColor = Color.FromArgb(150,0,0);
+                        lx.BackColor = Color.FromArgb(150, 0, 0);
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);

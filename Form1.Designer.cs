@@ -70,12 +70,13 @@
             // 
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            listViewTns.Dock = DockStyle.Bottom;
             listViewTns.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
-            listViewTns.Location = new Point(5, 35);
+            listViewTns.Location = new Point(0, 36);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(230, 682);
+            listViewTns.Size = new Size(238, 682);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
