@@ -316,6 +316,13 @@ namespace IBKR_Trader
         {
 
         }
+        private void AlwaysOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toolstripAlwaysOnTop.Checked == true)
+                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            else
+                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+        }
     }
     public static class ControlExtensions
     {

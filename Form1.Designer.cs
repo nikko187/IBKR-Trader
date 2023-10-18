@@ -42,8 +42,8 @@
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripTicks = new ToolStripMenuItem();
-            cbSymbol = new ComboBox();
             toolstripAlwaysOnTop = new ToolStripMenuItem();
+            cbSymbol = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             SuspendLayout();
@@ -118,22 +118,30 @@
             // 
             contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripTicks, toolstripAlwaysOnTop });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(181, 92);
+            contextFormRightClick.Size = new Size(153, 70);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(180, 22);
+            toolstripBorderToggle.Size = new Size(152, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
             // toolstripTicks
             // 
             toolstripTicks.Name = "toolstripTicks";
-            toolstripTicks.Size = new Size(180, 22);
+            toolstripTicks.Size = new Size(152, 22);
             toolstripTicks.Text = "Tick by tick";
             toolstripTicks.Click += ToolstripTickByTick;
+            // 
+            // toolstripAlwaysOnTop
+            // 
+            toolstripAlwaysOnTop.CheckOnClick = true;
+            toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
+            toolstripAlwaysOnTop.Size = new Size(152, 22);
+            toolstripAlwaysOnTop.Text = "Always On Top";
+            toolstripAlwaysOnTop.CheckedChanged += AlwaysOnTop_CheckedChanged;
             // 
             // cbSymbol
             // 
@@ -141,7 +149,7 @@
             cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
-            cbSymbol.Location = new Point(0, 2);
+            cbSymbol.Location = new Point(2, 2);
             cbSymbol.MaxLength = 6;
             cbSymbol.Name = "cbSymbol";
             cbSymbol.Size = new Size(68, 25);
@@ -152,18 +160,12 @@
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
-            // toolstripAlwaysOnTop
-            // 
-            toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
-            toolstripAlwaysOnTop.Size = new Size(180, 22);
-            toolstripAlwaysOnTop.Text = "Always On Top";
-            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Gainsboro;
+            BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(218, 885);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(listViewTns);
