@@ -158,8 +158,44 @@ namespace IBKR_Trader
             // ibClient.ClientSocket.reqContractDetails(88, contract);
 
         }
+        double Bid = 0;
+        double Ask = 0;
+        public void AddTextBoxItemTickPrice(string _tickPrice)
+        {
+            /*if (tbLast.InvokeRequired)
+            {
+                SetTextCallbackTickPrice d = new SetTextCallbackTickPrice(AddTextBoxItemTickPrice);
+                try
+                {
+                    this.Invoke(d, new object[] { _tickPrice });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("This is from tickPrice", e);
+                }
+            }
+            else*/
+            {
+                string[] tickerPrice = new string[] { _tickPrice };
+                tickerPrice = _tickPrice.Split(',');
 
+                if (Convert.ToInt32(tickerPrice[0]) == 1)
+                {
+                    if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
+                    {
+                        // Add the text string to the list box
+                        Ask = Convert.ToDouble(tickerPrice[2]);
+                    }
+                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
+                    {
+                        // Add the text string to the list box
+                        Bid = Convert.ToDouble(tickerPrice[2]);
+                    }
+                }
+            }
+        }
         delegate void SetTextCallbackTickString(string _tickString);
+
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
         {
@@ -170,7 +206,7 @@ namespace IBKR_Trader
                     SetTextCallbackTickString d = new SetTextCallbackTickString(AddListViewItemTickString);
                     this.Invoke(d, new object[] { _tickString });
                 }
-                catch (Exception f)
+                catch (Exception)
                 {
                     // lbData.Items.Insert(0, "TickString Invoke error: " + f);
                 }
@@ -179,10 +215,6 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    // get the bid price from the textbox Bid
-                    double theBid = Convert.ToDouble(tbBid.Text);
-                    // gets the ask price from the textbox Ask
-                    double theAsk = Convert.ToDouble(tbAsk.Text);
 
                     // Contains Last Price, Trade Size, Trade Time, Total Volume, VWAP, 
                     // single trade flag true, or false.
@@ -210,7 +242,7 @@ namespace IBKR_Trader
                     ListViewItem lx = new ListViewItem();
 
                     // if the last price is the same as the ask
-                    if (last_price >= theAsk)
+                    if (last_price >= Ask)
                     {
                         lx.BackColor = Color.SeaGreen; // listview foreground color
                         lx.Text = listTimeSales[0]; // last price
@@ -219,7 +251,7 @@ namespace IBKR_Trader
                         listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
                     }
                     // if the last price is the same as the bid
-                    else if (last_price <= theBid)
+                    else if (last_price <= Bid)
                     {
                         lx.BackColor = Color.DarkRed;
                         lx.Text = listTimeSales[0];
@@ -230,7 +262,7 @@ namespace IBKR_Trader
                         // lbData.Items.Insert(0, strSaleTime);
                     }
                     // if the last price in between the bid and ask.
-                    else if (last_price > theBid && last_price < theAsk)
+                    else if (last_price > Bid && last_price < Ask)
                     {
                         lx.ForeColor = Color.Silver;
                         lx.Text = listTimeSales[0];
@@ -410,7 +442,7 @@ namespace IBKR_Trader
 
             getData();
         }
-        private void ToolstripTickByTick (object sender, EventArgs e)
+        private void ToolstripTickByTick(object sender, EventArgs e)
         {
 
         }

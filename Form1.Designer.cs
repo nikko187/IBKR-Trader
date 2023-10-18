@@ -41,8 +41,8 @@
             tooltipClosePortion = new ToolTip(components);
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
-            cbSymbol = new ComboBox();
             toolstripTicks = new ToolStripMenuItem();
+            cbSymbol = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             SuspendLayout();
@@ -72,7 +72,7 @@
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Dock = DockStyle.Bottom;
-            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            listViewTns.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(0, 36);
@@ -126,6 +126,13 @@
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
+            // toolstripTicks
+            // 
+            toolstripTicks.Name = "toolstripTicks";
+            toolstripTicks.Size = new Size(147, 22);
+            toolstripTicks.Text = "Tick by tick";
+            toolstripTicks.Click += ToolstripTickByTick;
+            // 
             // cbSymbol
             // 
             cbSymbol.AllowDrop = true;
@@ -142,13 +149,6 @@
             cbSymbol.DragDrop += cbSymbol_DragDrop;
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
-            // 
-            // toolstripTicks
-            // 
-            toolstripTicks.Name = "toolstripTicks";
-            toolstripTicks.Size = new Size(147, 22);
-            toolstripTicks.Text = "Tick by tick";
-            toolstripTicks.Click += ToolstripTickByTick;
             // 
             // Form1
             // 
