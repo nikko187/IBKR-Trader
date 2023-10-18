@@ -204,7 +204,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.BackColor = Color.FromArgb(0, 170, 0); // listview foreground color
+                        lx.BackColor = Color.SeaGreen; // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -213,7 +213,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.BackColor = Color.FromArgb(150, 0, 0);
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
