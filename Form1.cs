@@ -14,6 +14,7 @@ using System.Drawing.Text;
 using IBApi;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Reflection;
 
 /**** Simplified TickByTick Time and Sales ONLY ****/
 
@@ -45,12 +46,11 @@ namespace IBKR_Trader
         public Form1()
         {
             InitializeComponent();
-
+            listViewTns.DoubleBuffered(true);
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
         }
-
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -79,7 +79,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 11);
+                    ibClient.ClientSocket.eConnect("", port, 13);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -102,7 +102,7 @@ namespace IBKR_Trader
 
 
                     // Subscribe to Group 4 within TWS
-                    ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
+                    //ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
 
                     getData();
 
@@ -156,7 +156,7 @@ namespace IBKR_Trader
 
             // Tick by tick TESTING -- SUCCESS!
             ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
-            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
+            ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -200,11 +200,11 @@ namespace IBKR_Trader
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
-
+                    //listViewTns.BeginUpdate();
                     // if the last price is the same as the ask change the color to lime
                     if (price >= theAsk)
                     {
-                        lx.BackColor = Color.SeaGreen; // listview foreground color
+                        lx.ForeColor = Color.SeaGreen; // listview foreground color
                         lx.Text = price.ToString(); // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -213,7 +213,7 @@ namespace IBKR_Trader
                     // if the last price is the same as the bid change the color to red
                     else if (price <= theBid)
                     {
-                        lx.BackColor = Color.DarkRed;
+                        lx.ForeColor = Color.DarkRed;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
@@ -241,6 +241,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
+                    //listViewTns.EndUpdate();
                 }
                 catch (Exception)
                 {
@@ -320,6 +321,14 @@ namespace IBKR_Trader
         private void ToolstripTickByTick(object sender, EventArgs e)
         {
 
+        }
+    }
+    public static class ControlExtensions
+    {
+        public static void DoubleBuffered(this Control control, bool enable)
+        {
+            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
         }
     }
 }

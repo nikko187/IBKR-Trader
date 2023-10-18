@@ -49,7 +49,7 @@
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(79, 3);
+            btnConnect.Location = new Point(74, 2);
             btnConnect.Name = "btnConnect";
             btnConnect.Size = new Size(63, 25);
             btnConnect.TabIndex = 0;
@@ -59,7 +59,7 @@
             // 
             // btnDisconnect
             // 
-            btnDisconnect.Location = new Point(202, 6);
+            btnDisconnect.Location = new Point(197, 2);
             btnDisconnect.Name = "btnDisconnect";
             btnDisconnect.Size = new Size(76, 25);
             btnDisconnect.TabIndex = 26;
@@ -69,15 +69,16 @@
             // 
             // listViewTns
             // 
+            listViewTns.Activation = ItemActivation.TwoClick;
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listViewTns.Dock = DockStyle.Bottom;
             listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
-            listViewTns.Location = new Point(0, 36);
+            listViewTns.Location = new Point(0, 31);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(229, 682);
+            listViewTns.Size = new Size(229, 854);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -100,7 +101,7 @@
             // 
             // numPort
             // 
-            numPort.Location = new Point(148, 6);
+            numPort.Location = new Point(143, 2);
             numPort.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numPort.Name = "numPort";
             numPort.Size = new Size(48, 23);
@@ -139,7 +140,7 @@
             cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
-            cbSymbol.Location = new Point(5, 4);
+            cbSymbol.Location = new Point(0, 2);
             cbSymbol.MaxLength = 6;
             cbSymbol.Name = "cbSymbol";
             cbSymbol.Size = new Size(68, 25);
@@ -156,7 +157,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(229, 718);
+            ClientSize = new Size(229, 885);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(listViewTns);
             Controls.Add(numPort);
@@ -166,7 +167,7 @@
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "IBKR Trader";
+            Text = "IBKR Trader T&S";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             contextFormRightClick.ResumeLayout(false);
@@ -182,7 +183,6 @@
 
         private Button btnConnect;
         private Button btnDisconnect;
-        private ListView listViewTns;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
@@ -195,5 +195,6 @@
         private ToolStripMenuItem toolstripBorderToggle;
         private ComboBox cbSymbol;
         private ToolStripMenuItem toolstripTicks;
+        public ListView listViewTns;
     }
 }
