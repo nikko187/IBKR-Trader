@@ -128,7 +128,7 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
             }
-
+            ibClient.ClientSocket.cancelMktData(1);
             // clears contents of TnS when changing tickers
             listViewTns.Items.Clear();
 
