@@ -555,7 +555,6 @@ namespace IBKR_Trader
             }
             else
             {
-
                 labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
             }
         }
@@ -799,6 +798,7 @@ namespace IBKR_Trader
             // increase the order id value
             order_id++;
 
+            BracketOrderExecuted = false;   // for proper order CXL.
         }
 
         private void tbBid_Click(object sender, EventArgs e)
@@ -828,7 +828,8 @@ namespace IBKR_Trader
 
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
-                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.10m;
+                    // Puts the Stop Loss price close to the current price
+                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.25m;
 
                     timer1_counter = 5; // reset time counter back to 5
 
