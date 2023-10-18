@@ -41,8 +41,8 @@
             tooltipClosePortion = new ToolTip(components);
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
-            cbSymbol = new ComboBox();
             toolstripTicks = new ToolStripMenuItem();
+            cbSymbol = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             SuspendLayout();
@@ -77,7 +77,7 @@
             listViewTns.HeaderStyle = ColumnHeaderStyle.None;
             listViewTns.Location = new Point(0, 36);
             listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(238, 682);
+            listViewTns.Size = new Size(229, 682);
             listViewTns.TabIndex = 30;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
@@ -126,6 +126,13 @@
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
+            // toolstripTicks
+            // 
+            toolstripTicks.Name = "toolstripTicks";
+            toolstripTicks.Size = new Size(147, 22);
+            toolstripTicks.Text = "Tick by tick";
+            toolstripTicks.Click += ToolstripTickByTick;
+            // 
             // cbSymbol
             // 
             cbSymbol.AllowDrop = true;
@@ -143,20 +150,13 @@
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
-            // toolstripTicks
-            // 
-            toolstripTicks.Name = "toolstripTicks";
-            toolstripTicks.Size = new Size(147, 22);
-            toolstripTicks.Text = "Tick by tick";
-            toolstripTicks.Click += ToolstripTickByTick;
-            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(238, 718);
+            ClientSize = new Size(229, 718);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(listViewTns);
             Controls.Add(numPort);

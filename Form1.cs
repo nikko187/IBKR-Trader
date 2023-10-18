@@ -167,7 +167,7 @@ namespace IBKR_Trader
         double theAsk = 0;
         delegate void SetTextCallbackBidAskTicks(double bidTick, double askTick);
 
-        
+
         public void BidAskTick(double bidTick, double askTick)
         {
             theAsk = askTick;
@@ -317,7 +317,7 @@ namespace IBKR_Trader
 
             getData();
         }
-        private void ToolstripTickByTick (object sender, EventArgs e)
+        private void ToolstripTickByTick(object sender, EventArgs e)
         {
 
         }
