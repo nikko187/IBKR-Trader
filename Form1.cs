@@ -46,7 +46,7 @@ namespace IBKR_Trader
         public Form1()
         {
             InitializeComponent();
-            //listViewTns.DoubleBuffered(true);
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataGridView1, new object[] { true });
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
@@ -81,7 +81,7 @@ namespace IBKR_Trader
 
                     //ibClient.ClientSocket.SetConnectOptions("+PACEAPI");    // Option to pace msgs to 50/second.
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 16);
+                    ibClient.ClientSocket.eConnect("", port, 17);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
