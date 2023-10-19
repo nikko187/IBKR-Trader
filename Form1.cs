@@ -73,6 +73,7 @@ namespace IBKR_Trader
             IntPtr textBox = FindWindowEx(targetWindow, IntPtr.Zero, textBoxClass, null);
 
             SendMessage(textBox, WM_SETTEXT, 0, newText);   // Sends the symbol text to my other TnS window
+            
             PostMessage(textBox, WM_SYSKEYDOWN, VK_RETURN, 0);  // Sends the "ENTER" key to my other TnS Window
         }
 
