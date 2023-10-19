@@ -53,17 +53,18 @@ namespace IBKR_Trader
 
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
-
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, string lParam);
+        [DllImport("user32.dll")]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
         const int WM_SETTEXT = 0x000C; // Windows message for setting text
-
+        const int WM_SYSKEYDOWN = 0x0104;   // KeyDown, as in, press a key
+        const int VK_RETURN = 0x0D;         // virtual key code for ENTER key
         private void TickerCopy()
         {
-            string windowTitle = "IBKR Trader T&S";
+            string windowTitle = "IBKR Trader T&S";     // Change these strings as desired for your application
             string className = "WindowsForms10.Window.8.app.0.33c0d9d_r3_ad1";
             string textBoxClass = "WindowsForms10.ComboBox.app.0.33c0d9d_r3_ad1"; // The class name of the text box control
             string newText = cbSymbol.Text;
@@ -71,8 +72,8 @@ namespace IBKR_Trader
             IntPtr targetWindow = FindWindow(className, windowTitle);
             IntPtr textBox = FindWindowEx(targetWindow, IntPtr.Zero, textBoxClass, null);
 
-            SendMessage(textBox, WM_SETTEXT, 0, newText);
-
+            SendMessage(textBox, WM_SETTEXT, 0, newText);   // Sends the symbol text to my other TnS window
+            PostMessage(textBox, WM_SYSKEYDOWN, VK_RETURN, 0);  // Sends the "ENTER" key to my other TnS Window
         }
 
         /********* ~~~~~ END TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
@@ -397,7 +398,7 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
             }
-            //TickerCopy();
+            TickerCopy();
             // account info and request account updates and current positions.
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
