@@ -29,13 +29,11 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             btnDisconnect = new Button();
-            listViewTns = new ListView();
-            columnHeader1 = new ColumnHeader();
-            columnHeader2 = new ColumnHeader();
-            columnHeader3 = new ColumnHeader();
             numPort = new NumericUpDown();
             tooltipPort = new ToolTip(components);
             tooltipClosePortion = new ToolTip(components);
@@ -44,8 +42,13 @@
             toolstripTicks = new ToolStripMenuItem();
             toolstripAlwaysOnTop = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
+            dataGridView1 = new DataGridView();
+            Price = new DataGridViewTextBoxColumn();
+            Size = new DataGridViewTextBoxColumn();
+            Time = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -60,7 +63,7 @@
             // 
             // btnDisconnect
             // 
-            btnDisconnect.Location = new Point(197, 2);
+            btnDisconnect.Location = new Point(193, 2);
             btnDisconnect.Name = "btnDisconnect";
             btnDisconnect.Size = new Size(76, 25);
             btnDisconnect.TabIndex = 26;
@@ -68,41 +71,12 @@
             btnDisconnect.UseVisualStyleBackColor = true;
             btnDisconnect.Click += btnDisconnect_Click;
             // 
-            // listViewTns
-            // 
-            listViewTns.Activation = ItemActivation.TwoClick;
-            listViewTns.BackColor = Color.Black;
-            listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listViewTns.Dock = DockStyle.Bottom;
-            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            listViewTns.ForeColor = Color.White;
-            listViewTns.HeaderStyle = ColumnHeaderStyle.None;
-            listViewTns.Location = new Point(0, 31);
-            listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(218, 854);
-            listViewTns.TabIndex = 30;
-            listViewTns.UseCompatibleStateImageBehavior = false;
-            listViewTns.View = View.Details;
-            listViewTns.VirtualListSize = 100;
-            // 
-            // columnHeader1
-            // 
-            columnHeader1.Text = "Price";
-            columnHeader1.Width = 64;
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Shares";
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "Time";
-            columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 70;
-            // 
             // numPort
             // 
-            numPort.Location = new Point(143, 2);
+            numPort.BackColor = Color.Black;
+            numPort.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            numPort.ForeColor = Color.White;
+            numPort.Location = new Point(141, 2);
             numPort.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numPort.Name = "numPort";
             numPort.Size = new Size(48, 23);
@@ -146,7 +120,10 @@
             // cbSymbol
             // 
             cbSymbol.AllowDrop = true;
-            cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            cbSymbol.BackColor = Color.Black;
+            cbSymbol.FlatStyle = FlatStyle.Flat;
+            cbSymbol.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            cbSymbol.ForeColor = Color.White;
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
             cbSymbol.Location = new Point(2, 2);
@@ -160,15 +137,69 @@
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.BackgroundColor = Color.Black;
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.Black;
+            dataGridViewCellStyle1.Font = new Font("Arial", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.Transparent;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridView1.ColumnHeadersVisible = false;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Price, Size, Time });
+            dataGridView1.EnableHeadersVisualStyles = false;
+            dataGridView1.GridColor = Color.White;
+            dataGridView1.Location = new Point(2, 31);
+            dataGridView1.MultiSelect = false;
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle2.BackColor = Color.Black;
+            dataGridViewCellStyle2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridView1.RowTemplate.Height = 19;
+            dataGridView1.ScrollBars = ScrollBars.None;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(215, 854);
+            dataGridView1.TabIndex = 40;
+            // 
+            // Price
+            // 
+            Price.HeaderText = "Price";
+            Price.Name = "Price";
+            Price.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Price.Width = 60;
+            // 
+            // Size
+            // 
+            Size.HeaderText = "Size";
+            Size.Name = "Size";
+            Size.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Size.Width = 60;
+            // 
+            // Time
+            // 
+            Time.HeaderText = "Time";
+            Time.Name = "Time";
+            Time.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Time.Width = 75;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(218, 885);
+            ClientSize = new Size(204, 885);
             ContextMenuStrip = contextFormRightClick;
-            Controls.Add(listViewTns);
+            Controls.Add(dataGridView1);
             Controls.Add(numPort);
             Controls.Add(btnDisconnect);
             Controls.Add(cbSymbol);
@@ -180,6 +211,7 @@
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             contextFormRightClick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -192,9 +224,6 @@
 
         private Button btnConnect;
         private Button btnDisconnect;
-        private ColumnHeader columnHeader1;
-        private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private NumericUpDown numPort;
         private ListBox lbHelp;
         private ToolTip tooltipPort;
@@ -204,7 +233,10 @@
         private ToolStripMenuItem toolstripBorderToggle;
         private ComboBox cbSymbol;
         private ToolStripMenuItem toolstripTicks;
-        public ListView listViewTns;
         private ToolStripMenuItem toolstripAlwaysOnTop;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn Price;
+        private DataGridViewTextBoxColumn Size;
+        private DataGridViewTextBoxColumn Time;
     }
 }

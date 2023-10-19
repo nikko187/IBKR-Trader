@@ -46,7 +46,7 @@ namespace IBKR_Trader
         public Form1()
         {
             InitializeComponent();
-            listViewTns.DoubleBuffered(true);
+            //listViewTns.DoubleBuffered(true);
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
@@ -79,9 +79,9 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
 
-                    ibClient.ClientSocket.SetConnectOptions("+PACEAPI");    // Option to pace msgs to 50/second.
+                    //ibClient.ClientSocket.SetConnectOptions("+PACEAPI");    // Option to pace msgs to 50/second.
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 15);
+                    ibClient.ClientSocket.eConnect("", port, 16);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -133,7 +133,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.cancelTickByTickData(2);
 
             // clears contents of TnS when changing tickers
-            listViewTns.Items.Clear();
+            dataGridView1.Rows.Clear();
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -177,7 +177,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)  // variables for actual Last prices on tickbytick basis.
         {
-            if (listViewTns.InvokeRequired)
+            if (dataGridView1.InvokeRequired)
             {
                 try
                 {
@@ -190,6 +190,7 @@ namespace IBKR_Trader
             }
             else
             {
+                /* LISTVIEW TIME AND SALES
                 try
                 {
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
@@ -240,8 +241,30 @@ namespace IBKR_Trader
                 catch (Exception)
                 {
                     // lbData.Items.Insert(0, "TnS error: " + g);
+                }*/
+                try
+                {
+                    if (price >= theAsk)
+                    {
+                        dataGridView1.Rows.Insert(0, price, size, time);
+                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.SeaGreen;
+                        dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else if (price <= theBid)
+                    {
+                        dataGridView1.Rows.Insert(0, price, size, time);
+                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                        dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        dataGridView1.Rows.Insert(0, price, size, time);
+                        dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
+                    }
                 }
+                catch (Exception) { }
             }
+
         }
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
@@ -324,6 +347,7 @@ namespace IBKR_Trader
                 SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
     }
+    /* DOUBLE BUFFER FOR LISTVIEW
     public static class ControlExtensions
     {
         public static void DoubleBuffered(this Control control, bool enable)
@@ -332,4 +356,5 @@ namespace IBKR_Trader
             doubleBufferPropertyInfo.SetValue(control, enable, null);
         }
     }
+    */
 }
