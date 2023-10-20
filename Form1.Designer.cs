@@ -109,6 +109,7 @@
             labelHi = new Label();
             labelChange = new Label();
             panel2 = new Panel();
+            label12 = new Label();
             labelSinceOpen = new Label();
             labelVolume = new Label();
             labelAvgVol = new Label();
@@ -118,8 +119,9 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripDarkMode = new ToolStripMenuItem();
             tbStopLoss = new NumericUpDown();
-            btnBuyLmtBid = new Button();
+            btnBuyBid = new Button();
             btnUpdateStop = new Button();
+            btnSellAsk = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -168,7 +170,7 @@
             // 
             lbData.FormattingEnabled = true;
             lbData.ItemHeight = 15;
-            lbData.Location = new Point(12, 200);
+            lbData.Location = new Point(12, 395);
             lbData.Name = "lbData";
             lbData.Size = new Size(626, 64);
             lbData.TabIndex = 2;
@@ -401,7 +403,7 @@
             // tbTakeProfit
             // 
             tbTakeProfit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTakeProfit.Location = new Point(407, 123);
+            tbTakeProfit.Location = new Point(58, 461);
             tbTakeProfit.Name = "tbTakeProfit";
             tbTakeProfit.ReadOnly = true;
             tbTakeProfit.Size = new Size(61, 25);
@@ -413,9 +415,9 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(342, 123);
+            btnCancelLast.Location = new Point(419, 123);
             btnCancelLast.Name = "btnCancelLast";
-            btnCancelLast.Size = new Size(59, 25);
+            btnCancelLast.Size = new Size(51, 26);
             btnCancelLast.TabIndex = 35;
             btnCancelLast.Text = "CXL Last";
             btnCancelLast.UseVisualStyleBackColor = false;
@@ -480,7 +482,7 @@
             // 
             cbTakeProfit.AutoSize = true;
             cbTakeProfit.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            cbTakeProfit.Location = new Point(428, 104);
+            cbTakeProfit.Location = new Point(12, 465);
             cbTakeProfit.Name = "cbTakeProfit";
             cbTakeProfit.Size = new Size(40, 19);
             cbTakeProfit.TabIndex = 41;
@@ -492,7 +494,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
-            label5.Location = new Point(12, 184);
+            label5.Location = new Point(12, 379);
             label5.Name = "label5";
             label5.Size = new Size(116, 13);
             label5.TabIndex = 42;
@@ -541,12 +543,13 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = Color.Black;
             dataGridViewCellStyle1.ForeColor = Color.White;
             dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BackgroundColor = SystemColors.AppWorkspace;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colTime, colid, colSymbol, colPrice, colTrigger, colShares, colSide, colType, colStatus, colFill, colCancel });
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = Color.Black;
@@ -559,8 +562,9 @@
             dataGridView1.Location = new Point(0, 3);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(615, 148);
+            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridView1.RowTemplate.Height = 20;
+            dataGridView1.Size = new Size(615, 155);
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
@@ -640,7 +644,7 @@
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
-            tabControl1.Location = new Point(12, 270);
+            tabControl1.Location = new Point(12, 187);
             tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -685,7 +689,7 @@
             // dataGridView4
             // 
             dataGridView4.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView4.Columns.AddRange(new DataGridViewColumn[] { col_Symbol, col_Position, col_Price, col_Openpnl, col_Closedpnl, col_Markedpnl });
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = Color.Black;
@@ -695,12 +699,13 @@
             dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
             dataGridView4.DefaultCellStyle = dataGridViewCellStyle4;
-            dataGridView4.Location = new Point(3, 3);
+            dataGridView4.Location = new Point(0, 3);
             dataGridView4.Name = "dataGridView4";
             dataGridView4.RowHeadersVisible = false;
-            dataGridView4.RowTemplate.Height = 25;
+            dataGridView4.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridView4.RowTemplate.Height = 20;
             dataGridView4.ShowCellToolTips = false;
-            dataGridView4.Size = new Size(614, 137);
+            dataGridView4.Size = new Size(617, 137);
             dataGridView4.TabIndex = 0;
             dataGridView4.CellFormatting += dataGridView4_CellFormatting;
             // 
@@ -869,6 +874,7 @@
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.Fixed3D;
+            panel2.Controls.Add(label12);
             panel2.Controls.Add(labelSinceOpen);
             panel2.Controls.Add(labelChange);
             panel2.Controls.Add(labelVolume);
@@ -878,15 +884,24 @@
             panel2.Size = new Size(392, 24);
             panel2.TabIndex = 57;
             // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(300, 2);
+            label12.Name = "label12";
+            label12.Size = new Size(38, 15);
+            label12.TabIndex = 4;
+            label12.Text = "sOpn:";
+            // 
             // labelSinceOpen
             // 
             labelSinceOpen.AutoSize = true;
             labelSinceOpen.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelSinceOpen.Location = new Point(300, 2);
+            labelSinceOpen.Location = new Point(335, 2);
             labelSinceOpen.Name = "labelSinceOpen";
-            labelSinceOpen.Size = new Size(63, 15);
+            labelSinceOpen.Size = new Size(14, 15);
             labelSinceOpen.TabIndex = 3;
-            labelSinceOpen.Text = "SncOpn: 0";
+            labelSinceOpen.Text = "0";
             labelSinceOpen.TextAlign = ContentAlignment.TopRight;
             // 
             // labelVolume
@@ -913,9 +928,9 @@
             // 
             btnS2BE.BackColor = Color.LightBlue;
             btnS2BE.FlatStyle = FlatStyle.Flat;
-            btnS2BE.Location = new Point(559, 123);
+            btnS2BE.Location = new Point(562, 123);
             btnS2BE.Name = "btnS2BE";
-            btnS2BE.Size = new Size(79, 24);
+            btnS2BE.Size = new Size(76, 26);
             btnS2BE.TabIndex = 58;
             btnS2BE.Text = "Stop to BE";
             btnS2BE.UseVisualStyleBackColor = false;
@@ -971,30 +986,42 @@
             tbStopLoss.Value = new decimal(new int[] { 1, 0, 0, 0 });
             tbStopLoss.ValueChanged += UpdateRiskQty;
             // 
-            // btnBuyLmtBid
+            // btnBuyBid
             // 
-            btnBuyLmtBid.BackColor = Color.PaleGreen;
-            btnBuyLmtBid.FlatStyle = FlatStyle.Flat;
-            btnBuyLmtBid.Location = new Point(192, 123);
-            btnBuyLmtBid.Name = "btnBuyLmtBid";
-            btnBuyLmtBid.Size = new Size(69, 26);
-            btnBuyLmtBid.TabIndex = 62;
-            btnBuyLmtBid.Text = "Buy Bid";
-            btnBuyLmtBid.UseVisualStyleBackColor = false;
-            btnBuyLmtBid.Visible = false;
+            btnBuyBid.BackColor = Color.FromArgb(190, 230, 190);
+            btnBuyBid.FlatStyle = FlatStyle.Flat;
+            btnBuyBid.Location = new Point(192, 123);
+            btnBuyBid.Name = "btnBuyBid";
+            btnBuyBid.Size = new Size(69, 26);
+            btnBuyBid.TabIndex = 62;
+            btnBuyBid.Text = "Buy Bid";
+            btnBuyBid.UseVisualStyleBackColor = false;
+            btnBuyBid.Click += btnBuyBid_Click;
             // 
             // btnUpdateStop
             // 
             btnUpdateStop.BackColor = Color.LightSkyBlue;
             btnUpdateStop.FlatStyle = FlatStyle.Flat;
-            btnUpdateStop.Location = new Point(474, 123);
+            btnUpdateStop.Location = new Point(476, 123);
             btnUpdateStop.Name = "btnUpdateStop";
-            btnUpdateStop.Size = new Size(79, 24);
+            btnUpdateStop.Size = new Size(80, 26);
             btnUpdateStop.TabIndex = 63;
             btnUpdateStop.Text = "UpdateStop";
             btnUpdateStop.TextAlign = ContentAlignment.TopCenter;
             btnUpdateStop.UseVisualStyleBackColor = false;
             btnUpdateStop.Click += btnUpdateStop_Click;
+            // 
+            // btnSellAsk
+            // 
+            btnSellAsk.BackColor = Color.FromArgb(230, 190, 190);
+            btnSellAsk.FlatStyle = FlatStyle.Flat;
+            btnSellAsk.Location = new Point(267, 123);
+            btnSellAsk.Name = "btnSellAsk";
+            btnSellAsk.Size = new Size(69, 26);
+            btnSellAsk.TabIndex = 62;
+            btnSellAsk.Text = "Sell Ask";
+            btnSellAsk.UseVisualStyleBackColor = false;
+            btnSellAsk.Click += btnSellAsk_Click;
             // 
             // Form1
             // 
@@ -1002,10 +1029,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(641, 157);
+            ClientSize = new Size(641, 490);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(btnUpdateStop);
-            Controls.Add(btnBuyLmtBid);
+            Controls.Add(btnSellAsk);
+            Controls.Add(btnBuyBid);
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
             Controls.Add(btnPosition);
@@ -1060,6 +1088,8 @@
             Name = "Form1";
             Text = "IBKR Trader";
             Load += Form1_Load;
+            DragDrop += Form1_DragDrop;
+            DragEnter += Form1_DragEnter;
             ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
@@ -1166,7 +1196,9 @@
         private ToolStripMenuItem toolstripDarkMode;
         private Label labelHi;
         private Label labelLo;
-        private Button btnBuyLmtBid;
+        private Button btnBuyBid;
         private Button btnUpdateStop;
+        private Button btnSellAsk;
+        private Label label12;
     }
 }

@@ -251,8 +251,8 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
                         UpdateRiskQty(null, null);
+                        PercentChange(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -834,6 +834,7 @@ namespace IBKR_Trader
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
                     // Puts the Stop Loss price close to the current price
                     tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.25m;
+                    PercentChange(null, null);
 
                     timer1_counter = 5; // reset time counter back to 5
 
@@ -1820,15 +1821,15 @@ namespace IBKR_Trader
             }
         }
 
-        delegate void SetTextCallbackGetFullName(string fullName, string industry);
-        public void GetFullName(string fullName, string industry)
+        delegate void SetTextCallbackGetFullName(string fullName, string industry, string category);
+        public void GetFullName(string fullName, string industry, string category)
         {
             if (labelName.InvokeRequired)
             {
                 try
                 {
                     SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
-                    Invoke(d, new object[] { fullName, industry });
+                    Invoke(d, new object[] { fullName, industry, category });
                 }
                 catch (Exception f)
                 {
@@ -1839,7 +1840,7 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    labelName.Text = fullName + " || " + industry;
+                    labelName.Text = fullName + " / " + industry + " / " + category;
                 }
                 catch (Exception) { }
             }
@@ -1894,20 +1895,20 @@ namespace IBKR_Trader
                     labelChange.ForeColor = Color.Blue;
 
                 else if (percentchange < 0)
-                    labelChange.ForeColor = Color.Crimson;
+                    labelChange.ForeColor = Color.DarkRed;
 
                 else
                 { labelChange.ForeColor = Color.Black; }
             }
 
             double changesinceopen = ((Convert.ToDouble(tbLast.Text) - openPrice) / openPrice) * 100;
-            labelSinceOpen.Text = "sOpn: " + changesinceopen.ToString("#0.00") + "%";
+            labelSinceOpen.Text = changesinceopen.ToString("#0.00") + "%";
 
             if (changesinceopen > 0)
                 labelSinceOpen.ForeColor = Color.Blue;
 
             else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.Crimson;
+                labelSinceOpen.ForeColor = Color.DarkRed;
 
             else
             { labelSinceOpen.ForeColor = Color.Black; }
@@ -2353,6 +2354,131 @@ namespace IBKR_Trader
                     lbData.Items.Insert(0, "UpdateStop error: " + s);
                 }
             }
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            // Copies dragged ticker into Symbol field
+            cbSymbol.Text = e.Data.GetData(DataFormats.Text).ToString();
+
+            string name = cbSymbol.Text;
+
+            // adds the security symbol to the dropdown list in the symbol combobox
+            if (!cbSymbol.Items.Contains(name))
+            {
+                cbSymbol.Items.Add(name);
+            }
+            cbSymbol.SelectAll();
+            getData();  // Gets market data via IB API
+        }
+
+        private void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            // Checks if dragged object can be Text.
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void btnBuyBid_Click(object sender, EventArgs e)
+        {
+            // Create a new contract to specify the security we are searching for
+            IBApi.Contract contract = new IBApi.Contract();
+
+            // Set the underlying stock symbol from the cbSymbol combobox
+            contract.Symbol = cbSymbol.Text;
+            // Set the Security type to STK for a Stock
+            contract.SecType = "STK";
+            // Use "SMART" as the general exchange
+            contract.Exchange = cbMarket.Text;
+            // Set the primary exchange (sometimes called Listing exchange)
+            // Use either NYSE or ISLAND
+            contract.PrimaryExch = "ISLAND";
+            // Set the currency to USD
+            contract.Currency = "USD";
+
+            IBApi.Order order = new IBApi.Order();
+            // gets the next order id from the text box
+            order.OrderId = order_id;
+            // gets the side of the order (BUY, or SELL)
+            order.Action = "Buy";
+
+            order.OrderType = "LMT";
+
+            // number of shares from Quantity
+            order.TotalQuantity = numQuantity.Value;
+
+            // Value from limit price
+            order.LmtPrice = Convert.ToDouble(tbBid.Text);
+            numPrice.Value = (decimal)order.LmtPrice;
+
+            // Sets AuxPrice to 0.00 for the SNAP type orders. 0.00 offset. if it's a STP order, use the price from price box.
+            order.AuxPrice = 0.00;
+
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
+            order.OutsideRth = chkOutside.Checked;
+
+            // Place the order
+            ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " " + order.LmtPrice;
+            lbData.Items.Insert(0, printBox);
+
+            // increase the order id value
+            order_id++;
+
+            BracketOrderExecuted = false;   // for proper order CXL.
+        }
+
+        private void btnSellAsk_Click(object sender, EventArgs e)
+        {
+            // Create a new contract to specify the security we are searching for
+            IBApi.Contract contract = new IBApi.Contract();
+
+            // Set the underlying stock symbol from the cbSymbol combobox
+            contract.Symbol = cbSymbol.Text;
+            // Set the Security type to STK for a Stock
+            contract.SecType = "STK";
+            // Use "SMART" as the general exchange
+            contract.Exchange = cbMarket.Text;
+            // Set the primary exchange (sometimes called Listing exchange)
+            // Use either NYSE or ISLAND
+            contract.PrimaryExch = "ISLAND";
+            // Set the currency to USD
+            contract.Currency = "USD";
+
+            IBApi.Order order = new IBApi.Order();
+            // gets the next order id from the text box
+            order.OrderId = order_id;
+            // gets the side of the order (BUY, or SELL)
+            order.Action = "Sell";
+
+            order.OrderType = "LMT";
+
+            // number of shares from Quantity
+            order.TotalQuantity = numQuantity.Value;
+
+            // Value from limit price
+            order.LmtPrice = Convert.ToDouble(tbAsk.Text);
+            numPrice.Value = (decimal)order.LmtPrice;
+
+            // Sets AuxPrice to 0.00 for the SNAP type orders. 0.00 offset. if it's a STP order, use the price from price box.
+            order.AuxPrice = 0.00;
+
+            // checks if Outside RTH is checked, then apply outsideRTH to the order
+            order.OutsideRth = chkOutside.Checked;
+
+            // Place the order
+            ibClient.ClientSocket.placeOrder(order_id, contract, order);
+
+            string printBox = order.Action + " " + order.TotalQuantity + " " + contract.Symbol + " at " + order.OrderType + " " + order.LmtPrice;
+            lbData.Items.Insert(0, printBox);
+
+            // increase the order id value
+            order_id++;
+
+            BracketOrderExecuted = false;   // for proper order CXL.
         }
     }
 }
