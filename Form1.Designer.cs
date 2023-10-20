@@ -978,7 +978,7 @@
             // 
             // btnUpdateStop
             // 
-            btnUpdateStop.BackColor = Color.MediumTurquoise;
+            btnUpdateStop.BackColor = Color.Turquoise;
             btnUpdateStop.FlatStyle = FlatStyle.Flat;
             btnUpdateStop.Location = new Point(291, 253);
             btnUpdateStop.Name = "btnUpdateStop";
@@ -1002,6 +1002,9 @@
             tnsGridView.RowHeadersVisible = false;
             tnsGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle5.BackColor = Color.Black;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = Color.Transparent;
             tnsGridView.RowsDefaultCellStyle = dataGridViewCellStyle5;
             tnsGridView.RowTemplate.Height = 19;
             tnsGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -1018,7 +1021,7 @@
             // 
             tnsSize.HeaderText = "Size";
             tnsSize.Name = "tnsSize";
-            tnsSize.Width = 60;
+            tnsSize.Width = 65;
             // 
             // tnsTime
             // 

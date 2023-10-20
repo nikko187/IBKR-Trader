@@ -120,7 +120,7 @@ namespace IBKR_Trader
             dataGridView1.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
 
             // Columns
-            dataGridView1.Columns[0].Width = 60;
+            /*dataGridView1.Columns[0].Width = 60;
             dataGridView1.Columns[1].Width = 50;
             dataGridView1.Columns[2].Width = 55;
             dataGridView1.Columns[3].Width = 60;
@@ -129,7 +129,7 @@ namespace IBKR_Trader
             dataGridView1.Columns[6].Width = 50;
             dataGridView1.Columns[7].Width = 60;
             dataGridView1.Columns[8].Width = 60;
-            dataGridView1.Columns[9].Width = 60;
+            dataGridView1.Columns[9].Width = 60;*/
             dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
             dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
             dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -248,6 +248,7 @@ namespace IBKR_Trader
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
                         UpdateRiskQty(null, null);
+                        PercentChange(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
@@ -267,7 +268,7 @@ namespace IBKR_Trader
                     {
                         labelLo.Text = "L: " + tickerPrice[2];
                     }
-                    PercentChange(null, null);
+
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
                 }
@@ -595,8 +596,8 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    double size = Convert.ToDouble(listTimeSales[1]);
-                    string strShareSize = size.ToString("#0");
+                    double size = Convert.ToDouble(listTimeSales[1]) * 100;
+                    string strShareSize = size.ToString("#,##0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
@@ -605,15 +606,15 @@ namespace IBKR_Trader
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
-                    string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
+                    string strSaleTime = epoch.ToString("HH:mm:ss:ff");  // formatting for time
 
-                    if (last_price >= theBid)
+                    if (last_price >= theAsk)
                     {
                         tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
                         tnsGridView.Rows[0].DefaultCellStyle.BackColor = Color.SeaGreen;
                         tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.White;
                     }
-                    else if (last_price <= theAsk)
+                    else if (last_price <= theBid)
                     {
                         tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
                         tnsGridView.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
@@ -624,7 +625,7 @@ namespace IBKR_Trader
                         tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
                         tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
                     }
-                    
+
                 }
                 catch (Exception)
                 {
@@ -874,9 +875,9 @@ namespace IBKR_Trader
             order_id++;
             BracketOrderExecuted = false;   // for proper order cancelation with order_ID count.
 
-    }
+        }
 
-    private void tbBid_Click(object sender, EventArgs e)
+        private void tbBid_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbBid.Text);
             cbOrderType.Text = "LMT";
@@ -903,12 +904,12 @@ namespace IBKR_Trader
 
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
-                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.10m;
-
+                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.15m;
+                    PercentChange(null, null);
                     timer1_counter = 5; // reset time counter back to 5
                     // TickerCopy();
                 }
-                catch (Exception) { }
+                catch (Exception ex) { Debug.WriteLine("Timer Tick: " + ex); }
 
             }
             timer1_counter--;   // subtract 1 every time there is a tick
@@ -1964,7 +1965,7 @@ namespace IBKR_Trader
                     labelChange.ForeColor = Color.Blue;
 
                 else if (percentchange < 0)
-                    labelChange.ForeColor = Color.Crimson;
+                    labelChange.ForeColor = Color.DarkRed;
 
                 else
                 { labelChange.ForeColor = Color.Black; }
@@ -1977,7 +1978,7 @@ namespace IBKR_Trader
                 labelSinceOpen.ForeColor = Color.Blue;
 
             else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.Crimson;
+                labelSinceOpen.ForeColor = Color.DarkRed;
 
             else
             { labelSinceOpen.ForeColor = Color.Black; }
