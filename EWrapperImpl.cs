@@ -87,8 +87,7 @@ namespace IBKR_Trader
         {
             Console.WriteLine("Tick Price. Ticker Id:" + tickerId + ", Field: " + field + ", Price: " + Util.DoubleMaxString(price) + ", CanAutoExecute: " + attribs.CanAutoExecute + 
                 ", PastLimit: " + attribs.PastLimit + ", PreOpen: " + attribs.PreOpen);
-            string strData = "Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
-                      ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
+            string strData = "Ticker Id:" + tickerId + ", Field: " + field + ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
 
             string _tickPrice = tickerId + "," + field + "," + price + "," + attribs.CanAutoExecute;
 

@@ -398,7 +398,7 @@ namespace IBKR_Trader
             }
 
             // clears contents of TnS when changing
-            listViewTns.Items.Clear();
+            tnsGridView.Rows.Clear();
 
             // account info and request account updates and current positions.
             string account_number = "D005";
@@ -557,7 +557,6 @@ namespace IBKR_Trader
             }
             else
             {
-
                 labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
             }
         }
@@ -565,7 +564,7 @@ namespace IBKR_Trader
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
         {
-            if (listViewTns.InvokeRequired)
+            if (tnsGridView.InvokeRequired)
             {
                 try
                 {
@@ -614,6 +613,24 @@ namespace IBKR_Trader
 
                     string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
 
+                    if (last_price >= theBid)
+                    {
+                        tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
+                        tnsGridView.Rows[0].DefaultCellStyle.BackColor = Color.SeaGreen;
+                        tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else if (last_price <= theAsk)
+                    {
+                        tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
+                        tnsGridView.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                        tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
+                        tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
+                    }
+                    /*
                     ListViewItem lx = new ListViewItem();
 
                     // if the last price is the same as the ask
@@ -654,7 +671,7 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
-                    }
+                    }*/
                 }
                 catch (Exception)
                 {
@@ -2350,6 +2367,106 @@ namespace IBKR_Trader
             cbSymbol.SelectAll();
             string symbol = cbSymbol.Text;
             System.Windows.Forms.Clipboard.SetText(symbol);
+        }
+
+        private void btnUpdateStop_Click(object sender, EventArgs e)
+        {
+            int countRow2 = 0;
+            decimal pos = 0;
+            bool wasFound2 = false;
+            string searchValue = cbSymbol.Text;
+            int stopOrderId = 0;
+            double stopPrice = 0;
+            string side = "";
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound2 = true;
+                        break;
+                    }
+                    countRow2++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound2)
+            {
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                foreach (DataGridViewRow row in dataGridView4.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Equals(searchValue)) // was found in data grid
+                    {
+                        // Modify the values in the row based on the current stock symbol.
+                        pos = Convert.ToDecimal(dataGridView4.Rows[countRow2].Cells[1].Value); // Position
+                        break;
+                    }
+
+                }
+            }
+            int countRow3 = 0;
+            bool wasFound3 = false;
+            try
+            {
+                // searches for the symbol and counts the rows and set the wasFound2 to true if found
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    {
+                        wasFound3 = true;
+                        break;
+                    }
+                    countRow3++;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (wasFound3)
+            {
+                try
+                {
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
+                        {
+                            // Modify the values in the row based on the current stock symbol.
+                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
+                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
+                            side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
+                            break;
+                        }
+                    }
+
+                    IBApi.Contract contract = new IBApi.Contract();
+                    contract.Symbol = searchValue;
+                    contract.SecType = "STK";
+                    contract.Exchange = "SMART";
+                    contract.PrimaryExch = "ISLAND";
+                    contract.Currency = "USD";
+
+                    IBApi.Order stopLoss = new Order();
+                    stopLoss.OrderId = stopOrderId;
+                    stopLoss.Action = side;
+                    stopLoss.OrderType = "STP";
+                    stopLoss.TotalQuantity = Math.Abs(pos);
+                    stopLoss.AuxPrice = stopPrice;
+
+                    // Place the order
+                    ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
+                }
+                catch (Exception s)
+                {
+                    lbData.Items.Insert(0, "UpdateStop error: " + s);
+                }
+            }
         }
     }
 }
