@@ -247,7 +247,6 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
                         UpdateRiskQty(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
@@ -268,7 +267,7 @@ namespace IBKR_Trader
                     {
                         labelLo.Text = "L: " + tickerPrice[2];
                     }
-
+                    PercentChange(null, null);
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
                 }
@@ -602,11 +601,6 @@ namespace IBKR_Trader
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
-                    // Current traded volume for the day.
-                    //double volume = Convert.ToDouble(listTimeSales[3]) * 100;
-                    //string voll = volume.ToString("#,##0");
-                    //labelVolume.Text = "Vol: " + voll;
-
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
                     epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
@@ -630,48 +624,7 @@ namespace IBKR_Trader
                         tnsGridView.Rows.Insert(0, last_price, strShareSize, strSaleTime);
                         tnsGridView.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
                     }
-                    /*
-                    ListViewItem lx = new ListViewItem();
-
-                    // if the last price is the same as the ask
-                    if (last_price >= theAsk)
-                    {
-                        lx.BackColor = Color.FromArgb(0, 200, 0); // listview foreground color
-                        lx.Text = listTimeSales[0]; // last price
-                        lx.SubItems.Add(strShareSize); // share size
-                        lx.SubItems.Add(strSaleTime); // time
-                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
-                    }
-                    // if the last price is the same as the bid
-                    else if (last_price <= theBid)
-                    {
-                        lx.BackColor = Color.DarkRed;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Insert(0, strSaleTime);
-                    }
-                    // if the last price in between the bid and ask.
-                    else if (last_price > theBid && last_price < theAsk)
-                    {
-                        lx.ForeColor = Color.Silver;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-
-                        // lbData.Items.Add(epoch);
-                    }
-                    else
-                    {
-                        lx.ForeColor = Color.White;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-                    }*/
+                    
                 }
                 catch (Exception)
                 {
@@ -771,13 +724,14 @@ namespace IBKR_Trader
 
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
             double quantity = Math.Floor((Convert.ToDouble(numRisk.Value)) / Math.Abs(lmtPrice - stopLoss));
+            numQuantity.Value = (decimal)quantity;
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
             foreach (Order o in bracket)    // loops through each order in the list
                 ibClient.ClientSocket.placeOrder(o.OrderId, contract, o);
 
-            // increase order id by 2, for parent and stop loss, as to not use same order id twice and get an error
+            // increase order id by 3, for parent , SL and TP
             if (takeProfitEnabled)
             {
                 order_id += 3;
@@ -785,6 +739,7 @@ namespace IBKR_Trader
                 lbData.Items.Insert(0, printBox);
 
             }
+            // increase order id by 2, for parent and SL only.
             else
             {
                 order_id += 2;
@@ -792,7 +747,7 @@ namespace IBKR_Trader
                 lbData.Items.Insert(0, printBox);
             }
 
-            BracketOrderExecuted = true;
+            BracketOrderExecuted = true;        // for proper order cancelation
             chkBracket.Checked = false;
         }
 
@@ -917,10 +872,11 @@ namespace IBKR_Trader
 
             // increase the order id value
             order_id++;
+            BracketOrderExecuted = false;   // for proper order cancelation with order_ID count.
 
-        }
+    }
 
-        private void tbBid_Click(object sender, EventArgs e)
+    private void tbBid_Click(object sender, EventArgs e)
         {
             numPrice.Value = Convert.ToDecimal(tbBid.Text);
             cbOrderType.Text = "LMT";
@@ -1934,15 +1890,15 @@ namespace IBKR_Trader
             }
         }
 
-        delegate void SetTextCallbackGetFullName(string fullName, string industry);
-        public void GetFullName(string fullName, string industry)
+        delegate void SetTextCallbackGetFullName(string fullName, string industry, string category);
+        public void GetFullName(string fullName, string industry, string category)
         {
             if (labelName.InvokeRequired)
             {
                 try
                 {
                     SetTextCallbackGetFullName d = new SetTextCallbackGetFullName(GetFullName);
-                    Invoke(d, new object[] { fullName, industry });
+                    Invoke(d, new object[] { fullName, industry, category });
                 }
                 catch (Exception f)
                 {
@@ -1953,7 +1909,7 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    labelName.Text = fullName + " || " + industry;
+                    labelName.Text = fullName + " / " + industry + " / " + category;
                 }
                 catch (Exception) { }
             }
@@ -1989,7 +1945,7 @@ namespace IBKR_Trader
             double percentchange = ((Convert.ToDouble(tbLast.Text) - closePrice) / closePrice) * 100;
             double change = Convert.ToDouble(tbLast.Text) - closePrice;
 
-            labelChange.Text = percentchange.ToString("#0.00") + "%   " + (Math.Round(change, 2)).ToString("#0.00");
+            labelChange.Text = percentchange.ToString("#0.00") + "%  " + (Math.Round(change, 2)).ToString("#0.00");
 
             if (toolstripDarkMode.Checked)
             {
@@ -2222,6 +2178,11 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = Color.White;
                 }
+                foreach (ListBox LB in Controls.OfType<ListBox>())
+                {
+                    LB.BackColor = Color.Black;
+                    LB.ForeColor = Color.White;
+                }
                 tbShortable.ForeColor = Color.Black;
 
             }
@@ -2257,6 +2218,11 @@ namespace IBKR_Trader
                 foreach (CheckBox check in Controls.OfType<CheckBox>())
                 {
                     check.ForeColor = SystemColors.ControlText;
+                }
+                foreach (ListBox LB in Controls.OfType<ListBox>())
+                {
+                    LB.BackColor = Color.White;
+                    LB.ForeColor = Color.Black;
                 }
                 tbShortable.ForeColor = SystemColors.WindowText;
 
