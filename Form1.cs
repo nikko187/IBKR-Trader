@@ -2279,7 +2279,7 @@ namespace IBKR_Trader
             bool wasFound2 = false;
             string searchValue = cbSymbol.Text;
             int stopOrderId = 0;
-            double stopPrice = 0;
+            //double stopPrice = 0;
             string side = "";
             try
             {
@@ -2342,7 +2342,7 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
+                            //stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
                             side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
                             break;
                         }
@@ -2360,7 +2360,7 @@ namespace IBKR_Trader
                     stopLoss.Action = side;
                     stopLoss.OrderType = "STP";
                     stopLoss.TotalQuantity = Math.Abs(pos);
-                    stopLoss.AuxPrice = stopPrice;
+                    //stopLoss.AuxPrice = stopPrice;
 
                     // Place the order
                     ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);

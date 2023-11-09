@@ -204,7 +204,7 @@
             numPrice.Location = new Point(106, 89);
             numPrice.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
             numPrice.Name = "numPrice";
-            numPrice.Size = new Size(80, 25);
+            numPrice.Size = new Size(75, 25);
             numPrice.TabIndex = 6;
             numPrice.ValueChanged += UpdateRiskQty;
             // 
@@ -286,10 +286,10 @@
             // 
             tbBid.BackColor = SystemColors.ControlLight;
             tbBid.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            tbBid.Location = new Point(192, 89);
+            tbBid.Location = new Point(187, 89);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
-            tbBid.Size = new Size(69, 25);
+            tbBid.Size = new Size(63, 25);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
             tbBid.Click += tbBid_Click;
@@ -298,10 +298,10 @@
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
             tbAsk.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            tbAsk.Location = new Point(267, 89);
+            tbAsk.Location = new Point(256, 89);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
-            tbAsk.Size = new Size(69, 25);
+            tbAsk.Size = new Size(63, 25);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
             tbAsk.Click += tbAsk_Click;
@@ -310,7 +310,7 @@
             // 
             B.AutoSize = true;
             B.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            B.Location = new Point(192, 75);
+            B.Location = new Point(187, 75);
             B.Name = "B";
             B.Size = new Size(23, 13);
             B.TabIndex = 20;
@@ -320,7 +320,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(311, 75);
+            label7.Location = new Point(294, 75);
             label7.Name = "label7";
             label7.Size = new Size(25, 13);
             label7.TabIndex = 21;
@@ -330,10 +330,10 @@
             // 
             tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbLast.Location = new Point(342, 89);
+            tbLast.Location = new Point(325, 89);
             tbLast.Name = "tbLast";
             tbLast.ReadOnly = true;
-            tbLast.Size = new Size(71, 25);
+            tbLast.Size = new Size(63, 25);
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
@@ -342,7 +342,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(386, 75);
+            label8.Location = new Point(361, 75);
             label8.Name = "label8";
             label8.Size = new Size(27, 13);
             label8.TabIndex = 23;
@@ -428,7 +428,7 @@
             btnCancelAll.BackColor = Color.FromArgb(255, 192, 128);
             btnCancelAll.FlatStyle = FlatStyle.Flat;
             btnCancelAll.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelAll.Location = new Point(503, 64);
+            btnCancelAll.Location = new Point(575, 64);
             btnCancelAll.Name = "btnCancelAll";
             btnCancelAll.Size = new Size(63, 24);
             btnCancelAll.TabIndex = 36;
@@ -534,7 +534,7 @@
             // labelSpread
             // 
             labelSpread.AutoSize = true;
-            labelSpread.Location = new Point(251, 74);
+            labelSpread.Location = new Point(239, 74);
             labelSpread.Name = "labelSpread";
             labelSpread.Size = new Size(28, 15);
             labelSpread.TabIndex = 46;
@@ -767,9 +767,9 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(572, 63);
+            btnClose.Location = new Point(503, 64);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(66, 25);
+            btnClose.Size = new Size(66, 24);
             btnClose.TabIndex = 52;
             btnClose.Text = "CLOSE";
             btnClose.UseVisualStyleBackColor = false;
@@ -990,7 +990,7 @@
             // 
             btnBuyBid.BackColor = Color.FromArgb(190, 230, 190);
             btnBuyBid.FlatStyle = FlatStyle.Flat;
-            btnBuyBid.Location = new Point(192, 123);
+            btnBuyBid.Location = new Point(269, 123);
             btnBuyBid.Name = "btnBuyBid";
             btnBuyBid.Size = new Size(69, 26);
             btnBuyBid.TabIndex = 62;
@@ -1015,7 +1015,7 @@
             // 
             btnSellAsk.BackColor = Color.FromArgb(230, 190, 190);
             btnSellAsk.FlatStyle = FlatStyle.Flat;
-            btnSellAsk.Location = new Point(267, 123);
+            btnSellAsk.Location = new Point(344, 123);
             btnSellAsk.Name = "btnSellAsk";
             btnSellAsk.Size = new Size(69, 26);
             btnSellAsk.TabIndex = 62;
