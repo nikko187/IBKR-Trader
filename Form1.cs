@@ -664,13 +664,14 @@ namespace IBKR_Trader
 
             // orderid, action, qty, entryprice, targetprice, stoploss
             string order_type = cbOrderType.Text;   // sets LMT or STP from box
-            string action = side;   // sets BUY or SELL from button click
+            string action = side;   // sets Buy or Sell from button click
+   
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
 
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
-            double quantity = Math.Floor((Convert.ToDouble(numRisk.Value)) / Math.Abs(lmtPrice - stopLoss));
+            double quantity = Math.Floor(Convert.ToDouble(numRisk.Value) / Math.Abs(lmtPrice - stopLoss));
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
@@ -2279,7 +2280,7 @@ namespace IBKR_Trader
             bool wasFound2 = false;
             string searchValue = cbSymbol.Text;
             int stopOrderId = 0;
-            //double stopPrice = 0;
+            double stopPrice = 0;
             string side = "";
             try
             {
@@ -2342,7 +2343,7 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            //stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
+                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[3].Value);
                             side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
                             break;
                         }
@@ -2360,7 +2361,7 @@ namespace IBKR_Trader
                     stopLoss.Action = side;
                     stopLoss.OrderType = "STP";
                     stopLoss.TotalQuantity = Math.Abs(pos);
-                    //stopLoss.AuxPrice = stopPrice;
+                    stopLoss.AuxPrice = stopPrice;
 
                     // Place the order
                     ibClient.ClientSocket.placeOrder(stopOrderId, contract, stopLoss);
