@@ -2356,7 +2356,7 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[3].Value);
+                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
                             side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
                             break;
                         }
