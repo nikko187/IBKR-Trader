@@ -422,7 +422,7 @@ namespace IBKR_Trader
             {
                 TickerCopy();
             }
-            catch (Exception e) { Debug.WriteLine("MT not open? " + e); }
+            catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
 
             // account info and request account updates and current positions.
             string account_number = "D005";
@@ -1022,7 +1022,7 @@ namespace IBKR_Trader
                     // checks if cell value is BUY and changes color to green and bold
                     if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "BUY")
                     {
-                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.ForeColor = System.Drawing.Color.LimeGreen;
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.ForeColor = Color.LimeGreen;
                         dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
                     }
 
@@ -1035,6 +1035,7 @@ namespace IBKR_Trader
                     {
                         if (fillstatus == "0.00")
                         {
+                            dataGridView1.Rows[e.RowIndex].Cells[8].Style.ForeColor = Color.Silver;
                             dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.LightGray };
                         }
                     }
@@ -1250,15 +1251,6 @@ namespace IBKR_Trader
                     }
                 }
             }
-        }
-
-        // USED TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS
-        private void cbAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbAlwaysOnTop.Checked == true)
-                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-            else
-                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
 
         delegate void SetTextCallbackShortable(string shortable);
@@ -2179,6 +2171,7 @@ namespace IBKR_Trader
             }
         }
 
+        // USED TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS
         private void ToolstripAlwaysOnTop(object sender, EventArgs e)
         {
             if (toolstripAlwaysOnTop.Checked)
