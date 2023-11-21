@@ -83,7 +83,6 @@
             colStatus = new DataGridViewTextBoxColumn();
             colFill = new DataGridViewTextBoxColumn();
             colCancel = new DataGridViewTextBoxColumn();
-            cbAlwaysOnTop = new CheckBox();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
@@ -118,6 +117,7 @@
             contextFormRightClick = new ContextMenuStrip(components);
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripDarkMode = new ToolStripMenuItem();
+            toolstripAlwaysOnTop = new ToolStripMenuItem();
             tbStopLoss = new NumericUpDown();
             btnBuyBid = new Button();
             btnUpdateStop = new Button();
@@ -389,11 +389,11 @@
             // chkOutside
             // 
             chkOutside.AutoSize = true;
-            chkOutside.Location = new Point(463, 46);
+            chkOutside.Location = new Point(410, 73);
             chkOutside.Name = "chkOutside";
-            chkOutside.Size = new Size(56, 19);
+            chkOutside.Size = new Size(53, 19);
             chkOutside.TabIndex = 29;
-            chkOutside.Text = "DAY+";
+            chkOutside.Text = "EXT+";
             chkOutside.UseVisualStyleBackColor = true;
             // 
             // timer1
@@ -502,7 +502,7 @@
             // 
             // btnHelp
             // 
-            btnHelp.Location = new Point(403, 157);
+            btnHelp.Location = new Point(509, 157);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(47, 23);
             btnHelp.TabIndex = 43;
@@ -627,18 +627,6 @@
             colCancel.DefaultCellStyle = dataGridViewCellStyle2;
             colCancel.HeaderText = "X";
             colCancel.Name = "colCancel";
-            // 
-            // cbAlwaysOnTop
-            // 
-            cbAlwaysOnTop.AutoSize = true;
-            cbAlwaysOnTop.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            cbAlwaysOnTop.Location = new Point(456, 159);
-            cbAlwaysOnTop.Name = "cbAlwaysOnTop";
-            cbAlwaysOnTop.Size = new Size(102, 17);
-            cbAlwaysOnTop.TabIndex = 48;
-            cbAlwaysOnTop.Text = "Always On Top";
-            cbAlwaysOnTop.UseVisualStyleBackColor = true;
-            cbAlwaysOnTop.CheckedChanged += cbAlwaysOnTop_CheckedChanged;
             // 
             // tabControl1
             // 
@@ -864,7 +852,7 @@
             labelChange.Anchor = AnchorStyles.Left;
             labelChange.AutoSize = true;
             labelChange.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelChange.Location = new Point(209, 2);
+            labelChange.Location = new Point(255, 2);
             labelChange.Name = "labelChange";
             labelChange.Size = new Size(14, 15);
             labelChange.TabIndex = 2;
@@ -881,13 +869,13 @@
             panel2.Controls.Add(labelAvgVol);
             panel2.Location = new Point(12, 157);
             panel2.Name = "panel2";
-            panel2.Size = new Size(392, 24);
+            panel2.Size = new Size(491, 24);
             panel2.TabIndex = 57;
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(300, 2);
+            label12.Location = new Point(389, 2);
             label12.Name = "label12";
             label12.Size = new Size(38, 15);
             label12.TabIndex = 4;
@@ -897,7 +885,7 @@
             // 
             labelSinceOpen.AutoSize = true;
             labelSinceOpen.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelSinceOpen.Location = new Point(335, 2);
+            labelSinceOpen.Location = new Point(429, 2);
             labelSinceOpen.Name = "labelSinceOpen";
             labelSinceOpen.Size = new Size(14, 15);
             labelSinceOpen.TabIndex = 3;
@@ -918,7 +906,7 @@
             // 
             labelAvgVol.AutoSize = true;
             labelAvgVol.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelAvgVol.Location = new Point(96, 2);
+            labelAvgVol.Location = new Point(116, 2);
             labelAvgVol.Name = "labelAvgVol";
             labelAvgVol.Size = new Size(51, 15);
             labelAvgVol.TabIndex = 1;
@@ -952,9 +940,9 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(171, 48);
+            contextFormRightClick.Size = new Size(171, 70);
             // 
             // toolstripBorderToggle
             // 
@@ -971,6 +959,14 @@
             toolstripDarkMode.Size = new Size(170, 22);
             toolstripDarkMode.Text = "Toggle Dark Mode";
             toolstripDarkMode.Click += ToolstripDarkModeToggle_Click;
+            // 
+            // toolstripAlwaysOnTop
+            // 
+            toolstripAlwaysOnTop.CheckOnClick = true;
+            toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
+            toolstripAlwaysOnTop.Size = new Size(170, 22);
+            toolstripAlwaysOnTop.Text = "Always on top";
+            toolstripAlwaysOnTop.Click += ToolstripAlwaysOnTop;
             // 
             // tbStopLoss
             // 
@@ -1045,7 +1041,6 @@
             Controls.Add(btnClose);
             Controls.Add(tbShortable);
             Controls.Add(tabControl1);
-            Controls.Add(cbAlwaysOnTop);
             Controls.Add(labelSpread);
             Controls.Add(numRisk);
             Controls.Add(label9);
@@ -1158,7 +1153,6 @@
         private DataGridViewTextBoxColumn colStatus;
         private DataGridViewTextBoxColumn colFill;
         private DataGridViewTextBoxColumn colCancel;
-        private CheckBox cbAlwaysOnTop;
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
@@ -1200,5 +1194,6 @@
         private Button btnUpdateStop;
         private Button btnSellAsk;
         private Label label12;
+        private ToolStripMenuItem toolstripAlwaysOnTop;
     }
 }

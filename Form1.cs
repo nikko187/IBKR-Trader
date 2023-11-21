@@ -18,6 +18,7 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
@@ -205,7 +206,7 @@ namespace IBKR_Trader
 
                     // Subscribe to Group 4 within TWS
                     ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
-
+                    dataGridView1.Rows.Clear();
                     getData();
 
                 }
@@ -416,7 +417,12 @@ namespace IBKR_Trader
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
             }
-            TickerCopy();
+
+            try
+            {
+                TickerCopy();
+            }
+            catch (Exception e) { Debug.WriteLine("MT not open? " + e); }
 
             // account info and request account updates and current positions.
             string account_number = "D005";
@@ -665,7 +671,7 @@ namespace IBKR_Trader
             // orderid, action, qty, entryprice, targetprice, stoploss
             string order_type = cbOrderType.Text;   // sets LMT or STP from box
             string action = side;   // sets Buy or Sell from button click
-   
+
             double lmtPrice = Convert.ToDouble(numPrice.Text); // limit price from box
             double takeProfit = Convert.ToDouble(tbTakeProfit.Text);    // tp amount from text box
             double stopLoss = Convert.ToDouble(tbStopLoss.Text);    // stop loss from text box
@@ -1007,29 +1013,29 @@ namespace IBKR_Trader
 
 
                     // checks if cell valye is SELL and changes color to Red and Bold
-                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Sell")
+                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "SELL")
                     {
-                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = Color.Red;
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.ForeColor = Color.Red;
                         dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
                     }
 
                     // checks if cell value is BUY and changes color to green and bold
-                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "Buy")
+                    if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "BUY")
                     {
-                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.BackColor = System.Drawing.Color.Green;
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Style.ForeColor = System.Drawing.Color.LimeGreen;
                         dataGridView1.Columns[6].DefaultCellStyle.Font = new Font(DataGridView.DefaultFont, FontStyle.Bold);
                     }
 
                     // checks if value in cell column 8 if Filled and if it is changes fore color to Green
                     if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Filled")
-                        dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
+                        dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.LightBlue };
 
                     //check if value in cell 8 is canceled and if so changes fore color text to green
                     if (dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString().Trim() == "Canceled")
                     {
                         if (fillstatus == "0.00")
                         {
-                            dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.Green };
+                            dataGridView1.Rows[e.RowIndex].DefaultCellStyle = new DataGridViewCellStyle { ForeColor = Color.LightGray };
                         }
                     }
                     // checks for partial fill in column 8 status column and changes text to yellow
@@ -1073,7 +1079,7 @@ namespace IBKR_Trader
 
                 string searchValue = Convert.ToString(orderId);     // 0 represents order id
                 int countRow = 0;
-                Boolean wasFound = false;
+                bool wasFound = false;
 
                 try
                 {
@@ -1089,6 +1095,7 @@ namespace IBKR_Trader
                                 dataGridView1.Rows[countRow].Cells[8].Value = myStatus;         // Status of order
                                 dataGridView1.Rows[countRow].Cells[9].Value = lastFillPrice.ToString("N2");     // e.lastFillPrice
                                 dataGridView1.Rows[countRow].Cells[10].Value = "X";     // cancel
+
 
                                 wasFound = true;
                                 break;
@@ -1167,18 +1174,20 @@ namespace IBKR_Trader
 
                 string searchValue = Convert.ToString(myOpenOrder[2]);      // 2 = order id
                 int countRow = 0;
-                Boolean wasFound = false;
+                bool wasFound = false;
 
                 double myLimitPrice = Convert.ToDouble(myOpenOrder[11]);    // 11 = lmtPrice
                 double myAuxPrice = Convert.ToDouble(myOpenOrder[12]);      // 12 = auxPrice
 
-                if (dataGridView1.Rows.Count < 0)
-                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                //if (dataGridView1.Rows.Count < 0)
+                //    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
                 try
                 {
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        if ((bool)row.Cells[0].Value?.ToString().Equals(searchValue))
+                        if ((bool)row.Cells[1].Value?.ToString().Equals(searchValue))
                         {
                             dataGridView1.Rows[countRow].Cells[1].Value = myOpenOrder[2];   // order number
                             dataGridView1.Rows[countRow].Cells[2].Value = myOpenOrder[4];   // stock symbol
@@ -1206,7 +1215,8 @@ namespace IBKR_Trader
                             if (row.Cells[1].Value.ToString().Equals(searchValue))
                             {
                                 // Check video on lots of commented out values for Cells[1,2,3,4,5,6,7]
-                                dataGridView1.Rows[countRow].Cells[10].Value = "X";
+                                // dataGridView1.Rows[countRow].Cells[10].Value = "X";
+
                                 break;
                             }
                             rowCount++;
@@ -1215,16 +1225,18 @@ namespace IBKR_Trader
                     else if (!wasFound)
                     {
                         int n = dataGridView1.Rows.Add();
+                        epoch = epoch.AddMilliseconds(Convert.ToDouble(myOpenOrder[0]));
 
-                        dataGridView1.Rows[n].Cells[0].Value = "Time";          // time submitted
+                        dataGridView1.Rows[n].Cells[0].Value = epoch.ToString("HH:mm:ss");      // time submitted
                         dataGridView1.Rows[n].Cells[1].Value = myOpenOrder[2];  // order id number
                         dataGridView1.Rows[n].Cells[2].Value = myOpenOrder[4];  // stock symbol
-                        dataGridView1.Rows[countRow].Cells[3].Value = myLimitPrice.ToString("N2");  // limit price to 2 decimals
-                        dataGridView1.Rows[countRow].Cells[4].Value = myAuxPrice.ToString("N2");    // aux price to 2 decimals
+                        dataGridView1.Rows[n].Cells[3].Value = myLimitPrice.ToString("N2");  // limit price to 2 decimals
+                        dataGridView1.Rows[n].Cells[4].Value = myAuxPrice.ToString("N2");    // aux price to 2 decimals
 
                         dataGridView1.Rows[n].Cells[6].Value = myOpenOrder[7];      // shares remaining
                         dataGridView1.Rows[n].Cells[7].Value = myOpenOrder[8];      // order type
                         dataGridView1.Rows[n].Cells[10].Value = "X";                // cancel order
+
                     }
                     else
                     {
@@ -1291,7 +1303,7 @@ namespace IBKR_Trader
                 int positionField = int.Parse(dataGridView4.Rows[e.RowIndex].Cells[1].Value.ToString().Trim());
 
                 if (positionField > 0)
-                    dataGridView4.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.Green;
+                    dataGridView4.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.LimeGreen;
 
                 if (positionField < 0)
                     dataGridView4.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.Red;
@@ -1337,7 +1349,7 @@ namespace IBKR_Trader
 
                 string searchValue = symbol;
                 int countRow2 = 0;
-                Boolean wasFound2 = false;
+                bool wasFound2 = false;
                 double myMarkedPNL = unrealizedPNL + realizedPNL;
                 string iMarkedPNL = Convert.ToString(myMarkedPNL);
 
@@ -1377,7 +1389,7 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbols values.
                             dataGridView4.Rows[countRow2].Cells[1].Value = position;  // Postion
-                            dataGridView4.Rows[countRow2].Cells[2].Value = averageCost;    // average cost Price
+                            dataGridView4.Rows[countRow2].Cells[2].Value = Math.Round(averageCost, 3);    // average cost Price
                             dataGridView4.Rows[countRow2].Cells[3].Value = unrealizedPNL;    // unrealized
                             dataGridView4.Rows[countRow2].Cells[4].Value = realizedPNL;   // realized
                             dataGridView4.Rows[countRow2].Cells[5].Value = iMarkedPNL;   // total pnl
@@ -1399,7 +1411,7 @@ namespace IBKR_Trader
                         {
                             // Modify the values in the row based on the current stock symbol.
                             dataGridView4.Rows[countRow2].Cells[1].Value = position;  // Postion
-                            dataGridView4.Rows[countRow2].Cells[2].Value = averageCost;    // average cost Price
+                            dataGridView4.Rows[countRow2].Cells[2].Value = Math.Round(averageCost, 3);    // average cost Price
                             dataGridView4.Rows[countRow2].Cells[3].Value = unrealizedPNL;    // unrealized
                             dataGridView4.Rows[countRow2].Cells[4].Value = realizedPNL;   // realized
                             dataGridView4.Rows[countRow2].Cells[5].Value = iMarkedPNL;    // total pnl
@@ -1420,7 +1432,7 @@ namespace IBKR_Trader
                     {
                         dataGridView4.Rows[n].Cells[0].Value = symbol;
                         dataGridView4.Rows[n].Cells[1].Value = position;
-                        dataGridView4.Rows[n].Cells[2].Value = averageCost;
+                        dataGridView4.Rows[n].Cells[2].Value = Math.Round(averageCost, 3);
                         dataGridView4.Rows[n].Cells[3].Value = unrealizedPNL;
                         dataGridView4.Rows[n].Cells[4].Value = realizedPNL;
                         dataGridView4.Rows[n].Cells[5].Value = iMarkedPNL;
@@ -1436,7 +1448,7 @@ namespace IBKR_Trader
                     {
                         dataGridView4.Rows[n].Cells[0].Value = symbol;
                         dataGridView4.Rows[n].Cells[1].Value = position;
-                        dataGridView4.Rows[n].Cells[2].Value = averageCost;
+                        dataGridView4.Rows[n].Cells[2].Value = Math.Round(averageCost, 3);
                         dataGridView4.Rows[n].Cells[3].Value = unrealizedPNL;
                         dataGridView4.Rows[n].Cells[4].Value = realizedPNL;
                         dataGridView4.Rows[n].Cells[5].Value = iMarkedPNL;
@@ -2165,6 +2177,14 @@ namespace IBKR_Trader
                 tbShortable.ForeColor = SystemColors.WindowText;
 
             }
+        }
+
+        private void ToolstripAlwaysOnTop(object sender, EventArgs e)
+        {
+            if (toolstripAlwaysOnTop.Checked)
+                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            else
+                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
 
         private void btnTenPercent_Click(object sender, EventArgs e)
