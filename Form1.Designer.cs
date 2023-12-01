@@ -46,6 +46,10 @@
             Price = new DataGridViewTextBoxColumn();
             Size = new DataGridViewTextBoxColumn();
             Time = new DataGridViewTextBoxColumn();
+            listViewTns = new ListView();
+            listviewPrice = new ColumnHeader();
+            listviewSize = new ColumnHeader();
+            listviewTime = new ColumnHeader();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -140,6 +144,7 @@
             // dataGridView1
             // 
             dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AllowUserToResizeRows = false;
             dataGridView1.BackgroundColor = Color.Black;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
@@ -166,7 +171,7 @@
             dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.RowTemplate.Height = 19;
             dataGridView1.ScrollBars = ScrollBars.None;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView1.Size = new Size(215, 854);
             dataGridView1.TabIndex = 40;
             // 
@@ -191,14 +196,48 @@
             Time.SortMode = DataGridViewColumnSortMode.NotSortable;
             Time.Width = 75;
             // 
+            // listViewTns
+            // 
+            listViewTns.AllowColumnReorder = true;
+            listViewTns.AutoArrange = false;
+            listViewTns.BackColor = Color.Black;
+            listViewTns.Columns.AddRange(new ColumnHeader[] { listviewPrice, listviewSize, listviewTime });
+            listViewTns.ForeColor = Color.White;
+            listViewTns.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            listViewTns.HideSelection = true;
+            listViewTns.LabelWrap = false;
+            listViewTns.Location = new Point(223, 31);
+            listViewTns.MultiSelect = false;
+            listViewTns.Name = "listViewTns";
+            listViewTns.Scrollable = false;
+            listViewTns.ShowGroups = false;
+            listViewTns.Size = new Size(212, 809);
+            listViewTns.TabIndex = 41;
+            listViewTns.UseCompatibleStateImageBehavior = false;
+            listViewTns.View = View.Details;
+            // 
+            // listviewPrice
+            // 
+            listviewPrice.Text = "Price";
+            // 
+            // listviewSize
+            // 
+            listviewSize.Text = "Size";
+            // 
+            // listviewTime
+            // 
+            listviewTime.Text = "Time";
+            listviewTime.Width = 80;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(204, 885);
+            ClientSize = new Size(439, 885);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(listViewTns);
             Controls.Add(dataGridView1);
             Controls.Add(numPort);
             Controls.Add(btnDisconnect);
@@ -238,5 +277,9 @@
         private DataGridViewTextBoxColumn Price;
         private DataGridViewTextBoxColumn Size;
         private DataGridViewTextBoxColumn Time;
+        private ListView listViewTns;
+        private ColumnHeader listviewPrice;
+        private ColumnHeader listviewSize;
+        private ColumnHeader listviewTime;
     }
 }

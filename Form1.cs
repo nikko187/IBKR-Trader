@@ -15,6 +15,7 @@ using IBApi;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Reflection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 /**** Simplified TickByTick Time and Sales ONLY ****/
 
@@ -46,7 +47,9 @@ namespace IBKR_Trader
         public Form1()
         {
             InitializeComponent();
-            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataGridView1, new object[] { true });
+            //listViewTns.DoubleBuffering(true); 
+
+            //typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataGridView1, new object[] { true });
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
@@ -190,7 +193,7 @@ namespace IBKR_Trader
             }
             else
             {
-                /* LISTVIEW TIME AND SALES
+                // LISTVIEW TIME AND SALES
                 try
                 {
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
@@ -199,28 +202,8 @@ namespace IBKR_Trader
                     string strSaleTime = time; //epoch.ToString("h:mm:ss:ff");  // formatting for time
 
                     ListViewItem lx = new ListViewItem();
-                    //listViewTns.BeginUpdate();
-                    // if the last price is the same as the ask change the color to lime
-                    if (price >= theAsk)
-                    {
-                        lx.BackColor = Color.SeaGreen; // listview foreground color
-                        lx.Text = price.ToString(); // last price
-                        lx.SubItems.Add(strShareSize); // share size
-                        lx.SubItems.Add(strSaleTime); // time
-                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
-                    }
-                    // if the last price is the same as the bid change the color to red
-                    else if (price <= theBid)
-                    {
-                        lx.BackColor = Color.DarkRed;
-                        lx.Text = price.ToString();
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-                    }
-                    // if the last price in greater than the mean price and
-                    // less than the ask price change the color to lime green
-                    else if (price > theBid && price < theAsk)
+
+                    if (price > theBid && price < theAsk)
                     {
                         lx.ForeColor = Color.Silver;
                         lx.Text = price.ToString();
@@ -228,20 +211,32 @@ namespace IBKR_Trader
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
-                    else
+                    if (price >= theAsk)
                     {
-                        lx.ForeColor = Color.White;
+                        lx.BackColor = Color.LimeGreen; // listview foreground color
+                        lx.Text = price.ToString(); // last price
+                        lx.SubItems.Add(strShareSize); // share size
+                        lx.SubItems.Add(strSaleTime); // time
+                        listViewTns.Items.Insert(0, lx); // use Insert instead of Add listView.Items.Add(li); 
+                    }
+
+                    if (price <= theBid)
+                    {
+                        lx.BackColor = Color.DarkRed;
                         lx.Text = price.ToString();
                         lx.SubItems.Add(strShareSize);
                         lx.SubItems.Add(strSaleTime);
                         listViewTns.Items.Insert(0, lx);
                     }
-                    //listViewTns.EndUpdate();
+
+
                 }
                 catch (Exception)
                 {
                     // lbData.Items.Insert(0, "TnS error: " + g);
-                }*/
+                }
+
+                /*
                 try
                 {
                     if (price >= theAsk)
@@ -263,6 +258,7 @@ namespace IBKR_Trader
                     }
                 }
                 catch (Exception) { }
+                */
             }
 
         }
@@ -346,7 +342,18 @@ namespace IBKR_Trader
             else
                 SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
+
     }
+    // DOUBLE BUFFER FOR LISTVIEW
+    public static class ControlExtensions
+    {
+        public static void DoubleBuffering(this Control control, bool enable)
+        {
+            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
+        }
+    }
+
     /* DOUBLE BUFFER FOR LISTVIEW
     public static class ControlExtensions
     {
