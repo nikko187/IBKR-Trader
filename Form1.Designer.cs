@@ -365,7 +365,7 @@
             btnSell.FlatStyle = FlatStyle.Flat;
             btnSell.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnSell.ForeColor = Color.Black;
-            btnSell.Location = new Point(130, 121);
+            btnSell.Location = new Point(12, 121);
             btnSell.Name = "btnSell";
             btnSell.Size = new Size(77, 28);
             btnSell.TabIndex = 27;
@@ -379,7 +379,7 @@
             btnBuy.FlatStyle = FlatStyle.Flat;
             btnBuy.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBuy.ForeColor = Color.Black;
-            btnBuy.Location = new Point(213, 121);
+            btnBuy.Location = new Point(104, 121);
             btnBuy.Name = "btnBuy";
             btnBuy.Size = new Size(77, 28);
             btnBuy.TabIndex = 28;
@@ -832,9 +832,9 @@
             comboboxPeg.Enabled = false;
             comboboxPeg.FormattingEnabled = true;
             comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to BID", "Peg to MID" });
-            comboboxPeg.Location = new Point(29, 125);
+            comboboxPeg.Location = new Point(222, 123);
             comboboxPeg.Name = "comboboxPeg";
-            comboboxPeg.Size = new Size(86, 23);
+            comboboxPeg.Size = new Size(83, 23);
             comboboxPeg.TabIndex = 65;
             comboboxPeg.Text = "Peg to ASK";
             tooltipClosePortion.SetToolTip(comboboxPeg, "Peg Limit Price?");
@@ -1028,7 +1028,7 @@
             // 
             checkboxPegPrice.AutoSize = true;
             checkboxPegPrice.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            checkboxPegPrice.Location = new Point(12, 129);
+            checkboxPegPrice.Location = new Point(205, 127);
             checkboxPegPrice.Name = "checkboxPegPrice";
             checkboxPegPrice.Size = new Size(15, 14);
             checkboxPegPrice.TabIndex = 64;

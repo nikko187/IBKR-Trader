@@ -682,7 +682,7 @@ namespace IBKR_Trader
 
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
             double quantity = Math.Floor(Convert.ToDouble(numRisk.Value) / Math.Abs(lmtPrice - stopLoss));
-            numQuantity.Value = (decimal)quantity;
+
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
@@ -703,7 +703,7 @@ namespace IBKR_Trader
                 string printBox = action + " " + quantity + " " + contract.Symbol + " at " + order_type + " " + lmtPrice + " Stop " + stopLoss + " and take profit " + takeProfit;
                 lbData.Items.Insert(0, printBox);
             }
-
+            numQuantity.Value = (decimal)quantity;
             BracketOrderExecuted = true;
             chkBracket.Checked = false;
         }
@@ -932,27 +932,27 @@ namespace IBKR_Trader
         {
             if (chkBracket.Checked)
             {
-                if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
+                if (cbOrderType.Text is "LMT" or "STP")
                 {
                     // numPrice.ReadOnly = true;
+                    try
+                    {
+                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - decimal.Parse(tbStopLoss.Text))));
+
+                    }
+                    catch (Exception) { }
+                }
+
+                else if (cbOrderType.Text is "MKT" or "SNAP MKT" or "SNAP MID" or "SNAP PRIM")
+                {
+                    // numPrice.ReadOnly = false;
                     try
                     {
                         numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (Convert.ToDecimal(tbLast.Text) - decimal.Parse(tbStopLoss.Text))));
                     }
                     catch (Exception) { }
                 }
-
-                else if (cbOrderType.Text is "LMT" or "STP")
-                {
-                    // numPrice.ReadOnly = false;
-                    try
-                    {
-                        numQuantity.Value = Math.Abs(Math.Floor(numRisk.Value / (decimal.Parse(numPrice.Text) - decimal.Parse(tbStopLoss.Text))));
-                    }
-                    catch (Exception) { }
-                }
             }
-            else { }
         }
 
         private void chkBracket_CheckedChanged(object sender, EventArgs e)
