@@ -103,6 +103,7 @@
             btnCloseQtr = new Button();
             tooltipClosePortion = new ToolTip(components);
             btnTenPercent = new Button();
+            comboboxPeg = new ComboBox();
             panel1 = new Panel();
             labelLo = new Label();
             labelHi = new Label();
@@ -118,10 +119,10 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripDarkMode = new ToolStripMenuItem();
             toolstripAlwaysOnTop = new ToolStripMenuItem();
+            toolstripClientId = new ToolStripTextBox();
             tbStopLoss = new NumericUpDown();
-            btnBuyBid = new Button();
             btnUpdateStop = new Button();
-            btnSellAsk = new Button();
+            checkboxPegPrice = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -364,7 +365,7 @@
             btnSell.FlatStyle = FlatStyle.Flat;
             btnSell.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnSell.ForeColor = Color.Black;
-            btnSell.Location = new Point(12, 121);
+            btnSell.Location = new Point(130, 121);
             btnSell.Name = "btnSell";
             btnSell.Size = new Size(77, 28);
             btnSell.TabIndex = 27;
@@ -378,7 +379,7 @@
             btnBuy.FlatStyle = FlatStyle.Flat;
             btnBuy.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBuy.ForeColor = Color.Black;
-            btnBuy.Location = new Point(95, 121);
+            btnBuy.Location = new Point(213, 121);
             btnBuy.Name = "btnBuy";
             btnBuy.Size = new Size(77, 28);
             btnBuy.TabIndex = 28;
@@ -468,11 +469,12 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
+            chkBracket.FlatStyle = FlatStyle.System;
             chkBracket.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             chkBracket.Location = new Point(243, 29);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
-            chkBracket.Size = new Size(64, 17);
+            chkBracket.Size = new Size(70, 18);
             chkBracket.TabIndex = 40;
             chkBracket.Text = "SL + $R";
             chkBracket.UseVisualStyleBackColor = true;
@@ -760,6 +762,7 @@
             btnClose.Size = new Size(66, 24);
             btnClose.TabIndex = 52;
             btnClose.Text = "CLOSE";
+            tooltipClosePortion.SetToolTip(btnClose, "Close at MKT and CXL orders");
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += ClosePosition;
             // 
@@ -804,6 +807,12 @@
             btnCloseQtr.UseVisualStyleBackColor = false;
             btnCloseQtr.Click += btnCloseQtr_Click;
             // 
+            // tooltipClosePortion
+            // 
+            tooltipClosePortion.AutoPopDelay = 5000;
+            tooltipClosePortion.InitialDelay = 1000;
+            tooltipClosePortion.ReshowDelay = 500;
+            // 
             // btnTenPercent
             // 
             btnTenPercent.BackColor = Color.LightSalmon;
@@ -814,9 +823,22 @@
             btnTenPercent.Size = new Size(50, 23);
             btnTenPercent.TabIndex = 61;
             btnTenPercent.Text = "10%";
-            tooltipClosePortion.SetToolTip(btnTenPercent, "Will close 25% of pos at MKT\r\n");
+            tooltipClosePortion.SetToolTip(btnTenPercent, "Will close 10% of pos at MKT\r\n");
             btnTenPercent.UseVisualStyleBackColor = false;
             btnTenPercent.Click += btnTenPercent_Click;
+            // 
+            // comboboxPeg
+            // 
+            comboboxPeg.Enabled = false;
+            comboboxPeg.FormattingEnabled = true;
+            comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to BID", "Peg to MID" });
+            comboboxPeg.Location = new Point(29, 125);
+            comboboxPeg.Name = "comboboxPeg";
+            comboboxPeg.Size = new Size(86, 23);
+            comboboxPeg.TabIndex = 65;
+            comboboxPeg.Text = "Peg to ASK";
+            tooltipClosePortion.SetToolTip(comboboxPeg, "Peg Limit Price?");
+            comboboxPeg.SelectedIndexChanged += comboboxPeg_SelectedIndexChanged;
             // 
             // panel1
             // 
@@ -940,9 +962,9 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(171, 70);
+            contextFormRightClick.Size = new Size(171, 95);
             // 
             // toolstripBorderToggle
             // 
@@ -968,6 +990,13 @@
             toolstripAlwaysOnTop.Text = "Always on top";
             toolstripAlwaysOnTop.Click += ToolstripAlwaysOnTop;
             // 
+            // toolstripClientId
+            // 
+            toolstripClientId.Name = "toolstripClientId";
+            toolstripClientId.Size = new Size(100, 23);
+            toolstripClientId.Text = "0";
+            toolstripClientId.ToolTipText = "Client ID";
+            // 
             // tbStopLoss
             // 
             tbStopLoss.DecimalPlaces = 2;
@@ -982,18 +1011,6 @@
             tbStopLoss.Value = new decimal(new int[] { 1, 0, 0, 0 });
             tbStopLoss.ValueChanged += UpdateRiskQty;
             // 
-            // btnBuyBid
-            // 
-            btnBuyBid.BackColor = Color.FromArgb(190, 230, 190);
-            btnBuyBid.FlatStyle = FlatStyle.Flat;
-            btnBuyBid.Location = new Point(269, 123);
-            btnBuyBid.Name = "btnBuyBid";
-            btnBuyBid.Size = new Size(69, 26);
-            btnBuyBid.TabIndex = 62;
-            btnBuyBid.Text = "Buy Bid";
-            btnBuyBid.UseVisualStyleBackColor = false;
-            btnBuyBid.Click += btnBuyBid_Click;
-            // 
             // btnUpdateStop
             // 
             btnUpdateStop.BackColor = Color.LightSkyBlue;
@@ -1007,17 +1024,16 @@
             btnUpdateStop.UseVisualStyleBackColor = false;
             btnUpdateStop.Click += btnUpdateStop_Click;
             // 
-            // btnSellAsk
+            // checkboxPegPrice
             // 
-            btnSellAsk.BackColor = Color.FromArgb(230, 190, 190);
-            btnSellAsk.FlatStyle = FlatStyle.Flat;
-            btnSellAsk.Location = new Point(344, 123);
-            btnSellAsk.Name = "btnSellAsk";
-            btnSellAsk.Size = new Size(69, 26);
-            btnSellAsk.TabIndex = 62;
-            btnSellAsk.Text = "Sell Ask";
-            btnSellAsk.UseVisualStyleBackColor = false;
-            btnSellAsk.Click += btnSellAsk_Click;
+            checkboxPegPrice.AutoSize = true;
+            checkboxPegPrice.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            checkboxPegPrice.Location = new Point(12, 129);
+            checkboxPegPrice.Name = "checkboxPegPrice";
+            checkboxPegPrice.Size = new Size(15, 14);
+            checkboxPegPrice.TabIndex = 64;
+            checkboxPegPrice.UseVisualStyleBackColor = true;
+            checkboxPegPrice.CheckedChanged += checkboxPegPrice_CheckedChanged;
             // 
             // Form1
             // 
@@ -1027,9 +1043,9 @@
             BackColor = Color.LightGray;
             ClientSize = new Size(641, 490);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(comboboxPeg);
+            Controls.Add(checkboxPegPrice);
             Controls.Add(btnUpdateStop);
-            Controls.Add(btnSellAsk);
-            Controls.Add(btnBuyBid);
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
             Controls.Add(btnPosition);
@@ -1100,6 +1116,7 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             contextFormRightClick.ResumeLayout(false);
+            contextFormRightClick.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)tbStopLoss).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -1190,10 +1207,11 @@
         private ToolStripMenuItem toolstripDarkMode;
         private Label labelHi;
         private Label labelLo;
-        private Button btnBuyBid;
         private Button btnUpdateStop;
-        private Button btnSellAsk;
         private Label label12;
         private ToolStripMenuItem toolstripAlwaysOnTop;
+        private CheckBox checkboxPegPrice;
+        private ComboBox comboboxPeg;
+        private ToolStripTextBox toolstripClientId;
     }
 }

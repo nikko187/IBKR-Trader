@@ -22,7 +22,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
-
+// add an option to peg limit price to ASK, BID, or MID.
 
 namespace IBKR_Trader
 {
@@ -268,7 +268,8 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
-                        UpdateRiskQty(null, null);
+                        if (chkBracket.Checked)
+                            UpdateRiskQty(null, null);
                         PercentChange(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
@@ -289,7 +290,10 @@ namespace IBKR_Trader
                     {
                         labelLo.Text = "L: " + tickerPrice[2];
                     }
-
+                    if (checkboxPegPrice.Checked)
+                    {
+                        comboboxPeg_SelectedIndexChanged(null, null);
+                    }
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
                 }
@@ -678,6 +682,7 @@ namespace IBKR_Trader
 
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
             double quantity = Math.Floor(Convert.ToDouble(numRisk.Value) / Math.Abs(lmtPrice - stopLoss));
+            numQuantity.Value = (decimal)quantity;
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
@@ -2509,6 +2514,37 @@ namespace IBKR_Trader
             order_id++;
 
             BracketOrderExecuted = false;   // for proper order CXL.
+        }
+
+        private void checkboxPegPrice_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkboxPegPrice.Checked)
+            {
+                comboboxPeg.Enabled = true;
+            }
+            else
+            {
+                comboboxPeg.Enabled = false;
+            }
+        }
+
+        private void comboboxPeg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboboxPeg.Enabled)
+            {
+                switch (comboboxPeg.Text)
+                {
+                    case "Peg to ASK":
+                        numPrice.Value = decimal.Parse(tbAsk.Text);
+                        break;
+                    case "Peg to BID":
+                        numPrice.Value = decimal.Parse(tbBid.Text);
+                        break;
+                    case "Peg to MID":
+                        numPrice.Value = Math.Round(Math.Abs((decimal.Parse(tbAsk.Text) + decimal.Parse(tbBid.Text))) / 2, 2);
+                        break;
+                }
+            }
         }
     }
 }
