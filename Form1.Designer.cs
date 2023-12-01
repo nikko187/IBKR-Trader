@@ -390,7 +390,7 @@
             // chkOutside
             // 
             chkOutside.AutoSize = true;
-            chkOutside.Location = new Point(410, 73);
+            chkOutside.Location = new Point(463, 51);
             chkOutside.Name = "chkOutside";
             chkOutside.Size = new Size(53, 19);
             chkOutside.TabIndex = 29;
@@ -757,9 +757,9 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(503, 64);
+            btnClose.Location = new Point(347, 123);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(66, 24);
+            btnClose.Size = new Size(66, 26);
             btnClose.TabIndex = 52;
             btnClose.Text = "CLOSE";
             tooltipClosePortion.SetToolTip(btnClose, "Close at MKT and CXL orders");
@@ -831,7 +831,7 @@
             // 
             comboboxPeg.Enabled = false;
             comboboxPeg.FormattingEnabled = true;
-            comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to BID", "Peg to MID" });
+            comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to MID", "Peg to BID" });
             comboboxPeg.Location = new Point(222, 123);
             comboboxPeg.Name = "comboboxPeg";
             comboboxPeg.Size = new Size(83, 23);

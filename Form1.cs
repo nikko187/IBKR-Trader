@@ -2521,6 +2521,7 @@ namespace IBKR_Trader
             if (checkboxPegPrice.Checked)
             {
                 comboboxPeg.Enabled = true;
+                comboboxPeg_SelectedIndexChanged(null, null);
             }
             else
             {
