@@ -49,6 +49,7 @@ namespace IBKR_Trader
         int order_id = 0;
         int timer1_counter = 5;
         int myContractId;
+        bool isConnected = false;
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
@@ -162,13 +163,12 @@ namespace IBKR_Trader
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            numPort.ReadOnly = true;
-
             // fixes crash on clicking connect when already connected.
-            if (ibClient.ClientSocket.IsConnected())
+            if (isConnected == true)
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
+                numPort.ReadOnly = true;
                 return;
             }
             else
@@ -180,7 +180,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, 0);
+                    ibClient.ClientSocket.eConnect("", port, Convert.ToInt32(toolstripClientId.Text));
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -208,6 +208,7 @@ namespace IBKR_Trader
                     ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
                     dataGridView1.Rows.Clear();
                     getData();
+                    numPort.ReadOnly = true;
 
                 }
                 catch (Exception)
@@ -230,7 +231,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("this is from _tickString time and sales ", e);
+                    lbData.Items.Insert(0, "AddTextBoxItemConId Err: " + e);
                 }
             }
             else
@@ -254,7 +255,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("This is from tickPrice", e);
+                    lbData.Items.Insert(0, "AddTextBoxItemTickPrice Err: " + e);
                 }
             }
             else
@@ -268,8 +269,6 @@ namespace IBKR_Trader
                     {
                         // Add the text string to the list box
                         tbLast.Text = tickerPrice[2];
-                        if (chkBracket.Checked)
-                            UpdateRiskQty(null, null);
                         PercentChange(null, null);
                     }
                     else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
@@ -291,9 +290,11 @@ namespace IBKR_Trader
                         labelLo.Text = "L: " + tickerPrice[2];
                     }
                     if (checkboxPegPrice.Checked)
-                    {
                         comboboxPeg_SelectedIndexChanged(null, null);
-                    }
+                    
+                    if (chkBracket.Checked)
+                        UpdateRiskQty(null, null);
+
                     double spread = Convert.ToDouble(tbAsk.Text) - Convert.ToDouble(tbBid.Text);
                     labelSpread.Text = spread.ToString("#0.00");
                 }
@@ -328,7 +329,7 @@ namespace IBKR_Trader
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Exception " + e);
+                                Console.WriteLine("Exception: " + e);
                             }
                             // calls the method to calculate the position total 
                             positionTotal();
@@ -363,7 +364,7 @@ namespace IBKR_Trader
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Exception " + e);
+                                Console.WriteLine("Exception: " + e);
                             }
                             // calls the method to calculate the position total 
                             positionTotal();
@@ -398,7 +399,7 @@ namespace IBKR_Trader
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Exception " + e);
+                                Console.WriteLine("Exception: " + e);
                             }
                             // calls the method to calculate the position total 
                             positionTotal();
@@ -415,11 +416,13 @@ namespace IBKR_Trader
             {
                 btnConnect.Text = "Connected";
                 btnConnect.BackColor = Color.LightGreen;
+                isConnected = true;
             }
             else
             {
                 btnConnect.Text = "Connect";
                 btnConnect.BackColor = Color.Gainsboro;
+                isConnected = false;
             }
 
             try
@@ -475,6 +478,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAllOpenOrders();
 
             timer1.Start();
+            isConnected = true;
 
         }
 
@@ -609,6 +613,7 @@ namespace IBKR_Trader
             btnConnect.Text = "Connect";
             btnConnect.BackColor = Color.Gainsboro;
             numPort.ReadOnly = false;
+            isConnected = false;
         }
 
         private void btnSell_Click(object sender, EventArgs e)
@@ -867,7 +872,7 @@ namespace IBKR_Trader
                     timer1_counter = 5; // reset time counter back to 5
 
                 }
-                catch (Exception) { }
+                catch (Exception) { lbData.Items.Insert(0, "Timer counter error."); }
 
             }
             timer1_counter--;   // subtract 1 every time there is a tick
@@ -1059,7 +1064,7 @@ namespace IBKR_Trader
                     dataGridView1.Rows[e.RowIndex].Cells[6].Style = dataGridView1.DefaultCellStyle;
                 }
             }
-            catch (Exception) { }
+            catch (Exception f) { lbData.Items.Insert(0, "DataGridView1Formatting Err: " + f); }
         }
 
         delegate void SetTextCallbackOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice);
@@ -1111,7 +1116,7 @@ namespace IBKR_Trader
 
                     }
                 }
-                catch (Exception) { }
+                catch (Exception g) { lbData.Items.Insert(0, "DataGridView OrderStats Err: " + g); }
 
                 if (wasFound)
                 {
@@ -1369,8 +1374,9 @@ namespace IBKR_Trader
                         countRow2++;
                     }
                 }
-                catch (Exception)
+                catch (Exception h)
                 {
+                    lbData.Items.Insert(0, "Update Portfolio Err: " + h);
                 }
 
                 // if found and there is not position
@@ -1540,8 +1546,9 @@ namespace IBKR_Trader
                     countRow2++;
                 }
             }
-            catch (Exception)
+            catch (Exception j)
             {
+                lbData.Items.Insert(0, "ClosePosition Err: " + j);
             }
             if (wasFound2)
             {
@@ -1622,8 +1629,9 @@ namespace IBKR_Trader
                     countRow2++;
                 }
             }
-            catch (Exception)
+            catch (Exception k)
             {
+                lbData.Items.Insert(0, "CloseHalfPos Err: " + k);
             }
             if (wasFound2)
             {
@@ -1868,7 +1876,7 @@ namespace IBKR_Trader
                 {
                     labelName.Text = fullName + " / " + industry + " / " + category;
                 }
-                catch (Exception) { }
+                catch (Exception h) { lbData.Items.Insert(0, "GetFullName Err: " + h); }
             }
         }
 
