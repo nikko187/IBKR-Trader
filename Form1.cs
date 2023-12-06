@@ -291,7 +291,7 @@ namespace IBKR_Trader
                     }
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
-                    
+
                     if (chkBracket.Checked)
                         UpdateRiskQty(null, null);
 

@@ -154,7 +154,7 @@
             cbSymbol.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbSymbol.FormattingEnabled = true;
             cbSymbol.Items.AddRange(new object[] { "MSFT", "TSLA", "IBM", "AMD", "NVDA", "META", "SPY", "QQQ" });
-            cbSymbol.Location = new Point(12, 47);
+            cbSymbol.Location = new Point(12, 46);
             cbSymbol.MaxLength = 6;
             cbSymbol.Name = "cbSymbol";
             cbSymbol.Size = new Size(68, 25);
@@ -180,7 +180,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 31);
+            label1.Location = new Point(12, 30);
             label1.Name = "label1";
             label1.Size = new Size(44, 13);
             label1.TabIndex = 3;
@@ -189,7 +189,7 @@
             // numQuantity
             // 
             numQuantity.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            numQuantity.Location = new Point(86, 47);
+            numQuantity.Location = new Point(86, 46);
             numQuantity.Margin = new Padding(1);
             numQuantity.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numQuantity.Name = "numQuantity";
@@ -202,7 +202,7 @@
             numPrice.DecimalPlaces = 2;
             numPrice.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             numPrice.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numPrice.Location = new Point(106, 89);
+            numPrice.Location = new Point(106, 88);
             numPrice.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
             numPrice.Name = "numPrice";
             numPrice.Size = new Size(75, 25);
@@ -213,7 +213,7 @@
             // 
             Price.AutoSize = true;
             Price.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            Price.Location = new Point(106, 75);
+            Price.Location = new Point(106, 74);
             Price.Name = "Price";
             Price.Size = new Size(31, 13);
             Price.TabIndex = 7;
@@ -245,7 +245,7 @@
             cbOrderType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             cbOrderType.FormattingEnabled = true;
             cbOrderType.Items.AddRange(new object[] { "LMT", "MKT", "SNAP MKT", "SNAP MID", "SNAP PRIM", "STP" });
-            cbOrderType.Location = new Point(12, 89);
+            cbOrderType.Location = new Point(12, 88);
             cbOrderType.Name = "cbOrderType";
             cbOrderType.Size = new Size(88, 25);
             cbOrderType.TabIndex = 10;
@@ -256,7 +256,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(12, 75);
+            label4.Location = new Point(12, 74);
             label4.Name = "label4";
             label4.Size = new Size(30, 13);
             label4.TabIndex = 12;
@@ -287,7 +287,7 @@
             // 
             tbBid.BackColor = SystemColors.ControlLight;
             tbBid.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            tbBid.Location = new Point(187, 89);
+            tbBid.Location = new Point(187, 88);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
             tbBid.Size = new Size(63, 25);
@@ -299,7 +299,7 @@
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
             tbAsk.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            tbAsk.Location = new Point(256, 89);
+            tbAsk.Location = new Point(256, 88);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
             tbAsk.Size = new Size(63, 25);
@@ -311,7 +311,7 @@
             // 
             B.AutoSize = true;
             B.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            B.Location = new Point(187, 75);
+            B.Location = new Point(187, 74);
             B.Name = "B";
             B.Size = new Size(23, 13);
             B.TabIndex = 20;
@@ -321,7 +321,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(294, 75);
+            label7.Location = new Point(294, 74);
             label7.Name = "label7";
             label7.Size = new Size(25, 13);
             label7.TabIndex = 21;
@@ -331,7 +331,7 @@
             // 
             tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbLast.Location = new Point(325, 89);
+            tbLast.Location = new Point(325, 88);
             tbLast.Name = "tbLast";
             tbLast.ReadOnly = true;
             tbLast.Size = new Size(63, 25);
@@ -343,7 +343,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(361, 75);
+            label8.Location = new Point(361, 74);
             label8.Name = "label8";
             label8.Size = new Size(27, 13);
             label8.TabIndex = 23;
@@ -365,7 +365,7 @@
             btnSell.FlatStyle = FlatStyle.Flat;
             btnSell.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnSell.ForeColor = Color.Black;
-            btnSell.Location = new Point(12, 121);
+            btnSell.Location = new Point(12, 119);
             btnSell.Name = "btnSell";
             btnSell.Size = new Size(77, 28);
             btnSell.TabIndex = 27;
@@ -379,7 +379,7 @@
             btnBuy.FlatStyle = FlatStyle.Flat;
             btnBuy.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBuy.ForeColor = Color.Black;
-            btnBuy.Location = new Point(104, 121);
+            btnBuy.Location = new Point(104, 119);
             btnBuy.Name = "btnBuy";
             btnBuy.Size = new Size(77, 28);
             btnBuy.TabIndex = 28;
@@ -416,7 +416,7 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(419, 123);
+            btnCancelLast.Location = new Point(419, 120);
             btnCancelLast.Name = "btnCancelLast";
             btnCancelLast.Size = new Size(51, 26);
             btnCancelLast.TabIndex = 35;
@@ -429,7 +429,7 @@
             btnCancelAll.BackColor = Color.FromArgb(255, 192, 128);
             btnCancelAll.FlatStyle = FlatStyle.Flat;
             btnCancelAll.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelAll.Location = new Point(575, 64);
+            btnCancelAll.Location = new Point(575, 61);
             btnCancelAll.Name = "btnCancelAll";
             btnCancelAll.Size = new Size(63, 24);
             btnCancelAll.TabIndex = 36;
@@ -450,7 +450,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(86, 30);
+            label2.Location = new Point(86, 29);
             label2.Name = "label2";
             label2.Size = new Size(51, 13);
             label2.TabIndex = 38;
@@ -471,7 +471,7 @@
             chkBracket.AutoSize = true;
             chkBracket.FlatStyle = FlatStyle.System;
             chkBracket.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            chkBracket.Location = new Point(243, 29);
+            chkBracket.Location = new Point(176, 30);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
             chkBracket.Size = new Size(70, 18);
@@ -516,7 +516,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label9.Location = new Point(173, 31);
+            label9.Location = new Point(259, 30);
             label9.Name = "label9";
             label9.Size = new Size(37, 13);
             label9.TabIndex = 44;
@@ -525,7 +525,7 @@
             // numRisk
             // 
             numRisk.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            numRisk.Location = new Point(173, 47);
+            numRisk.Location = new Point(259, 46);
             numRisk.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numRisk.Name = "numRisk";
             numRisk.Size = new Size(61, 25);
@@ -536,7 +536,7 @@
             // labelSpread
             // 
             labelSpread.AutoSize = true;
-            labelSpread.Location = new Point(239, 74);
+            labelSpread.Location = new Point(239, 73);
             labelSpread.Name = "labelSpread";
             labelSpread.Size = new Size(28, 15);
             labelSpread.TabIndex = 46;
@@ -757,7 +757,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(347, 123);
+            btnClose.Location = new Point(347, 120);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(66, 26);
             btnClose.TabIndex = 52;
@@ -771,7 +771,7 @@
             btnCloseHalf.BackColor = Color.LightSalmon;
             btnCloseHalf.FlatStyle = FlatStyle.Flat;
             btnCloseHalf.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseHalf.Location = new Point(588, 94);
+            btnCloseHalf.Location = new Point(588, 91);
             btnCloseHalf.Name = "btnCloseHalf";
             btnCloseHalf.Size = new Size(50, 23);
             btnCloseHalf.TabIndex = 53;
@@ -798,7 +798,7 @@
             btnCloseQtr.BackColor = Color.LightSalmon;
             btnCloseQtr.FlatStyle = FlatStyle.Flat;
             btnCloseQtr.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCloseQtr.Location = new Point(532, 94);
+            btnCloseQtr.Location = new Point(532, 91);
             btnCloseQtr.Name = "btnCloseQtr";
             btnCloseQtr.Size = new Size(50, 23);
             btnCloseQtr.TabIndex = 55;
@@ -818,7 +818,7 @@
             btnTenPercent.BackColor = Color.LightSalmon;
             btnTenPercent.FlatStyle = FlatStyle.Flat;
             btnTenPercent.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnTenPercent.Location = new Point(476, 94);
+            btnTenPercent.Location = new Point(476, 91);
             btnTenPercent.Name = "btnTenPercent";
             btnTenPercent.Size = new Size(50, 23);
             btnTenPercent.TabIndex = 61;
@@ -832,7 +832,7 @@
             comboboxPeg.Enabled = false;
             comboboxPeg.FormattingEnabled = true;
             comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to MID", "Peg to BID" });
-            comboboxPeg.Location = new Point(222, 123);
+            comboboxPeg.Location = new Point(213, 119);
             comboboxPeg.Name = "comboboxPeg";
             comboboxPeg.Size = new Size(83, 23);
             comboboxPeg.TabIndex = 65;
@@ -938,7 +938,7 @@
             // 
             btnS2BE.BackColor = Color.LightBlue;
             btnS2BE.FlatStyle = FlatStyle.Flat;
-            btnS2BE.Location = new Point(562, 123);
+            btnS2BE.Location = new Point(562, 120);
             btnS2BE.Name = "btnS2BE";
             btnS2BE.Size = new Size(76, 26);
             btnS2BE.TabIndex = 58;
@@ -951,7 +951,7 @@
             btnPosition.FlatAppearance.BorderColor = Color.Gray;
             btnPosition.FlatStyle = FlatStyle.Flat;
             btnPosition.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPosition.Location = new Point(147, 47);
+            btnPosition.Location = new Point(147, 46);
             btnPosition.Margin = new Padding(0);
             btnPosition.Name = "btnPosition";
             btnPosition.Size = new Size(21, 25);
@@ -1002,7 +1002,7 @@
             tbStopLoss.DecimalPlaces = 2;
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbStopLoss.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            tbStopLoss.Location = new Point(239, 46);
+            tbStopLoss.Location = new Point(172, 46);
             tbStopLoss.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
@@ -1015,7 +1015,7 @@
             // 
             btnUpdateStop.BackColor = Color.LightSkyBlue;
             btnUpdateStop.FlatStyle = FlatStyle.Flat;
-            btnUpdateStop.Location = new Point(476, 123);
+            btnUpdateStop.Location = new Point(476, 120);
             btnUpdateStop.Name = "btnUpdateStop";
             btnUpdateStop.Size = new Size(80, 26);
             btnUpdateStop.TabIndex = 63;
@@ -1028,7 +1028,7 @@
             // 
             checkboxPegPrice.AutoSize = true;
             checkboxPegPrice.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            checkboxPegPrice.Location = new Point(205, 127);
+            checkboxPegPrice.Location = new Point(196, 123);
             checkboxPegPrice.Name = "checkboxPegPrice";
             checkboxPegPrice.Size = new Size(15, 14);
             checkboxPegPrice.TabIndex = 64;
