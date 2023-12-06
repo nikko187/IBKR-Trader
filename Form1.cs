@@ -840,12 +840,14 @@ namespace IBKR_Trader
 
         private void tbBid_Click(object sender, EventArgs e)
         {
+            checkboxPegPrice.Checked = false;
             numPrice.Value = Convert.ToDecimal(tbBid.Text);
             cbOrderType.Text = "LMT";
         }
 
         private void tbAsk_Click(object sender, EventArgs e)
         {
+            checkboxPegPrice.Checked = false;
             numPrice.Value = Convert.ToDecimal(tbAsk.Text);
             cbOrderType.Text = "LMT";
         }
