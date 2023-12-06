@@ -290,7 +290,7 @@
             tbBid.Location = new Point(187, 88);
             tbBid.Name = "tbBid";
             tbBid.ReadOnly = true;
-            tbBid.Size = new Size(63, 25);
+            tbBid.Size = new Size(60, 25);
             tbBid.TabIndex = 18;
             tbBid.Text = "0.00";
             tbBid.Click += tbBid_Click;
@@ -299,10 +299,10 @@
             // 
             tbAsk.BackColor = SystemColors.ControlLight;
             tbAsk.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            tbAsk.Location = new Point(256, 88);
+            tbAsk.Location = new Point(253, 88);
             tbAsk.Name = "tbAsk";
             tbAsk.ReadOnly = true;
-            tbAsk.Size = new Size(63, 25);
+            tbAsk.Size = new Size(60, 25);
             tbAsk.TabIndex = 19;
             tbAsk.Text = "0.00";
             tbAsk.Click += tbAsk_Click;
@@ -321,7 +321,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(294, 74);
+            label7.Location = new Point(288, 74);
             label7.Name = "label7";
             label7.Size = new Size(25, 13);
             label7.TabIndex = 21;
@@ -331,10 +331,10 @@
             // 
             tbLast.BackColor = SystemColors.ControlLight;
             tbLast.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            tbLast.Location = new Point(325, 88);
+            tbLast.Location = new Point(319, 88);
             tbLast.Name = "tbLast";
             tbLast.ReadOnly = true;
-            tbLast.Size = new Size(63, 25);
+            tbLast.Size = new Size(60, 25);
             tbLast.TabIndex = 22;
             tbLast.Text = "0.00";
             tbLast.Click += tbLast_Click;
@@ -343,7 +343,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(361, 74);
+            label8.Location = new Point(352, 74);
             label8.Name = "label8";
             label8.Size = new Size(27, 13);
             label8.TabIndex = 23;
@@ -536,7 +536,7 @@
             // labelSpread
             // 
             labelSpread.AutoSize = true;
-            labelSpread.Location = new Point(239, 73);
+            labelSpread.Location = new Point(235, 73);
             labelSpread.Name = "labelSpread";
             labelSpread.Size = new Size(28, 15);
             labelSpread.TabIndex = 46;
