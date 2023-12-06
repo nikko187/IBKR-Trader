@@ -36,6 +36,7 @@ namespace IBKR_Trader
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        private DataTable TickbyTicKTable = new DataTable();
 
         // DELEGATE ENABLES ASYNCHRONOUS CALLS FOR SETTING TEXT PROPERTY ON LISTBOX
         //delegate void SetTextCallback(string text);
@@ -48,11 +49,25 @@ namespace IBKR_Trader
         {
             InitializeComponent();
             //listViewTns.DoubleBuffering(true); 
+            
+            if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
+            {
+                Type dgvType = dataGridView1.GetType();
+                PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+                  BindingFlags.Instance | BindingFlags.NonPublic);
+                pi.SetValue(dataGridView1, true, null);
+            }
 
-            //typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataGridView1, new object[] { true });
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
+            DataColumn timeColumn = new DataColumn("Time");
+            DataColumn priceColumn = new DataColumn("Price");
+            DataColumn sizeColumn = new DataColumn("Size");
+
+            TickbyTicKTable.Columns.Add(timeColumn);
+            TickbyTicKTable.Columns.Add(priceColumn);
+            TickbyTicKTable.Columns.Add(sizeColumn);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -60,6 +75,10 @@ namespace IBKR_Trader
             // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
 
+            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            //or even better .DisableResizing. 
+            //Most time consumption enum is DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
+            dataGridView1.RowHeadersVisible = false; // set it to false if not needed
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -136,7 +155,8 @@ namespace IBKR_Trader
             ibClient.ClientSocket.cancelTickByTickData(2);
 
             // clears contents of TnS when changing tickers
-            dataGridView1.Rows.Clear();
+            // dataGridView1.Rows.Clear();
+
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -166,6 +186,7 @@ namespace IBKR_Trader
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);
 
+
         }
 
         private double theBid = 0;  // decalring variables to be used in the scope.
@@ -192,7 +213,7 @@ namespace IBKR_Trader
                 }
             }
             else
-            {
+            {/*
                 // LISTVIEW TIME AND SALES
                 try
                 {
@@ -234,31 +255,34 @@ namespace IBKR_Trader
                 catch (Exception)
                 {
                     // lbData.Items.Insert(0, "TnS error: " + g);
-                }
+                }*/
 
-                /*
+
                 try
                 {
+                    dataGridView1.DataSource = TickbyTicKTable;
+                    DataRow row = TickbyTicKTable.NewRow();
+                    row[0] = time; row[1] = price; row[2] = size.ToString("#,##0");
+
+                    TickbyTicKTable.Rows.InsertAt(row, 0);
+
                     if (price >= theAsk)
                     {
-                        dataGridView1.Rows.Insert(0, price, size, time);
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.SeaGreen;
                         dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.White;
                     }
                     else if (price <= theBid)
                     {
-                        dataGridView1.Rows.Insert(0, price, size, time);
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
                         dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.White;
                     }
                     else
                     {
-                        dataGridView1.Rows.Insert(0, price, size, time);
                         dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
                     }
                 }
-                catch (Exception) { }
-                */
+                catch (Exception h) { MessageBox.Show("Tns Err: " + h); }
+
             }
 
         }
@@ -266,6 +290,7 @@ namespace IBKR_Trader
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
+
         }
 
         private void cbSymbol_KeyPress(object sender, KeyPressEventArgs e)
@@ -301,7 +326,6 @@ namespace IBKR_Trader
                     cbSymbol.Items.Add(name);
                 }
                 cbSymbol.SelectAll();
-
                 getData();
             }
         }

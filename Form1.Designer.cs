@@ -43,9 +43,6 @@
             toolstripAlwaysOnTop = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
             dataGridView1 = new DataGridView();
-            Price = new DataGridViewTextBoxColumn();
-            Size = new DataGridViewTextBoxColumn();
-            Time = new DataGridViewTextBoxColumn();
             listViewTns = new ListView();
             listviewPrice = new ColumnHeader();
             listviewSize = new ColumnHeader();
@@ -143,10 +140,11 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.BackgroundColor = Color.Black;
+            dataGridView1.BackgroundColor = Color.WhiteSmoke;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = Color.Black;
@@ -157,44 +155,22 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridView1.ColumnHeadersVisible = false;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Price, Size, Time });
-            dataGridView1.EnableHeadersVisualStyles = false;
-            dataGridView1.GridColor = Color.White;
+            dataGridView1.EditMode = DataGridViewEditMode.EditProgrammatically;
+            dataGridView1.GridColor = Color.Black;
             dataGridView1.Location = new Point(2, 31);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle2.BackColor = Color.Black;
             dataGridViewCellStyle2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = Color.LightGray;
             dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.RowTemplate.Height = 19;
-            dataGridView1.ScrollBars = ScrollBars.None;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dataGridView1.Size = new Size(215, 854);
+            dataGridView1.ScrollBars = ScrollBars.Vertical;
+            dataGridView1.Size = new Size(328, 854);
             dataGridView1.TabIndex = 40;
-            // 
-            // Price
-            // 
-            Price.HeaderText = "Price";
-            Price.Name = "Price";
-            Price.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Price.Width = 60;
-            // 
-            // Size
-            // 
-            Size.HeaderText = "Size";
-            Size.Name = "Size";
-            Size.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Size.Width = 60;
-            // 
-            // Time
-            // 
-            Time.HeaderText = "Time";
-            Time.Name = "Time";
-            Time.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Time.Width = 75;
             // 
             // listViewTns
             // 
@@ -206,7 +182,7 @@
             listViewTns.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             listViewTns.HideSelection = true;
             listViewTns.LabelWrap = false;
-            listViewTns.Location = new Point(223, 31);
+            listViewTns.Location = new Point(252, 31);
             listViewTns.MultiSelect = false;
             listViewTns.Name = "listViewTns";
             listViewTns.Scrollable = false;
@@ -215,6 +191,7 @@
             listViewTns.TabIndex = 41;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
+            listViewTns.Visible = false;
             // 
             // listviewPrice
             // 
@@ -274,9 +251,6 @@
         private ToolStripMenuItem toolstripTicks;
         private ToolStripMenuItem toolstripAlwaysOnTop;
         private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn Price;
-        private DataGridViewTextBoxColumn Size;
-        private DataGridViewTextBoxColumn Time;
         private ListView listViewTns;
         private ColumnHeader listviewPrice;
         private ColumnHeader listviewSize;
