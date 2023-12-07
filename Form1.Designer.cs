@@ -29,13 +29,12 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             btnDisconnect = new Button();
-            listViewTns = new ListView();
-            columnHeader1 = new ColumnHeader();
-            columnHeader2 = new ColumnHeader();
-            columnHeader3 = new ColumnHeader();
             numPort = new NumericUpDown();
             tooltipPort = new ToolTip(components);
             tooltipClosePortion = new ToolTip(components);
@@ -43,8 +42,10 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripTicks = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
+            datagridviewTns = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)datagridviewTns).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -66,37 +67,6 @@
             btnDisconnect.Text = "Disconnect";
             btnDisconnect.UseVisualStyleBackColor = true;
             btnDisconnect.Click += btnDisconnect_Click;
-            // 
-            // listViewTns
-            // 
-            listViewTns.BackColor = Color.Black;
-            listViewTns.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listViewTns.Dock = DockStyle.Bottom;
-            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            listViewTns.ForeColor = Color.White;
-            listViewTns.HeaderStyle = ColumnHeaderStyle.None;
-            listViewTns.Location = new Point(0, 36);
-            listViewTns.Name = "listViewTns";
-            listViewTns.Size = new Size(238, 682);
-            listViewTns.TabIndex = 30;
-            listViewTns.UseCompatibleStateImageBehavior = false;
-            listViewTns.View = View.Details;
-            // 
-            // columnHeader1
-            // 
-            columnHeader1.Text = "Price";
-            columnHeader1.Width = 65;
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Shares";
-            columnHeader2.Width = 55;
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "Time";
-            columnHeader3.TextAlign = HorizontalAlignment.Right;
-            columnHeader3.Width = 86;
             // 
             // numPort
             // 
@@ -150,15 +120,53 @@
             cbSymbol.KeyDown += cbSymbol_KeyDown;
             cbSymbol.KeyPress += cbSymbol_KeyPress;
             // 
+            // datagridviewTns
+            // 
+            datagridviewTns.AllowUserToAddRows = false;
+            datagridviewTns.AllowUserToDeleteRows = false;
+            datagridviewTns.AllowUserToOrderColumns = true;
+            datagridviewTns.AllowUserToResizeRows = false;
+            datagridviewTns.BackgroundColor = Color.Black;
+            datagridviewTns.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.Black;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            datagridviewTns.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            datagridviewTns.ColumnHeadersHeight = 20;
+            datagridviewTns.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.Black;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(224, 224, 224);
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            datagridviewTns.DefaultCellStyle = dataGridViewCellStyle2;
+            datagridviewTns.EditMode = DataGridViewEditMode.EditProgrammatically;
+            datagridviewTns.Location = new Point(5, 35);
+            datagridviewTns.Name = "datagridviewTns";
+            datagridviewTns.RowHeadersVisible = false;
+            datagridviewTns.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle3.BackColor = Color.Transparent;
+            dataGridViewCellStyle3.ForeColor = Color.Silver;
+            datagridviewTns.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            datagridviewTns.RowTemplate.Height = 20;
+            datagridviewTns.Size = new Size(199, 680);
+            datagridviewTns.TabIndex = 40;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
-            ClientSize = new Size(238, 718);
+            ClientSize = new Size(210, 718);
             ContextMenuStrip = contextFormRightClick;
-            Controls.Add(listViewTns);
+            Controls.Add(datagridviewTns);
             Controls.Add(numPort);
             Controls.Add(btnDisconnect);
             Controls.Add(cbSymbol);
@@ -170,6 +178,7 @@
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             contextFormRightClick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)datagridviewTns).EndInit();
             ResumeLayout(false);
         }
 
@@ -182,10 +191,6 @@
 
         private Button btnConnect;
         private Button btnDisconnect;
-        private ListView listViewTns;
-        private ColumnHeader columnHeader1;
-        private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private NumericUpDown numPort;
         private ListBox lbHelp;
         private ToolTip tooltipPort;
@@ -195,5 +200,6 @@
         private ToolStripMenuItem toolstripBorderToggle;
         private ComboBox cbSymbol;
         private ToolStripMenuItem toolstripTicks;
+        private DataGridView datagridviewTns;
     }
 }

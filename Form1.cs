@@ -44,12 +44,16 @@ namespace IBKR_Trader
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
 
+        private DataTable timeandsalesTable = new DataTable();
         public Form1()
         {
             InitializeComponent();
 
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
+
+            Func<string, DataColumn> toDataColumn = i => new DataColumn { ColumnName = i };
+            timeandsalesTable.Columns.AddRange(new[] { "Time", "Price", "Size" }.Select(toDataColumn).ToArray());
 
         }
 
@@ -59,6 +63,10 @@ namespace IBKR_Trader
             // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
 
+            datagridviewTns.DataSource = timeandsalesTable;
+            datagridviewTns.Columns[0].Width = 60;
+            datagridviewTns.Columns[1].Width = 60;
+            datagridviewTns.Columns[2].Width = 60;
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -104,7 +112,7 @@ namespace IBKR_Trader
 
 
                     // Subscribe to Group 4 within TWS
-                    ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
+                    // ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
 
                     getData();
 
@@ -130,7 +138,7 @@ namespace IBKR_Trader
             }
             ibClient.ClientSocket.cancelMktData(1);
             // clears contents of TnS when changing tickers
-            listViewTns.Items.Clear();
+            timeandsalesTable.Rows.Clear();
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -181,15 +189,17 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
+                    switch (Convert.ToInt32(tickerPrice[1]))  // Delayed Ask 67, realtime is tickerPrice == 2
                     {
-                        // Add the text string to the list box
-                        Ask = Convert.ToDouble(tickerPrice[2]);
-                    }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
-                    {
-                        // Add the text string to the list box
-                        Bid = Convert.ToDouble(tickerPrice[2]);
+                        case 2:
+                            // Add the text string to the list box
+                            Ask = Convert.ToDouble(tickerPrice[2]);
+                            break;
+
+                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1                   
+                            // Add the text string to the list box
+                            Bid = Convert.ToDouble(tickerPrice[2]);
+                            break;
                     }
                 }
             }
@@ -199,7 +209,7 @@ namespace IBKR_Trader
         // TIME AND SALES CONFIG
         public void AddListViewItemTickString(string _tickString)
         {
-            if (listViewTns.InvokeRequired)
+            if (datagridviewTns.InvokeRequired)
             {
                 try
                 {
@@ -227,24 +237,48 @@ namespace IBKR_Trader
                     double last_price = Convert.ToDouble(listTimeSales[0]);
 
                     // Proper way to adapt SIZE from tickstring data value and get rid of trailing zeroes.
-                    double size = Convert.ToDouble(listTimeSales[1]);
-                    string strShareSize = size.ToString("#0");
+                    double size = Convert.ToDouble(listTimeSales[1]) * 100;
+                    string strSize = size.ToString("#,##0");
 
                     // TIME from tickstring data value
                     double trade_time = Convert.ToDouble(listTimeSales[2]);
 
                     DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     epoch = epoch.AddMilliseconds(trade_time);
-                    epoch = epoch.AddHours(-4);   //Daylight saving time use -4 Summer otherwise use -5 Winter
+                    epoch = epoch.AddHours(-5);   //Daylight saving time use -4 Summer otherwise use -5 Winter
 
                     string strSaleTime = epoch.ToString("HH:mm:ss");  // formatting for time
 
+                    DataRow row = timeandsalesTable.NewRow();
+                    row[0] = strSaleTime;
+                    row[1] = last_price;
+                    row[2] = strSize;
+                    timeandsalesTable.Rows.InsertAt(row, 0);
+
+                    if (last_price >= Ask)
+                    {
+                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
+                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+
+                    }
+                    else if (last_price <= Bid)
+                    {
+                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.Black;
+                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.LightGray;
+                    }
+
+                    /* LISTVIEW TNS (now defunct)
                     ListViewItem lx = new ListViewItem();
 
                     // if the last price is the same as the ask
                     if (last_price >= Ask)
                     {
-                        lx.BackColor = Color.SeaGreen; // listview foreground color
+                        lx.BackColor = Color.FromArgb(0, 180, 10); // listview bg color
                         lx.Text = listTimeSales[0]; // last price
                         lx.SubItems.Add(strShareSize); // share size
                         lx.SubItems.Add(strSaleTime); // time
@@ -262,7 +296,7 @@ namespace IBKR_Trader
                         // lbData.Items.Insert(0, strSaleTime);
                     }
                     // if the last price in between the bid and ask.
-                    else if (last_price > Bid && last_price < Ask)
+                    else
                     {
                         lx.ForeColor = Color.Silver;
                         lx.Text = listTimeSales[0];
@@ -271,19 +305,11 @@ namespace IBKR_Trader
                         listViewTns.Items.Insert(0, lx);
 
                         // lbData.Items.Add(epoch);
-                    }
-                    else
-                    {
-                        lx.ForeColor = Color.White;
-                        lx.Text = listTimeSales[0];
-                        lx.SubItems.Add(strShareSize);
-                        lx.SubItems.Add(strSaleTime);
-                        listViewTns.Items.Insert(0, lx);
-                    }
+                    }*/
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    // Debug.WriteLine("TnS error: " + e);
+                    Debug.WriteLine("TnS error: " + e);
                 }
             }
         }
