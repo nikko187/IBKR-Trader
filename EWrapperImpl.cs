@@ -18,7 +18,8 @@ namespace IBKR_Trader
         private int nextOrderId;
 
         // assigned as main form once we connect;
-        public Form1 myform;
+        //public Form1 myform;
+        //public TimeAndSales tnsForm;
 
         //! [socket_declare]
         EClientSocket clientSocket;
@@ -139,6 +140,11 @@ namespace IBKR_Trader
             // string tickStringData = ("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flag true or false
+
+            if (tickType == 77)
+            {
+                tnsForm.DataGridViewTickString(value);
+            }
 
         }
         //! [tickstring]

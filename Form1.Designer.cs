@@ -123,6 +123,7 @@
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
+            openTns = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -1035,6 +1036,16 @@
             checkboxPegPrice.UseVisualStyleBackColor = true;
             checkboxPegPrice.CheckedChanged += checkboxPegPrice_CheckedChanged;
             // 
+            // openTns
+            // 
+            openTns.Location = new Point(522, 61);
+            openTns.Name = "openTns";
+            openTns.Size = new Size(47, 24);
+            openTns.TabIndex = 66;
+            openTns.Text = "TnS";
+            openTns.UseVisualStyleBackColor = true;
+            openTns.Click += openTns_Click;
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -1043,6 +1054,7 @@
             BackColor = Color.LightGray;
             ClientSize = new Size(641, 490);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(openTns);
             Controls.Add(comboboxPeg);
             Controls.Add(checkboxPegPrice);
             Controls.Add(btnUpdateStop);
@@ -1125,7 +1137,6 @@
         #endregion
 
         private Button btnConnect;
-        private ComboBox cbSymbol;
         private ListBox lbData;
         private Label label1;
         private NumericUpDown numQuantity;
@@ -1213,5 +1224,7 @@
         private CheckBox checkboxPegPrice;
         private ComboBox comboboxPeg;
         private ToolStripTextBox toolstripClientId;
+        private Button openTns;
+        public ComboBox cbSymbol;
     }
 }

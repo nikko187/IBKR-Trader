@@ -50,6 +50,12 @@ namespace IBKR_Trader
         int timer1_counter = 5;
         int myContractId;
         bool isConnected = false;
+        private TwsService twsConnection;
+        public string Symbol
+        {
+            get { return this.cbSymbol.Text; }
+            set { this.cbSymbol.Text = value; }
+        }
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
@@ -115,14 +121,16 @@ namespace IBKR_Trader
         }
 
         // Create ibClient object to represent the connection
-        EWrapperImpl ibClient;
+        //EWrapperImpl ibClient;
+
+        TimeAndSales tnsForm;
 
         public Form1()
         {
             InitializeComponent();
 
             // Instantiate the ibClient
-            ibClient = new EWrapperImpl();
+            twsConnection = new TwsService();
 
         }
 
@@ -163,59 +171,8 @@ namespace IBKR_Trader
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            // fixes crash on clicking connect when already connected.
-            if (isConnected == true)
-            {
-                btnConnect.Text = "Connected";
-                btnConnect.BackColor = Color.LightGreen;
-                numPort.ReadOnly = true;
-                return;
-            }
-            else
-            {
-                try
-                {
-                    // Parameters to connect to TWS are:
-                    // host       - IP address or host name of the host running TWS
-                    // port       - listening port 7496 or 7497
-                    // clientId   - client application identifier can be any number
-                    int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, Convert.ToInt32(toolstripClientId.Text));
+            twsConnection.Connect("", (int)numPort.Value, Convert.ToInt32(toolstripClientId.Text));
 
-                    var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
-                    reader.Start();
-
-                    new Thread(() =>
-                    {
-                        while (ibClient.ClientSocket.IsConnected())
-                        {
-                            ibClient.Signal.waitForSignal();
-                            reader.processMsgs();
-                        }
-                    })
-                    { IsBackground = true }.Start();
-
-                    // Wait until the connection is completed
-                    while (ibClient.NextOrderId <= 0) { }
-
-                    // Set up the form object in the ewrapper
-                    ibClient.myform = (Form1)Application.OpenForms[0];
-
-                    // Update order ID value
-                    order_id = ibClient.NextOrderId;
-
-                    // Subscribe to Group 4 within TWS
-                    ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
-                    dataGridView1.Rows.Clear();
-                    getData();
-                    numPort.ReadOnly = true;
-
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
-                }
-            }
         }
 
         delegate void SetTextCallbackContractId(int contractId);
@@ -241,7 +198,7 @@ namespace IBKR_Trader
                 // convert contract id from an int to a string and add exchange
                 string strGroup = myContractId.ToString() + "@SMART";
                 // update the display group which will change the symbol
-                ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
+                TwsService.ClientSocket.updateDisplayGroup(9002, strGroup);
             }
         }
         public void AddTextBoxItemTickPrice(string _tickPrice)
@@ -463,7 +420,7 @@ namespace IBKR_Trader
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
-
+           
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
@@ -2556,6 +2513,12 @@ namespace IBKR_Trader
                         break;
                 }
             }
+        }
+
+        private void openTns_Click(object sender, EventArgs e)
+        {
+            TimeAndSales tnsForm = new TimeAndSales(twsConnection);
+            tnsForm.Show();
         }
     }
 }
