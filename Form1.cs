@@ -19,6 +19,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Linq.Expressions;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
@@ -116,6 +117,10 @@ namespace IBKR_Trader
 
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
+        public static Form1 instance;
+        public ComboBox cb;
+        public TextBox bid;
+        public TextBox ask;
 
         public Form1()
         {
@@ -123,9 +128,15 @@ namespace IBKR_Trader
 
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
-
+            instance = this;
+            cb = cbSymbol;
         }
 
+        private void btnTns_Click(object sender, EventArgs e)
+        {
+            tnsForm tns = new tnsForm();
+            tns.Show();
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -158,6 +169,9 @@ namespace IBKR_Trader
 
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
+
+            tnsForm tns = new tnsForm();
+            tns.Show();
 
         }
 
@@ -206,7 +220,6 @@ namespace IBKR_Trader
 
                     // Subscribe to Group 4 within TWS
                     ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
-                    dataGridView1.Rows.Clear();
                     getData();
                     numPort.ReadOnly = true;
 
@@ -216,6 +229,78 @@ namespace IBKR_Trader
                     MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
                 }
             }
+        }
+
+        private void getData()
+        {
+            if (ibClient.ClientSocket.IsConnected())
+            {
+                btnConnect.Text = "Connected";
+                btnConnect.BackColor = Color.LightGreen;
+                isConnected = true;
+            }
+            else
+            {
+                btnConnect.Text = "Connect";
+                btnConnect.BackColor = Color.Gainsboro;
+                isConnected = false;
+            }
+
+            try
+            {
+                TickerCopy();
+            }
+            catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
+
+            // account info and request account updates and current positions.
+            string account_number = "D005";
+            ibClient.ClientSocket.reqAccountUpdates(true, account_number);
+            ibClient.ClientSocket.reqPositions();
+
+            // ibClient.ClientSocket.cancelTickByTickData(1);
+            ibClient.ClientSocket.cancelMktData(1); // cancel market data
+            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+
+            // Create a new contract to specify the security we are searching for
+            IBApi.Contract contract = new IBApi.Contract();
+            // Create a new TagValueList object (for API version 9.71 and later) 
+            List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
+
+            // Set the underlying stock symbol fromthe cbSymbol combobox            
+            contract.Symbol = cbSymbol.Text;
+            // Set the Security type to STK for a Stock, FUT for Futures
+            contract.SecType = "STK";
+            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
+            contract.Exchange = "SMART";
+            // Set the primary exchange (sometimes called Listing exchange)
+            // Use either NYSE or ISLAND. For futures use "GLOBEX"
+            contract.PrimaryExch = "ISLAND";
+            // Set the currency to USD
+            contract.Currency = "USD";
+
+            // If using delayed market data subscription un-comment 
+            // the line below to request delayed data
+            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
+
+            // For API v9.72 and higher, add one more parameter for regulatory snapshot
+            ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 233", false, false, mktDataOptions);
+
+            // Tick by tick TESTING -- SUCCESS!
+            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
+
+            // ibClient.ClientSocket.reqMktDepthExchanges();
+            // List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
+            // ibClient.ClientSocket.reqMarketDepth(1, contract, 10, true, mktDepthOptions);
+
+            // request contract details based on contract that was created above
+            ibClient.ClientSocket.reqContractDetails(88, contract);
+
+            // requests all open order in account
+            ibClient.ClientSocket.reqAllOpenOrders();
+
+            timer1.Start();
+            isConnected = true;
+
         }
 
         delegate void SetTextCallbackContractId(int contractId);
@@ -244,6 +329,9 @@ namespace IBKR_Trader
                 ibClient.ClientSocket.updateDisplayGroup(9002, strGroup);
             }
         }
+
+        public string strAsk = "";
+        public string strBid = "";
         public void AddTextBoxItemTickPrice(string _tickPrice)
         {
             if (tbLast.InvokeRequired)
@@ -265,30 +353,26 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
+                    switch (Convert.ToInt32(tickerPrice[1]))// Delayed Last 68, realtime is tickerPrice == 4
                     {
-                        // Add the text string to the list box
-                        tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
+                        case 4:
+                            // Add the text string to the list box
+                            tbLast.Text = tickerPrice[2];
+                            break;
+
+                        case 2:  // Delayed Ask 67, realtime is tickerPrice == 2                  
+                            // Add the text string to the list box
+                            tbAsk.Text = tickerPrice[2];
+                            strAsk = tickerPrice[2];
+                            break;
+
+                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1                    
+                            // Add the text string to the list box
+                            tbBid.Text = tickerPrice[2];
+                            strBid = tickerPrice[2];
+                            break;
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
-                    {
-                        // Add the text string to the list box
-                        tbAsk.Text = tickerPrice[2];
-                    }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
-                    {
-                        // Add the text string to the list box
-                        tbBid.Text = tickerPrice[2];
-                    }
-                    if (Convert.ToInt32(tickerPrice[1]) == 6)
-                    {
-                        labelHi.Text = "H: " + tickerPrice[2];
-                    }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 7)
-                    {
-                        labelLo.Text = "L: " + tickerPrice[2];
-                    }
+
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
 
@@ -410,77 +494,6 @@ namespace IBKR_Trader
 
             }
         }
-        private void getData()
-        {
-            if (ibClient.ClientSocket.IsConnected())
-            {
-                btnConnect.Text = "Connected";
-                btnConnect.BackColor = Color.LightGreen;
-                isConnected = true;
-            }
-            else
-            {
-                btnConnect.Text = "Connect";
-                btnConnect.BackColor = Color.Gainsboro;
-                isConnected = false;
-            }
-
-            try
-            {
-                TickerCopy();
-            }
-            catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
-
-            // account info and request account updates and current positions.
-            string account_number = "D005";
-            ibClient.ClientSocket.reqAccountUpdates(true, account_number);
-            ibClient.ClientSocket.reqPositions();
-
-            // ibClient.ClientSocket.cancelTickByTickData(1);
-            ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
-
-            // Create a new contract to specify the security we are searching for
-            IBApi.Contract contract = new IBApi.Contract();
-            // Create a new TagValueList object (for API version 9.71 and later) 
-            List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
-
-            // Set the underlying stock symbol fromthe cbSymbol combobox            
-            contract.Symbol = cbSymbol.Text;
-            // Set the Security type to STK for a Stock, FUT for Futures
-            contract.SecType = "STK";
-            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
-            contract.Exchange = "SMART";
-            // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "ISLAND";
-            // Set the currency to USD
-            contract.Currency = "USD";
-
-            // If using delayed market data subscription un-comment 
-            // the line below to request delayed data
-            ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
-
-            // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
-
-            // Tick by tick TESTING -- SUCCESS!
-            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
-
-            // ibClient.ClientSocket.reqMktDepthExchanges();
-            // List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
-            // ibClient.ClientSocket.reqMarketDepth(1, contract, 10, true, mktDepthOptions);
-
-            // request contract details based on contract that was created above
-            ibClient.ClientSocket.reqContractDetails(88, contract);
-
-            // requests all open order in account
-            ibClient.ClientSocket.reqAllOpenOrders();
-
-            timer1.Start();
-            isConnected = true;
-
-        }
 
         /* public void MktDepth(int position, int operation, int side, double price, decimal size)
         {
@@ -578,6 +591,10 @@ namespace IBKR_Trader
             }
         }
         */
+
+        public void TimeAndSales(string tickstring)
+        {
+        }
 
         delegate void CallbackVolume(decimal size);
         public void Volume(decimal size)
@@ -2556,6 +2573,12 @@ namespace IBKR_Trader
                         break;
                 }
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ibClient.ClientSocket.eDisconnect();
+            Application.Exit();
         }
     }
 }

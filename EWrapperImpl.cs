@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -19,6 +20,7 @@ namespace IBKR_Trader
 
         // assigned as main form once we connect;
         public Form1 myform;
+        public static EWrapperImpl instance;
 
         //! [socket_declare]
         EClientSocket clientSocket;
@@ -30,6 +32,7 @@ namespace IBKR_Trader
         {
             Signal = new EReaderMonitorSignal();
             clientSocket = new EClientSocket(this, Signal);
+            instance = this;
         }
         //! [socket_init]
 
@@ -93,19 +96,25 @@ namespace IBKR_Trader
             string _tickPrice = tickerId + "," + field + "," + price + "," + attribs.CanAutoExecute;
 
             // Write this string to console
-            myform.AddTextBoxItemTickPrice(_tickPrice);
+            myform?.AddTextBoxItemTickPrice(_tickPrice);
+
+            var childForms = Application.OpenForms.OfType<tnsForm>().ToList();
+            if (childForms.Count() == 1)
+            {
+                //tnsForm?.TickPrice(_tickPrice);
+            }
 
             // Add this tick price to the form by calling the AddListBoxItem delegate
-            myform.AddListBoxItem(strData);
+            //myform.AddListBoxItem(strData);
 
             if (field == 9)     // 9 real-time close price. 75 delayed close
             {
-                myform.closePrice = price;
+                //myform.closePrice = price;
             }
 
             if (field == 14)        // 14 realtime open tick. No delayed open tick.
             {
-                myform.openPrice = price;
+                //myform.openPrice = price;
             }
         }
         //! [tickprice]
@@ -117,19 +126,19 @@ namespace IBKR_Trader
             
             string strData = "Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + size;
             Console.WriteLine(strData);
-            myform.AddListBoxItem(strData);
+            myform?.AddListBoxItem(strData);
 
             if (field == 21)        // avg daily volume over 90 days
             {
-                myform.AverageVolume(size);
+                myform?.AverageVolume(size);
             }
             if (field == 8)
             {
-                myform.Volume(size);
+                myform?.Volume(size);
             }
         }
         //! [ticksize]
-        
+
         //! [tickstring]
         public virtual void tickString(int tickerId, int tickType, string value)
         {
@@ -140,6 +149,13 @@ namespace IBKR_Trader
 
             // Contains Last Price, trade size, trade time, total volume, vwap, single trade flag true or false
 
+            //var childForms = Application.OpenForms.OfType<tnsForm>().ToList();
+            //if (childForms.Count() == 1)
+
+            if (tickType == 77 || tickType == 48)
+            {
+                tnsForm.instance.TimeAndSalesTickString(value);
+            }
         }
         //! [tickstring]
 

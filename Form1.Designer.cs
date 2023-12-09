@@ -123,6 +123,7 @@
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
+            btnTns = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -1035,14 +1036,26 @@
             checkboxPegPrice.UseVisualStyleBackColor = true;
             checkboxPegPrice.CheckedChanged += checkboxPegPrice_CheckedChanged;
             // 
+            // btnTns
+            // 
+            btnTns.FlatStyle = FlatStyle.Flat;
+            btnTns.Location = new Point(522, 61);
+            btnTns.Name = "btnTns";
+            btnTns.Size = new Size(47, 24);
+            btnTns.TabIndex = 66;
+            btnTns.Text = "TnS";
+            btnTns.UseVisualStyleBackColor = true;
+            btnTns.Click += btnTns_Click;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(641, 490);
+            ClientSize = new Size(641, 151);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(btnTns);
             Controls.Add(comboboxPeg);
             Controls.Add(checkboxPegPrice);
             Controls.Add(btnUpdateStop);
@@ -1094,10 +1107,12 @@
             Controls.Add(btnConnect);
             Controls.Add(label10);
             Controls.Add(label11);
+            DoubleBuffered = true;
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "IBKR Trader";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             DragDrop += Form1_DragDrop;
             DragEnter += Form1_DragEnter;
@@ -1125,7 +1140,6 @@
         #endregion
 
         private Button btnConnect;
-        private ComboBox cbSymbol;
         private ListBox lbData;
         private Label label1;
         private NumericUpDown numQuantity;
@@ -1213,5 +1227,7 @@
         private CheckBox checkboxPegPrice;
         private ComboBox comboboxPeg;
         private ToolStripTextBox toolstripClientId;
+        private Button btnTns;
+        public ComboBox cbSymbol;
     }
 }
