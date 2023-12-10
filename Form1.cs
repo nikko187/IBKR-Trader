@@ -42,6 +42,7 @@ namespace IBKR_Trader
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        //*****************************************************//
 
         // DELEGATE ENABLES ASYNCHRONOUS CALLS FOR SETTING TEXT PROPERTY ON LISTBOX
         delegate void SetTextCallback(string text);
@@ -80,6 +81,7 @@ namespace IBKR_Trader
             string newText = cbSymbol.Text;
             System.Windows.Forms.Clipboard.SetText(newText);
 
+            // Currently configured to send Ticker symbol to MedvedTrader to change the ticker automatically.
             Process medvedProccess = Process.GetProcessesByName("MT")[0];
             hwnd = medvedProccess.MainWindowHandle;
             IntPtr targetWindow = FindWindow(className, windowTitle);
@@ -115,8 +117,10 @@ namespace IBKR_Trader
             */
         }
 
-        // Create ibClient object to represent the connection
+        // Create ibClient object to represent the connection to IBKR EWrapperImpll
         EWrapperImpl ibClient;
+
+        // These are in progress testing for Multi Form usage... WIP //
         public static Form1 instance;
         public ComboBox cb;
         public TextBox bid;
@@ -128,6 +132,7 @@ namespace IBKR_Trader
 
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
+
             instance = this;
             cb = cbSymbol;
         }
@@ -142,7 +147,6 @@ namespace IBKR_Trader
         {
             // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
             // btnConnect.PerformClick();
-
 
             // dataGridView3 Properties
             dataGridView1.RowHeadersVisible = false;
@@ -170,6 +174,7 @@ namespace IBKR_Trader
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
 
+            // Show the second form (Time and Sales window) immediately. //
             tnsForm tns = new tnsForm();
             tns.Show();
 
@@ -248,7 +253,7 @@ namespace IBKR_Trader
 
             try
             {
-                TickerCopy();
+                TickerCopy();   // Send Ticker to MedvedTrader to change it's windows automatically. //
             }
             catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
 
@@ -288,10 +293,6 @@ namespace IBKR_Trader
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
-            // ibClient.ClientSocket.reqMktDepthExchanges();
-            // List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
-            // ibClient.ClientSocket.reqMarketDepth(1, contract, 10, true, mktDepthOptions);
-
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
 
@@ -304,7 +305,6 @@ namespace IBKR_Trader
         }
 
         delegate void SetTextCallbackContractId(int contractId);
-
         public void AddTextBoxItemConId(int contractId)
         {
             if (cbSymbol.InvokeRequired)
