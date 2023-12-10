@@ -70,6 +70,7 @@ namespace IBKR_Trader
                     string strTime = epoch.ToString("H:mm:ss");
 
                     datagridviewTns.Rows.Insert(0, strTime, price, strSize);
+
                     if (price >= _ask)
                     {
                         datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
