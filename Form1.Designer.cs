@@ -123,6 +123,7 @@
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
+            numOffset = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -136,11 +137,13 @@
             panel2.SuspendLayout();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)tbStopLoss).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numOffset).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(475, 4);
+            btnConnect.FlatStyle = FlatStyle.Popup;
+            btnConnect.Location = new Point(475, 5);
             btnConnect.Name = "btnConnect";
             btnConnect.Size = new Size(78, 23);
             btnConnect.TabIndex = 0;
@@ -180,7 +183,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 30);
+            label1.Location = new Point(12, 31);
             label1.Name = "label1";
             label1.Size = new Size(44, 13);
             label1.TabIndex = 3;
@@ -416,9 +419,9 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(419, 120);
+            btnCancelLast.Location = new Point(419, 91);
             btnCancelLast.Name = "btnCancelLast";
-            btnCancelLast.Size = new Size(51, 26);
+            btnCancelLast.Size = new Size(51, 24);
             btnCancelLast.TabIndex = 35;
             btnCancelLast.Text = "CXL Last";
             btnCancelLast.UseVisualStyleBackColor = false;
@@ -450,7 +453,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(86, 29);
+            label2.Location = new Point(86, 31);
             label2.Name = "label2";
             label2.Size = new Size(51, 13);
             label2.TabIndex = 38;
@@ -757,7 +760,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(347, 120);
+            btnClose.Location = new Point(404, 120);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(66, 26);
             btnClose.TabIndex = 52;
@@ -1035,14 +1038,26 @@
             checkboxPegPrice.UseVisualStyleBackColor = true;
             checkboxPegPrice.CheckedChanged += checkboxPegPrice_CheckedChanged;
             // 
+            // numOffset
+            // 
+            numOffset.DecimalPlaces = 2;
+            numOffset.Enabled = false;
+            numOffset.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numOffset.Location = new Point(300, 119);
+            numOffset.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
+            numOffset.Name = "numOffset";
+            numOffset.Size = new Size(43, 23);
+            numOffset.TabIndex = 66;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(641, 490);
+            ClientSize = new Size(641, 154);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
             Controls.Add(checkboxPegPrice);
             Controls.Add(btnUpdateStop);
@@ -1094,10 +1109,13 @@
             Controls.Add(btnConnect);
             Controls.Add(label10);
             Controls.Add(label11);
+            DoubleBuffered = true;
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
             Text = "IBKR Trader";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             DragDrop += Form1_DragDrop;
             DragEnter += Form1_DragEnter;
@@ -1118,6 +1136,7 @@
             contextFormRightClick.ResumeLayout(false);
             contextFormRightClick.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)tbStopLoss).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numOffset).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1213,5 +1232,6 @@
         private CheckBox checkboxPegPrice;
         private ComboBox comboboxPeg;
         private ToolStripTextBox toolstripClientId;
+        private NumericUpDown numOffset;
     }
 }

@@ -265,30 +265,36 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 4)// Delayed Last 68, realtime is tickerPrice == 4
+                    switch (Convert.ToInt32(tickerPrice[1]))// Delayed Last 68, realtime is tickerPrice == 4
                     {
-                        // Add the text string to the list box
-                        tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
+                        case 4:
+                            // Add the text string to the list box
+                            tbLast.Text = tickerPrice[2];
+                            PercentChange(null, null);
+                            break;
+
+                        case 2:  // Delayed Ask 67, realtime is tickerPrice == 2
+                            // Add the text string to the list box
+                            tbAsk.Text = tickerPrice[2];
+                            break;
+
+                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1
+                            // Add the text string to the list box
+                            tbBid.Text = tickerPrice[2];
+                            break;
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 2)  // Delayed Ask 67, realtime is tickerPrice == 2
+
+                    switch (Convert.ToInt32(tickerPrice[1]))
                     {
-                        // Add the text string to the list box
-                        tbAsk.Text = tickerPrice[2];
+                        case 6:     // High of Day
+                            labelHi.Text = "H: " + tickerPrice[2];
+                            break;
+
+                        case 7:     // Low of day
+                            labelLo.Text = "L: " + tickerPrice[2];
+                            break;
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
-                    {
-                        // Add the text string to the list box
-                        tbBid.Text = tickerPrice[2];
-                    }
-                    if (Convert.ToInt32(tickerPrice[1]) == 6)
-                    {
-                        labelHi.Text = "H: " + tickerPrice[2];
-                    }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 7)
-                    {
-                        labelLo.Text = "L: " + tickerPrice[2];
-                    }
+
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
 
@@ -2114,7 +2120,7 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(35, 35, 45);
+                this.BackColor = Color.FromArgb(35, 40, 45);
                 btnPosition.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())
@@ -2356,9 +2362,8 @@ namespace IBKR_Trader
                     countRow3++;
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
+
             if (wasFound3)
             {
                 try
@@ -2396,7 +2401,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception s)
                 {
-                    lbData.Items.Insert(0, "UpdateStop error: " + s);
+                    Debug.WriteLine(s);
                 }
             }
         }
@@ -2531,11 +2536,14 @@ namespace IBKR_Trader
             if (checkboxPegPrice.Checked)
             {
                 comboboxPeg.Enabled = true;
+                numOffset.Enabled = true;
+
                 comboboxPeg_SelectedIndexChanged(null, null);
             }
             else
             {
                 comboboxPeg.Enabled = false;
+                numOffset.Enabled = false;
             }
         }
 
@@ -2546,16 +2554,22 @@ namespace IBKR_Trader
                 switch (comboboxPeg.Text)
                 {
                     case "Peg to ASK":
-                        numPrice.Value = decimal.Parse(tbAsk.Text);
+                        numPrice.Value = decimal.Parse(tbAsk.Text) + numOffset.Value; ;
                         break;
                     case "Peg to BID":
-                        numPrice.Value = decimal.Parse(tbBid.Text);
+                        numPrice.Value = decimal.Parse(tbBid.Text) + numOffset.Value;
                         break;
                     case "Peg to MID":
-                        numPrice.Value = Math.Round(Math.Abs((decimal.Parse(tbAsk.Text) + decimal.Parse(tbBid.Text))) / 2, 2);
+                        numPrice.Value = Math.Round(Math.Abs((decimal.Parse(tbAsk.Text) + decimal.Parse(tbBid.Text))) / 2, 2) + numOffset.Value;
                         break;
                 }
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ibClient.ClientSocket.eDisconnect();
+            ibClient.ClientSocket.Close();
         }
     }
 }
