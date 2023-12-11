@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             btnDisconnect = new Button();
@@ -47,7 +47,8 @@
             listviewPrice = new ColumnHeader();
             listviewSize = new ColumnHeader();
             listviewTime = new ColumnHeader();
-            tbLast = new TextBox();
+            tbBid = new TextBox();
+            tbAsk = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -147,14 +148,14 @@
             dataGridView1.AllowUserToResizeRows = false;
             dataGridView1.BackgroundColor = Color.Black;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.Black;
-            dataGridViewCellStyle1.Font = new Font("Arial", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.Black;
+            dataGridViewCellStyle3.Font = new Font("Arial", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = Color.Transparent;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.ColumnHeadersHeight = 20;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView1.EditMode = DataGridViewEditMode.EditProgrammatically;
@@ -166,10 +167,10 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle2.BackColor = Color.Black;
-            dataGridViewCellStyle2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = Color.LightGray;
-            dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = Color.Black;
+            dataGridViewCellStyle4.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = Color.LightGray;
+            dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
             dataGridView1.RowTemplate.Height = 19;
             dataGridView1.ScrollBars = ScrollBars.Vertical;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -210,12 +211,19 @@
             listviewTime.Text = "Time";
             listviewTime.Width = 80;
             // 
-            // tbLast
+            // tbBid
             // 
-            tbLast.Location = new Point(275, 4);
-            tbLast.Name = "tbLast";
-            tbLast.Size = new Size(100, 23);
-            tbLast.TabIndex = 42;
+            tbBid.Location = new Point(275, 4);
+            tbBid.Name = "tbBid";
+            tbBid.Size = new Size(59, 23);
+            tbBid.TabIndex = 42;
+            // 
+            // tbAsk
+            // 
+            tbAsk.Location = new Point(340, 4);
+            tbAsk.Name = "tbAsk";
+            tbAsk.Size = new Size(59, 23);
+            tbAsk.TabIndex = 42;
             // 
             // Form1
             // 
@@ -225,7 +233,8 @@
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(428, 885);
             ContextMenuStrip = contextFormRightClick;
-            Controls.Add(tbLast);
+            Controls.Add(tbAsk);
+            Controls.Add(tbBid);
             Controls.Add(listViewTns);
             Controls.Add(dataGridView1);
             Controls.Add(numPort);
@@ -269,6 +278,7 @@
         private ColumnHeader listviewPrice;
         private ColumnHeader listviewSize;
         private ColumnHeader listviewTime;
-        private TextBox tbLast;
+        private TextBox tbBid;
+        private TextBox tbAsk;
     }
 }

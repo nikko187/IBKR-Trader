@@ -16,6 +16,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Security.Policy;
 
 /**** Simplified TickByTick Time and Sales ONLY ****/
 
@@ -83,6 +85,7 @@ namespace IBKR_Trader
             dataGridView1.RowHeadersVisible = false; // set it to false if not needed
 
             dataGridView1.DataSource = tns;
+            //tbBid.DataContext = bidAsks;
 
             dataGridView1.Columns[0].Width = 60;
             dataGridView1.Columns[1].Width = 65;
@@ -181,18 +184,17 @@ namespace IBKR_Trader
             // Set the underlying stock symbol fromthe cbSymbol combobox            
             contract.Symbol = cbSymbol.Text;
             // Set the Security type to STK for a Stock, FUT for Futures
-            contract.SecType = "FUT";
-            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
-            contract.Exchange = "CME";
+            contract.SecType = "STK";
+            // Use "SMART" as the general exchange, for Futures use "CME" or "NYMEX", etc.
+            contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "";
+            // Use either NYSE or ISLAND for equities. For futures use "".
+            contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
-            contract.LastTradeDateOrContractMonth = "202312";
+            // Expiration date for futures contract. YYYYMM
+            //contract.LastTradeDateOrContractMonth = "202312";
 
-            // If using delayed market data subscription un-comment 
-            // the line below to request delayed data
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // Tick by tick TESTING -- SUCCESS!
@@ -205,18 +207,33 @@ namespace IBKR_Trader
 
         }
 
-
+        BindingList<BidAsk> bidAsks = new BindingList<BidAsk>();
         private double theBid = 0;  // decalring variables to be used in the scope.
         private double theAsk = 0;
         delegate void SetTextCallbackBidAskTicks(double bidTick, double askTick);
         public void BidAskTick(double bidTick, double askTick)  // the only variables I need from TickByTickBidAsk
         {
-            theAsk = askTick;
-            theBid = bidTick;
+            if (tbAsk.InvokeRequired || tbBid.InvokeRequired)
+            {
+                try
+                {
+                    SetTextCallbackBidAskTicks d = new SetTextCallbackBidAskTicks(BidAskTick);
+                    this.Invoke(d, new object[] { bidTick, askTick });
+                }
+                catch (Exception)
+                {
+                }
+            }
+            else
+            {
+                //bidAsks.Add(new BidAsk(bidTick, askTick));
+
+                tbBid.Text = bidTick.ToString();
+                tbAsk.Text = askTick.ToString();
+            }
         }
 
         BindingList<TNS> tns = new BindingList<TNS>();
-        ListViewItem lx;
 
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)  // variables for actual Last prices on tickbytick basis.
@@ -281,13 +298,11 @@ namespace IBKR_Trader
                 {
                     tns.Insert(0, new TNS(time, price, size));
 
-                    tbLast.Text = price.ToString();
-
-                    if (price <= theBid)
+                    if (price <= Convert.ToDouble(tbBid.Text))
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
                     }
-                    else if (price >= theAsk)
+                    else if (price >= Convert.ToDouble(tbAsk.Text))
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
                     }
@@ -318,9 +333,6 @@ namespace IBKR_Trader
             }
 
         }
-
-
-
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
