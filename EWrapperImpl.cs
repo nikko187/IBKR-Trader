@@ -8,6 +8,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using IBApi;
 using IBKR_Trader;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace IBKR_Trader
 {
@@ -821,7 +823,10 @@ namespace IBKR_Trader
                     reqId, Util.UnixSecondsToString(tick.Time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(tick.Price), Util.DecimalMaxString(tick.Size), tick.Exchange, tick.SpecialConditions, tick.TickAttribLast);
             }
         }
-		//! [historicaltickslast]
+        //! [historicaltickslast]
+
+        //private readonly Subject<TNS> _tnsdata = new Subject<TNS>();
+        //public IObservable<TNS> rawData => _tnsdata.AsObservable();
 
         //! [tickbytickalllast]
         public void tickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
@@ -831,8 +836,9 @@ namespace IBKR_Trader
 
             
             string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
-
-            myform.TickByTick(newTime, price, size);
+            //_tnsdata.OnNext(TNS);
+            myform.TickByTick(newTime, price, size);    
+            
  
         }
         //! [tickbytickalllast]

@@ -45,11 +45,13 @@ namespace IBKR_Trader
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
 
+
         public Form1()
         {
             InitializeComponent();
-            //listViewTns.DoubleBuffering(true); 
-            
+            listViewTns.DoubleBuffered(true);
+
+            // Double buffer for DGV
             if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
             {
                 Type dgvType = dataGridView1.GetType();
@@ -61,13 +63,13 @@ namespace IBKR_Trader
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
-            DataColumn timeColumn = new DataColumn("Time");
-            DataColumn priceColumn = new DataColumn("Price");
-            DataColumn sizeColumn = new DataColumn("Size");
+            //DataColumn timeColumn = new DataColumn("Time");
+            //DataColumn priceColumn = new DataColumn("Price");
+            //DataColumn sizeColumn = new DataColumn("Size");
 
-            TickbyTicKTable.Columns.Add(timeColumn);
-            TickbyTicKTable.Columns.Add(priceColumn);
-            TickbyTicKTable.Columns.Add(sizeColumn);
+            //TickbyTicKTable.Columns.Add(timeColumn);
+            //TickbyTicKTable.Columns.Add(priceColumn);
+            //TickbyTicKTable.Columns.Add(sizeColumn);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -79,6 +81,19 @@ namespace IBKR_Trader
             //or even better .DisableResizing. 
             //Most time consumption enum is DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
             dataGridView1.RowHeadersVisible = false; // set it to false if not needed
+
+            dataGridView1.DataSource = tns;
+
+            dataGridView1.Columns[0].Width = 60;
+            dataGridView1.Columns[1].Width = 65;
+            dataGridView1.Columns[2].Width = 60;
+            dataGridView1.Columns[0].DefaultCellStyle.BackColor = Color.Black;
+            dataGridView1.Columns[1].DefaultCellStyle.BackColor = Color.Black;
+            dataGridView1.Columns[2].DefaultCellStyle.BackColor = Color.Black;
+            dataGridView1.Columns[0].DefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.Columns[1].DefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.Columns[2].DefaultCellStyle.ForeColor = Color.White;
+
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -166,21 +181,22 @@ namespace IBKR_Trader
             // Set the underlying stock symbol fromthe cbSymbol combobox            
             contract.Symbol = cbSymbol.Text;
             // Set the Security type to STK for a Stock, FUT for Futures
-            contract.SecType = "STK";
+            contract.SecType = "FUT";
             // Use "SMART" as the general exchange, for Futures use "GLOBEX"
-            contract.Exchange = "SMART";
+            contract.Exchange = "CME";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use "GLOBEX"
-            contract.PrimaryExch = "ISLAND";
+            contract.PrimaryExch = "";
             // Set the currency to USD
             contract.Currency = "USD";
+            contract.LastTradeDateOrContractMonth = "202312";
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // Tick by tick TESTING -- SUCCESS!
-            ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
+            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0, false);
             ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above
@@ -188,6 +204,7 @@ namespace IBKR_Trader
 
 
         }
+
 
         private double theBid = 0;  // decalring variables to be used in the scope.
         private double theAsk = 0;
@@ -197,6 +214,9 @@ namespace IBKR_Trader
             theAsk = askTick;
             theBid = bidTick;
         }
+
+        BindingList<TNS> tns = new BindingList<TNS>();
+        ListViewItem lx;
 
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)  // variables for actual Last prices on tickbytick basis.
@@ -257,10 +277,22 @@ namespace IBKR_Trader
                     // lbData.Items.Insert(0, "TnS error: " + g);
                 }*/
 
-
                 try
                 {
-                    dataGridView1.DataSource = TickbyTicKTable;
+                    tns.Insert(0, new TNS(time, price, size));
+
+                    tbLast.Text = price.ToString();
+
+                    if (price <= theBid)
+                    {
+                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
+                    }
+                    else if (price >= theAsk)
+                    {
+                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                    }
+
+                    /******** BACKUP START ********
                     DataRow row = TickbyTicKTable.NewRow();
                     row[0] = time; row[1] = price; row[2] = size.ToString("#,##0");
 
@@ -280,12 +312,15 @@ namespace IBKR_Trader
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.ForeColor = Color.Silver;
                     }
+                    /********* BACKUP END **********/
                 }
                 catch (Exception h) { MessageBox.Show("Tns Err: " + h); }
-
             }
 
         }
+
+
+
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -369,23 +404,16 @@ namespace IBKR_Trader
 
     }
     // DOUBLE BUFFER FOR LISTVIEW
-    public static class ControlExtensions
-    {
-        public static void DoubleBuffering(this Control control, bool enable)
-        {
-            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            doubleBufferPropertyInfo.SetValue(control, enable, null);
-        }
-    }
 
-    /* DOUBLE BUFFER FOR LISTVIEW
-    public static class ControlExtensions
-    {
-        public static void DoubleBuffered(this Control control, bool enable)
-        {
-            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            doubleBufferPropertyInfo.SetValue(control, enable, null);
-        }
-    }
-    */
+
+    //DOUBLE BUFFER FOR LISTVIEW
+    //public static class ControlExtensions
+    //{
+    //    public static void DoubleBuffered(this Control control, bool enable)
+    //    {
+    //        var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+    //        doubleBufferPropertyInfo.SetValue(control, enable, null);
+    //    }
+    //}
+
 }

@@ -47,6 +47,7 @@
             listviewPrice = new ColumnHeader();
             listviewSize = new ColumnHeader();
             listviewTime = new ColumnHeader();
+            tbLast = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -144,7 +145,7 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.BackgroundColor = Color.WhiteSmoke;
+            dataGridView1.BackgroundColor = Color.Black;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = Color.Black;
@@ -154,8 +155,10 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.ColumnHeadersHeight = 20;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView1.EditMode = DataGridViewEditMode.EditProgrammatically;
+            dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.Black;
             dataGridView1.Location = new Point(2, 31);
             dataGridView1.MultiSelect = false;
@@ -169,7 +172,8 @@
             dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.RowTemplate.Height = 19;
             dataGridView1.ScrollBars = ScrollBars.Vertical;
-            dataGridView1.Size = new Size(328, 854);
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(206, 854);
             dataGridView1.TabIndex = 40;
             // 
             // listViewTns
@@ -178,20 +182,20 @@
             listViewTns.AutoArrange = false;
             listViewTns.BackColor = Color.Black;
             listViewTns.Columns.AddRange(new ColumnHeader[] { listviewPrice, listviewSize, listviewTime });
+            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             listViewTns.ForeColor = Color.White;
             listViewTns.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             listViewTns.HideSelection = true;
             listViewTns.LabelWrap = false;
-            listViewTns.Location = new Point(252, 31);
+            listViewTns.Location = new Point(214, 31);
             listViewTns.MultiSelect = false;
             listViewTns.Name = "listViewTns";
             listViewTns.Scrollable = false;
             listViewTns.ShowGroups = false;
-            listViewTns.Size = new Size(212, 809);
+            listViewTns.Size = new Size(209, 854);
             listViewTns.TabIndex = 41;
             listViewTns.UseCompatibleStateImageBehavior = false;
             listViewTns.View = View.Details;
-            listViewTns.Visible = false;
             // 
             // listviewPrice
             // 
@@ -206,20 +210,29 @@
             listviewTime.Text = "Time";
             listviewTime.Width = 80;
             // 
+            // tbLast
+            // 
+            tbLast.Location = new Point(275, 4);
+            tbLast.Name = "tbLast";
+            tbLast.Size = new Size(100, 23);
+            tbLast.TabIndex = 42;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(439, 885);
+            ClientSize = new Size(428, 885);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(tbLast);
             Controls.Add(listViewTns);
             Controls.Add(dataGridView1);
             Controls.Add(numPort);
             Controls.Add(btnDisconnect);
             Controls.Add(cbSymbol);
             Controls.Add(btnConnect);
+            DoubleBuffered = true;
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
@@ -229,6 +242,7 @@
             contextFormRightClick.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         private void ToolstripTicks_Click(object sender, EventArgs e)
@@ -255,5 +269,6 @@
         private ColumnHeader listviewPrice;
         private ColumnHeader listviewSize;
         private ColumnHeader listviewTime;
+        private TextBox tbLast;
     }
 }
