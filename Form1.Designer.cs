@@ -1046,8 +1046,9 @@
             numOffset.Location = new Point(300, 119);
             numOffset.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
             numOffset.Name = "numOffset";
-            numOffset.Size = new Size(43, 23);
+            numOffset.Size = new Size(49, 23);
             numOffset.TabIndex = 66;
+            numOffset.ValueChanged += numOffset_ValueChanged;
             // 
             // Form1
             // 

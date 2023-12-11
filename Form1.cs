@@ -282,10 +282,6 @@ namespace IBKR_Trader
                             // Add the text string to the list box
                             tbBid.Text = tickerPrice[2];
                             break;
-                    }
-
-                    switch (Convert.ToInt32(tickerPrice[1]))
-                    {
                         case 6:     // High of Day
                             labelHi.Text = "H: " + tickerPrice[2];
                             break;
@@ -2570,6 +2566,11 @@ namespace IBKR_Trader
         {
             ibClient.ClientSocket.eDisconnect();
             ibClient.ClientSocket.Close();
+        }
+
+        private void numOffset_ValueChanged(object sender, EventArgs e)
+        {
+            comboboxPeg_SelectedIndexChanged(null, null);
         }
     }
 }
