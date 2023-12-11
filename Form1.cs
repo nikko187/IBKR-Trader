@@ -53,15 +53,6 @@ namespace IBKR_Trader
             InitializeComponent();
             listViewTns.DoubleBuffered(true);
 
-            // Double buffer for DGV
-            if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
-            {
-                Type dgvType = dataGridView1.GetType();
-                PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
-                  BindingFlags.Instance | BindingFlags.NonPublic);
-                pi.SetValue(dataGridView1, true, null);
-            }
-
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
 
@@ -97,6 +88,14 @@ namespace IBKR_Trader
             dataGridView1.Columns[1].DefaultCellStyle.ForeColor = Color.White;
             dataGridView1.Columns[2].DefaultCellStyle.ForeColor = Color.White;
 
+            // Double buffer for DGV
+            if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
+            {
+                Type dgvType = dataGridView1.GetType();
+                PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+                  BindingFlags.Instance | BindingFlags.NonPublic);
+                pi.SetValue(dataGridView1, true, null);
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -197,7 +196,7 @@ namespace IBKR_Trader
 
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
-            // Tick by tick TESTING -- SUCCESS!
+            // Tick by tick data requests.
             ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0, false);
             ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
@@ -298,6 +297,7 @@ namespace IBKR_Trader
 
                 try
                 {
+                    
                     tns.Insert(0, new TNS(time, price, size));
 
                     if (price <= theBid)
