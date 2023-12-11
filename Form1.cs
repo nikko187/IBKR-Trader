@@ -275,20 +275,21 @@ namespace IBKR_Trader
             contract.Symbol = cbSymbol.Text;
             // Set the Security type to STK for a Stock, FUT for Futures
             contract.SecType = "STK";
-            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
+            // Use "SMART" as the general exchange, for Futures use "CME, NYMEX, etc"
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND. For futures use "GLOBEX"
+            // Use either NYSE or ISLAND. For futures use ""
             contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
+            //contract.LastTradeDateOrContractMonth = "202312";
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 233", false, false, mktDataOptions);
+            ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 375", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
@@ -2578,6 +2579,7 @@ namespace IBKR_Trader
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             ibClient.ClientSocket.eDisconnect();
+            ibClient.ClientSocket.Close();
             Application.Exit();
         }
     }

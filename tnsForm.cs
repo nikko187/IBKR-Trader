@@ -32,9 +32,15 @@ namespace IBKR_Trader
         private void tnsForm_Load(object sender, EventArgs e)
         {
             // ibClient.form2 = (tnsForm)Application.OpenForms[0];
+            datagridviewTns.DataSource = _tns;
+
+            datagridviewTns.Columns[0].Width = 60;
+            datagridviewTns.Columns[1].Width = 60;
+            datagridviewTns.Columns[2].Width = 60;
+
         }
 
-
+        BindingList<tnsData> _tns = new BindingList<tnsData>();
         delegate void TimeAndSalesCallback(string tickstring);
         public void TimeAndSalesTickString(string tickstring)
         {
@@ -46,7 +52,6 @@ namespace IBKR_Trader
                     Invoke(d, new object[] { tickstring });
                 }
                 catch (Exception) { }
-
             }
             else
             {
@@ -69,7 +74,8 @@ namespace IBKR_Trader
 
                     string strTime = epoch.ToString("H:mm:ss");
 
-                    datagridviewTns.Rows.Insert(0, strTime, price, strSize);
+
+                    _tns.Insert(0, new tnsData(strTime, price, strSize));
 
                     if (price >= _ask)
                     {
