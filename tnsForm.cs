@@ -72,7 +72,7 @@ namespace IBKR_Trader
                     epoch = epoch.AddMilliseconds(time);
                     epoch = epoch.AddHours(-5);
 
-                    string strTime = epoch.ToString("H:mm:ss");
+                    string strTime = epoch.ToString("HH:mm:ss");
 
 
                     _tns.Insert(0, new tnsData(strTime, price, strSize));
