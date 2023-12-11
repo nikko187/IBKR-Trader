@@ -49,6 +49,7 @@
             listviewTime = new ColumnHeader();
             tbBid = new TextBox();
             tbAsk = new TextBox();
+            dgvTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -229,6 +230,12 @@
             tbAsk.Size = new Size(59, 23);
             tbAsk.TabIndex = 42;
             // 
+            // dgvTimer
+            // 
+            dgvTimer.Enabled = true;
+            dgvTimer.Interval = 200;
+            dgvTimer.Tick += dgvTimer_Tick;
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -284,5 +291,6 @@
         private ColumnHeader listviewTime;
         private TextBox tbBid;
         private TextBox tbAsk;
+        private System.Windows.Forms.Timer dgvTimer;
     }
 }

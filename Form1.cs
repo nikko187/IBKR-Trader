@@ -202,7 +202,7 @@ namespace IBKR_Trader
 
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);
-
+            dgvTimer.Start();
 
         }
 
@@ -235,6 +235,7 @@ namespace IBKR_Trader
         }
 
         BindingList<TNS> tns = new BindingList<TNS>();
+        List<TNS> tnsList = new List<TNS>();
 
         delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)  // variables for actual Last prices on tickbytick basis.
@@ -297,9 +298,9 @@ namespace IBKR_Trader
 
                 try
                 {
-                    
-                    tns.Insert(0, new TNS(time, price, size));
 
+                    //tnsList.Insert(0, new TNS(time, price, size));
+                    tns.Insert(0, new TNS(time, price, size));
                     if (price <= theBid)
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
@@ -334,6 +335,12 @@ namespace IBKR_Trader
                 catch (Exception h) { MessageBox.Show("Tns Err: " + h); }
             }
 
+        }
+        private void dgvTimer_Tick(object sender, EventArgs e)
+        {
+
+            dataGridView1.ResumeDrawing();
+            dataGridView1.SuspendDrawing();
         }
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
