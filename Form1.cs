@@ -146,6 +146,7 @@ namespace IBKR_Trader
                     //ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
 
                     getData();
+                    dgvTimer.Start();
 
                 }
                 catch (Exception)
@@ -202,7 +203,7 @@ namespace IBKR_Trader
 
             // request contract details based on contract that was created above
             // ibClient.ClientSocket.reqContractDetails(88, contract);
-            dgvTimer.Start();
+
 
         }
 
@@ -338,8 +339,8 @@ namespace IBKR_Trader
         }
         private void dgvTimer_Tick(object sender, EventArgs e)
         {
-
             dataGridView1.ResumeDrawing();
+            
             dataGridView1.SuspendDrawing();
         }
 
