@@ -228,8 +228,10 @@ namespace IBKR_Trader
             {
                 //bidAsks.Add(new BidAsk(bidTick, askTick));
 
-                tbBid.Text = bidTick.ToString();
+                theBid = bidTick;
+                theAsk = askTick;
                 tbAsk.Text = askTick.ToString();
+                tbBid.Text = bidTick.ToString();
             }
         }
 
@@ -298,13 +300,13 @@ namespace IBKR_Trader
                 {
                     tns.Insert(0, new TNS(time, price, size));
 
-                    if (price <= Convert.ToDouble(tbBid.Text))
-                    {
-                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
-                    }
-                    else if (price >= Convert.ToDouble(tbAsk.Text))
+                    if (price <= theBid)
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                    }
+                    else if (price >= theAsk)
+                    {
+                        dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
                     }
 
                     /******** BACKUP START ********
