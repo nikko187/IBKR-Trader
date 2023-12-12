@@ -125,7 +125,7 @@
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
-            btnTns = new Button();
+            numOffset = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -139,6 +139,7 @@
             panel2.SuspendLayout();
             contextFormRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)tbStopLoss).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numOffset).BeginInit();
             SuspendLayout();
             // 
             // btnConnect
@@ -419,9 +420,9 @@
             btnCancelLast.BackColor = Color.Yellow;
             btnCancelLast.FlatStyle = FlatStyle.Flat;
             btnCancelLast.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancelLast.Location = new Point(419, 120);
+            btnCancelLast.Location = new Point(419, 91);
             btnCancelLast.Name = "btnCancelLast";
-            btnCancelLast.Size = new Size(51, 26);
+            btnCancelLast.Size = new Size(51, 23);
             btnCancelLast.TabIndex = 35;
             btnCancelLast.Text = "CXL Last";
             btnCancelLast.UseVisualStyleBackColor = false;
@@ -760,7 +761,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             btnClose.ForeColor = SystemColors.ControlText;
-            btnClose.Location = new Point(347, 120);
+            btnClose.Location = new Point(404, 120);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(66, 26);
             btnClose.TabIndex = 52;
@@ -1051,16 +1052,17 @@
             checkboxPegPrice.UseVisualStyleBackColor = true;
             checkboxPegPrice.CheckedChanged += checkboxPegPrice_CheckedChanged;
             // 
-            // btnTns
+            // numOffset
             // 
-            btnTns.FlatStyle = FlatStyle.Flat;
-            btnTns.Location = new Point(522, 61);
-            btnTns.Name = "btnTns";
-            btnTns.Size = new Size(47, 24);
-            btnTns.TabIndex = 66;
-            btnTns.Text = "TnS";
-            btnTns.UseVisualStyleBackColor = true;
-            btnTns.Click += btnTns_Click;
+            numOffset.DecimalPlaces = 2;
+            numOffset.Enabled = false;
+            numOffset.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numOffset.Location = new Point(302, 119);
+            numOffset.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
+            numOffset.Name = "numOffset";
+            numOffset.Size = new Size(49, 23);
+            numOffset.TabIndex = 67;
+            numOffset.ValueChanged += numOffset_ValueChanged;
             // 
             // Form1
             // 
@@ -1070,7 +1072,7 @@
             BackColor = Color.Silver;
             ClientSize = new Size(641, 151);
             ContextMenuStrip = contextFormRightClick;
-            Controls.Add(btnTns);
+            Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
             Controls.Add(checkboxPegPrice);
             Controls.Add(btnUpdateStop);
@@ -1148,6 +1150,7 @@
             contextFormRightClick.ResumeLayout(false);
             contextFormRightClick.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)tbStopLoss).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numOffset).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1242,9 +1245,9 @@
         private CheckBox checkboxPegPrice;
         private ComboBox comboboxPeg;
         private ToolStripTextBox toolstripClientId;
-        private Button btnTns;
         public ComboBox cbSymbol;
         private ToolStripSeparator toolStripSeparator1;
         public ToolStripComboBox toolstripTns;
+        private NumericUpDown numOffset;
     }
 }

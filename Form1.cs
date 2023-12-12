@@ -2554,10 +2554,12 @@ namespace IBKR_Trader
             if (checkboxPegPrice.Checked)
             {
                 comboboxPeg.Enabled = true;
+                numOffset.Enabled = true;
                 comboboxPeg_SelectedIndexChanged(null, null);
             }
             else
             {
+                numOffset.Enabled = false;
                 comboboxPeg.Enabled = false;
             }
         }
@@ -2569,13 +2571,13 @@ namespace IBKR_Trader
                 switch (comboboxPeg.Text)
                 {
                     case "Peg to ASK":
-                        numPrice.Value = decimal.Parse(tbAsk.Text);
+                        numPrice.Value = decimal.Parse(tbAsk.Text) + numOffset.Value;
                         break;
                     case "Peg to BID":
-                        numPrice.Value = decimal.Parse(tbBid.Text);
+                        numPrice.Value = decimal.Parse(tbBid.Text) + numOffset.Value;
                         break;
                     case "Peg to MID":
-                        numPrice.Value = Math.Round(Math.Abs((decimal.Parse(tbAsk.Text) + decimal.Parse(tbBid.Text))) / 2, 2);
+                        numPrice.Value = Math.Round(Math.Abs((decimal.Parse(tbAsk.Text) + decimal.Parse(tbBid.Text))) / 2, 2) + numOffset.Value;
                         break;
                 }
             }
@@ -2586,13 +2588,17 @@ namespace IBKR_Trader
             ibClient.ClientSocket.eDisconnect();
             ibClient.ClientSocket.Close();
             tnsForm.instance.Close();
-            this.Close();
             Application.Exit();
         }
 
         private void toolstripTns_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
+        }
+
+        private void numOffset_ValueChanged(object sender, EventArgs e)
+        {
+            comboboxPeg_SelectedIndexChanged(null, null);
         }
     }
 }
