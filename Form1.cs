@@ -263,10 +263,10 @@ namespace IBKR_Trader
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
-
-            // ibClient.ClientSocket.cancelTickByTickData(1);
+            //tnsForm.instance.datagridviewTns.Rows.Clear();
+            ibClient.ClientSocket.cancelTickByTickData(2);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
+
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -281,7 +281,7 @@ namespace IBKR_Trader
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use ""
-            contract.PrimaryExch = "NYSE";
+            contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
             //contract.LastTradeDateOrContractMonth = "202312";
@@ -291,10 +291,16 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 375", false, false, mktDataOptions);
+
 
             // Tick by tick TESTING -- SUCCESS!
-            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
+            if (toolstripTns.Text == "Snapshot 250ms T&S")
+                ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 375", false, false, mktDataOptions);
+            else
+            {
+                ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
+                ibClient.ClientSocket.reqTickByTickData(2, contract, "Last", 0, false);
+            }
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -595,10 +601,6 @@ namespace IBKR_Trader
             }
         }
         */
-
-        public void TimeAndSales(string tickstring)
-        {
-        }
 
         delegate void CallbackVolume(decimal size);
         public void Volume(decimal size)
@@ -2584,6 +2586,11 @@ namespace IBKR_Trader
             ibClient.ClientSocket.eDisconnect();
             ibClient.ClientSocket.Close();
             Application.Exit();
+        }
+
+        private void toolstripTns_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            getData();
         }
     }
 }

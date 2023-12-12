@@ -99,5 +99,34 @@ namespace IBKR_Trader
             }
         }
 
+        delegate void TickByTickCallback(string time, double lastPrice, decimal size);
+        public void TickByTick(string time, double lastPrice, decimal size)
+        {
+            if (datagridviewTns.InvokeRequired)
+            {
+                try
+                {
+                    TickByTickCallback d = new TickByTickCallback(TickByTick);
+                    Invoke(d, new object[] { time, lastPrice, size });
+                }
+                catch (Exception) { Debug.WriteLine("TickByTick Invoke Err. "); }
+            }
+            else
+            {
+                try
+                {
+                    _bid = Convert.ToDouble(Form1.instance.strBid);
+                    _ask = Convert.ToDouble(Form1.instance.strAsk);
+                    price = lastPrice;
+                    _tns.Insert(0, new tnsData(time, price, size.ToString("#,##0")));
+                }
+                catch (Exception f) { Debug.WriteLine(f.Message); }
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
     }
 }

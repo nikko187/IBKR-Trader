@@ -120,6 +120,8 @@
             toolstripDarkMode = new ToolStripMenuItem();
             toolstripAlwaysOnTop = new ToolStripMenuItem();
             toolstripClientId = new ToolStripTextBox();
+            toolStripSeparator1 = new ToolStripSeparator();
+            toolstripTns = new ToolStripComboBox();
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
@@ -963,15 +965,15 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId, toolStripSeparator1, toolstripTns });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(171, 95);
+            contextFormRightClick.Size = new Size(196, 128);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(170, 22);
+            toolstripBorderToggle.Size = new Size(195, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
@@ -979,7 +981,7 @@
             // 
             toolstripDarkMode.CheckOnClick = true;
             toolstripDarkMode.Name = "toolstripDarkMode";
-            toolstripDarkMode.Size = new Size(170, 22);
+            toolstripDarkMode.Size = new Size(195, 22);
             toolstripDarkMode.Text = "Toggle Dark Mode";
             toolstripDarkMode.Click += ToolstripDarkModeToggle_Click;
             // 
@@ -987,7 +989,7 @@
             // 
             toolstripAlwaysOnTop.CheckOnClick = true;
             toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
-            toolstripAlwaysOnTop.Size = new Size(170, 22);
+            toolstripAlwaysOnTop.Size = new Size(195, 22);
             toolstripAlwaysOnTop.Text = "Always on top";
             toolstripAlwaysOnTop.Click += ToolstripAlwaysOnTop;
             // 
@@ -997,6 +999,19 @@
             toolstripClientId.Size = new Size(100, 23);
             toolstripClientId.Text = "0";
             toolstripClientId.ToolTipText = "Client ID";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(192, 6);
+            // 
+            // toolstripTns
+            // 
+            toolstripTns.Items.AddRange(new object[] { "TickByTick T&S", "Snapshot 250ms T&S" });
+            toolstripTns.Name = "toolstripTns";
+            toolstripTns.Size = new Size(135, 23);
+            toolstripTns.Text = "Snapshot 250ms T&S";
+            toolstripTns.SelectedIndexChanged += toolstripTns_SelectedIndexChanged;
             // 
             // tbStopLoss
             // 
@@ -1229,5 +1244,7 @@
         private ToolStripTextBox toolstripClientId;
         private Button btnTns;
         public ComboBox cbSymbol;
+        private ToolStripSeparator toolStripSeparator1;
+        public ToolStripComboBox toolstripTns;
     }
 }

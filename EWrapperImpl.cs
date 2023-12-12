@@ -897,15 +897,10 @@ namespace IBKR_Trader
             Console.WriteLine("Tick-By-Tick. Request Id: {0}, TickType: {1}, Time: {2}, Price: {3}, Size: {4}, Exchange: {5}, Special Conditions: {6}, PastLimit: {7}, Unreported: {8}",
                 reqId, tickType == 1 ? "Last" : "AllLast", Util.UnixSecondsToString(time, "yyyyMMdd-HH:mm:ss"), Util.DoubleMaxString(price), Util.DecimalMaxString(size), exchange, specialConditions, tickAttribLast.PastLimit, tickAttribLast.Unreported);
 
-            /*
-            string newTime = Util.UnixSecondsToString(time, "HH:mm:ss:ff");
-
-            if (size >= 100)
-            {
-                decimal newsize = size;
-                myform.TickByTick(newTime, price, newsize);
-            }
-            */
+            
+            string newTime = Util.UnixSecondsToString(time, "HH:mm:ss");
+            tnsForm.instance.TickByTick(newTime, price, size);
+            
         }
         //! [tickbytickalllast]
 

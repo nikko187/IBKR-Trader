@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             datagridviewTns = new DataGridView();
+            timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)datagridviewTns).BeginInit();
             SuspendLayout();
             // 
@@ -65,6 +67,7 @@
             datagridviewTns.EnableHeadersVisualStyles = false;
             datagridviewTns.Location = new Point(0, 0);
             datagridviewTns.Name = "datagridviewTns";
+            datagridviewTns.ReadOnly = true;
             datagridviewTns.RowHeadersVisible = false;
             datagridviewTns.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             datagridviewTns.RowTemplate.Height = 20;
@@ -72,6 +75,12 @@
             datagridviewTns.Size = new Size(193, 485);
             datagridviewTns.TabIndex = 0;
             datagridviewTns.RowPrePaint += dataGridView1_RowPrePaint;
+            // 
+            // timer1
+            // 
+            timer1.Enabled = true;
+            timer1.Interval = 200;
+            timer1.Tick += timer1_Tick;
             // 
             // tnsForm
             // 
@@ -94,6 +103,7 @@
 
         #endregion
 
-        private DataGridView datagridviewTns;
+        public DataGridView datagridviewTns;
+        private System.Windows.Forms.Timer timer1;
     }
 }
