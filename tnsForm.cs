@@ -28,6 +28,7 @@ namespace IBKR_Trader
         {
             InitializeComponent();
             instance = this;
+            datagridviewTns.DoubleBuffered(true);
         }
         BindingList<tnsData> _tns;
         private void tnsForm_Load(object sender, EventArgs e)

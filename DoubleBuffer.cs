@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace IBKR_Trader
 {
-    internal class DoubleBuffered
+    public static class DoubleBuffer
     {
         //Set Double buffering on the Grid using reflection and the bindingflags enum.
-        typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | 
-        BindingFlags.Instance | BindingFlags.SetProperty, null,
-        DataGridViewControlName, new object[] { true });
+        public static void DoubleBuffered(this Control control, bool enable)
+        {
+            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
+        }
     }
 }
