@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tnsForm));
             datagridviewTns = new DataGridView();
             timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)datagridviewTns).BeginInit();
@@ -93,6 +94,7 @@
             Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             ForeColor = Color.Gainsboro;
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "tnsForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Time & Sales";
