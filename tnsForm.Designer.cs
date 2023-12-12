@@ -40,7 +40,7 @@
             datagridviewTns.AllowUserToDeleteRows = false;
             datagridviewTns.AllowUserToOrderColumns = true;
             datagridviewTns.AllowUserToResizeRows = false;
-            datagridviewTns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            datagridviewTns.BackgroundColor = Color.Black;
             datagridviewTns.BorderStyle = BorderStyle.None;
             datagridviewTns.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -53,7 +53,7 @@
             datagridviewTns.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             datagridviewTns.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.BackColor = Color.Black;
             dataGridViewCellStyle2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             dataGridViewCellStyle2.ForeColor = Color.Gainsboro;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
@@ -66,15 +66,17 @@
             datagridviewTns.Name = "datagridviewTns";
             datagridviewTns.RowHeadersVisible = false;
             datagridviewTns.RowTemplate.Height = 20;
-            datagridviewTns.Size = new Size(207, 429);
+            datagridviewTns.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            datagridviewTns.Size = new Size(193, 485);
             datagridviewTns.TabIndex = 0;
+            datagridviewTns.RowPrePaint += dataGridView1_RowPrePaint;
             // 
             // tnsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Black;
-            ClientSize = new Size(207, 429);
+            BackColor = Color.Silver;
+            ClientSize = new Size(193, 485);
             Controls.Add(datagridviewTns);
             DoubleBuffered = true;
             Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);

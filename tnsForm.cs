@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using System.Diagnostics;
 
 namespace IBKR_Trader
 {
@@ -28,19 +29,22 @@ namespace IBKR_Trader
             InitializeComponent();
             instance = this;
         }
-
+        BindingList<tnsData> _tns;
         private void tnsForm_Load(object sender, EventArgs e)
         {
+            _tns = new BindingList<tnsData>();
+            _tns.AllowEdit = false;
+            _tns.AllowRemove = false;
             // ibClient.form2 = (tnsForm)Application.OpenForms[0];
             datagridviewTns.DataSource = _tns;
 
             datagridviewTns.Columns[0].Width = 60;
             datagridviewTns.Columns[1].Width = 60;
             datagridviewTns.Columns[2].Width = 60;
-
         }
 
-        BindingList<tnsData> _tns = new BindingList<tnsData>();
+        double price;
+
         delegate void TimeAndSalesCallback(string tickstring);
         public void TimeAndSalesTickString(string tickstring)
         {
@@ -62,7 +66,7 @@ namespace IBKR_Trader
 
                     string[] timeandsales = tickstring.Split(';');
 
-                    double price = Convert.ToDouble(timeandsales[0]);
+                    price = Convert.ToDouble(timeandsales[0]);
                     double size = Convert.ToDouble(timeandsales[1]) * 100;
                     double time = Convert.ToDouble(timeandsales[2]);
 
@@ -74,26 +78,24 @@ namespace IBKR_Trader
 
                     string strTime = epoch.ToString("HH:mm:ss");
 
-
                     _tns.Insert(0, new tnsData(strTime, price, strSize));
 
-                    if (price >= _ask)
-                    {
-                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
-                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
-                    }
-                    else if (price <= _bid)
-                    {
-                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
-                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
-                    }
-                    else
-                    {
-                        datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.Black;
-                        datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.LightGray;
-                    }
+
                 }
                 catch (Exception) { }
+            }
+        }
+        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (price >= _ask)
+            {
+                datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
+                datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
+            }
+            else if (price <= _bid)
+            {
+                datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
+                datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
             }
         }
 

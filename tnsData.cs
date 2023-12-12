@@ -8,6 +8,7 @@ namespace IBKR_Trader
 {
     internal class tnsData
     {
+        
         public string Time { get; set; }
         public double Price { get; set; }
         public string Size { get; set; }
@@ -18,4 +19,5 @@ namespace IBKR_Trader
             Size = size;
         }
     }
+    
 }

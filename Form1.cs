@@ -192,6 +192,7 @@ namespace IBKR_Trader
             }
             else
             {
+                int id = Convert.ToInt32(toolstripClientId.Text);
                 try
                 {
                     // Parameters to connect to TWS are:
@@ -199,7 +200,7 @@ namespace IBKR_Trader
                     // port       - listening port 7496 or 7497
                     // clientId   - client application identifier can be any number
                     int port = (int)numPort.Value;
-                    ibClient.ClientSocket.eConnect("", port, Convert.ToInt32(toolstripClientId.Text));
+                    ibClient.ClientSocket.eConnect("", port, id);
 
                     var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
                     reader.Start();
@@ -232,6 +233,7 @@ namespace IBKR_Trader
                 catch (Exception)
                 {
                     MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
+                    
                 }
             }
         }
@@ -279,7 +281,7 @@ namespace IBKR_Trader
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use ""
-            contract.PrimaryExch = "ISLAND";
+            contract.PrimaryExch = "NYSE";
             // Set the currency to USD
             contract.Currency = "USD";
             //contract.LastTradeDateOrContractMonth = "202312";
@@ -331,8 +333,8 @@ namespace IBKR_Trader
             }
         }
 
-        public string strAsk = "";
-        public string strBid = "";
+        public string strAsk;
+        public string strBid;
         public void AddTextBoxItemTickPrice(string _tickPrice)
         {
             if (tbLast.InvokeRequired)
@@ -359,6 +361,7 @@ namespace IBKR_Trader
                         case 4:
                             // Add the text string to the list box
                             tbLast.Text = tickerPrice[2];
+
                             break;
 
                         case 2:  // Delayed Ask 67, realtime is tickerPrice == 2                  
