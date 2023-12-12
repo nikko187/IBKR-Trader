@@ -2585,6 +2585,8 @@ namespace IBKR_Trader
         {
             ibClient.ClientSocket.eDisconnect();
             ibClient.ClientSocket.Close();
+            tnsForm.instance.Close();
+            this.Close();
             Application.Exit();
         }
 

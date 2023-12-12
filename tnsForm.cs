@@ -126,7 +126,9 @@ namespace IBKR_Trader
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            datagridviewTns.ResumeDrawing();
 
+            datagridviewTns.SuspendDrawing();
         }
     }
 }
