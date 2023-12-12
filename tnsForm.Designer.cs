@@ -40,6 +40,7 @@
             datagridviewTns.AllowUserToDeleteRows = false;
             datagridviewTns.AllowUserToOrderColumns = true;
             datagridviewTns.AllowUserToResizeRows = false;
+            datagridviewTns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             datagridviewTns.BackgroundColor = Color.Black;
             datagridviewTns.BorderStyle = BorderStyle.None;
             datagridviewTns.CellBorderStyle = DataGridViewCellBorderStyle.None;
@@ -65,6 +66,7 @@
             datagridviewTns.Location = new Point(0, 0);
             datagridviewTns.Name = "datagridviewTns";
             datagridviewTns.RowHeadersVisible = false;
+            datagridviewTns.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             datagridviewTns.RowTemplate.Height = 20;
             datagridviewTns.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             datagridviewTns.Size = new Size(193, 485);

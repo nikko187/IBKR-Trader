@@ -233,7 +233,7 @@ namespace IBKR_Trader
                 catch (Exception)
                 {
                     MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
-                    
+
                 }
             }
         }

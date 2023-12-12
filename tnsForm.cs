@@ -80,7 +80,6 @@ namespace IBKR_Trader
 
                     _tns.Insert(0, new tnsData(strTime, price, strSize));
 
-
                 }
                 catch (Exception) { }
             }
