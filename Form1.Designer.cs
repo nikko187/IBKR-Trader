@@ -43,10 +43,6 @@
             toolstripAlwaysOnTop = new ToolStripMenuItem();
             cbSymbol = new ComboBox();
             dataGridView1 = new DataGridView();
-            listViewTns = new ListView();
-            listviewPrice = new ColumnHeader();
-            listviewSize = new ColumnHeader();
-            listviewTime = new ColumnHeader();
             tbBid = new TextBox();
             tbAsk = new TextBox();
             dgvTimer = new System.Windows.Forms.Timer(components);
@@ -162,7 +158,7 @@
             dataGridView1.EditMode = DataGridViewEditMode.EditProgrammatically;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.Black;
-            dataGridView1.Location = new Point(2, 31);
+            dataGridView1.Location = new Point(2, 62);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -175,48 +171,14 @@
             dataGridView1.RowTemplate.Height = 19;
             dataGridView1.ScrollBars = ScrollBars.Vertical;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(206, 854);
+            dataGridView1.Size = new Size(206, 823);
             dataGridView1.TabIndex = 40;
-            // 
-            // listViewTns
-            // 
-            listViewTns.AllowColumnReorder = true;
-            listViewTns.AutoArrange = false;
-            listViewTns.BackColor = Color.Black;
-            listViewTns.Columns.AddRange(new ColumnHeader[] { listviewPrice, listviewSize, listviewTime });
-            listViewTns.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            listViewTns.ForeColor = Color.White;
-            listViewTns.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            listViewTns.HideSelection = true;
-            listViewTns.LabelWrap = false;
-            listViewTns.Location = new Point(214, 31);
-            listViewTns.MultiSelect = false;
-            listViewTns.Name = "listViewTns";
-            listViewTns.Scrollable = false;
-            listViewTns.ShowGroups = false;
-            listViewTns.Size = new Size(209, 854);
-            listViewTns.TabIndex = 41;
-            listViewTns.UseCompatibleStateImageBehavior = false;
-            listViewTns.View = View.Details;
-            // 
-            // listviewPrice
-            // 
-            listviewPrice.Text = "Price";
-            // 
-            // listviewSize
-            // 
-            listviewSize.Text = "Size";
-            // 
-            // listviewTime
-            // 
-            listviewTime.Text = "Time";
-            listviewTime.Width = 80;
             // 
             // tbBid
             // 
             tbBid.BackColor = Color.Black;
             tbBid.ForeColor = Color.White;
-            tbBid.Location = new Point(275, 4);
+            tbBid.Location = new Point(2, 33);
             tbBid.Name = "tbBid";
             tbBid.Size = new Size(59, 23);
             tbBid.TabIndex = 42;
@@ -225,15 +187,13 @@
             // 
             tbAsk.BackColor = Color.Black;
             tbAsk.ForeColor = Color.White;
-            tbAsk.Location = new Point(340, 4);
+            tbAsk.Location = new Point(67, 33);
             tbAsk.Name = "tbAsk";
             tbAsk.Size = new Size(59, 23);
             tbAsk.TabIndex = 42;
             // 
             // dgvTimer
             // 
-            dgvTimer.Enabled = true;
-            dgvTimer.Interval = 200;
             dgvTimer.Tick += dgvTimer_Tick;
             // 
             // Form1
@@ -242,11 +202,10 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(428, 885);
+            ClientSize = new Size(210, 885);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(tbAsk);
             Controls.Add(tbBid);
-            Controls.Add(listViewTns);
             Controls.Add(dataGridView1);
             Controls.Add(numPort);
             Controls.Add(btnDisconnect);
@@ -285,10 +244,6 @@
         private ToolStripMenuItem toolstripTicks;
         private ToolStripMenuItem toolstripAlwaysOnTop;
         private DataGridView dataGridView1;
-        private ListView listViewTns;
-        private ColumnHeader listviewPrice;
-        private ColumnHeader listviewSize;
-        private ColumnHeader listviewTime;
         private TextBox tbBid;
         private TextBox tbAsk;
         private System.Windows.Forms.Timer dgvTimer;

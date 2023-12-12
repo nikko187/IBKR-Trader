@@ -51,7 +51,7 @@ namespace IBKR_Trader
         public Form1()
         {
             InitializeComponent();
-            listViewTns.DoubleBuffered(true);
+            dataGridView1.DoubleBuffered(true);
 
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
@@ -88,14 +88,6 @@ namespace IBKR_Trader
             dataGridView1.Columns[1].DefaultCellStyle.ForeColor = Color.White;
             dataGridView1.Columns[2].DefaultCellStyle.ForeColor = Color.White;
 
-            // Double buffer for DGV
-            if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
-            {
-                Type dgvType = dataGridView1.GetType();
-                PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
-                  BindingFlags.Instance | BindingFlags.NonPublic);
-                pi.SetValue(dataGridView1, true, null);
-            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -171,6 +163,7 @@ namespace IBKR_Trader
 
             ibClient.ClientSocket.cancelTickByTickData(1);
             ibClient.ClientSocket.cancelTickByTickData(2);
+            tns.Clear();
 
             // clears contents of TnS when changing tickers
             // dataGridView1.Rows.Clear();
@@ -198,7 +191,7 @@ namespace IBKR_Trader
             // ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // Tick by tick data requests.
-            ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 0, false);
+            ibClient.ClientSocket.reqTickByTickData(1, contract, "Last", 0, false);
             ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, true);
 
             // request contract details based on contract that was created above
@@ -233,6 +226,12 @@ namespace IBKR_Trader
                 tbAsk.Text = askTick.ToString();
                 tbBid.Text = bidTick.ToString();
             }
+        }
+
+        delegate void CallbackErrorMsg(int id, int errorCode, string msg);
+        public void ErrorMsg(int id, int errorCode, string msg)
+        {
+            Debug.WriteLine(id + " " + errorCode + " " + msg);
         }
 
         BindingList<TNS> tns = new BindingList<TNS>();
@@ -337,11 +336,16 @@ namespace IBKR_Trader
             }
 
         }
+
         private void dgvTimer_Tick(object sender, EventArgs e)
         {
             dataGridView1.ResumeDrawing();
-            
+            tbBid.ResumeDrawing();
+            tbAsk.ResumeDrawing();
+
             dataGridView1.SuspendDrawing();
+            tbBid.SuspendDrawing();
+            tbAsk.SuspendDrawing();
         }
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)

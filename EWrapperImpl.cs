@@ -70,6 +70,7 @@ namespace IBKR_Trader
             else
             {
                 Console.WriteLine("Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg + "\n");
+                myform.ErrorMsg(id, errorCode, errorMsg);
             }
         }
         //! [error]
