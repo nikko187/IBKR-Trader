@@ -115,20 +115,34 @@ namespace IBKR_Trader
             {
                 try
                 {
-                    _bid = Convert.ToDouble(Form1.instance.strBid);
-                    _ask = Convert.ToDouble(Form1.instance.strAsk);
+                    _bid = bidTick;
+                    _ask = askTick;
                     price = lastPrice;
                     _tns.Insert(0, new tnsData(time, price, size.ToString("#,##0")));
                 }
                 catch (Exception f) { Debug.WriteLine(f.Message); }
             }
         }
-
+        private double bidTick;
+        private double askTick;
+        public void BidAskTicks(double bid, double ask)
+        {
+            bidTick = bid;
+            askTick = ask;
+        }
+        int timerCounter = 3;
         private void timer1_Tick(object sender, EventArgs e)
         {
-            datagridviewTns.ResumeDrawing();
-
-            datagridviewTns.SuspendDrawing();
+            if (timerCounter > 0)
+            {
+                datagridviewTns.SuspendDrawing();
+                timerCounter--;
+            }
+            else if (timerCounter == 0)
+            {
+                datagridviewTns.ResumeDrawing();
+                timerCounter = 3;
+            }
         }
     }
 }

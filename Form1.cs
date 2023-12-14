@@ -49,7 +49,7 @@ namespace IBKR_Trader
         delegate void SetTextCallbackTickPrice(string _tickPrice);
 
         int order_id = 0;
-        int timer1_counter = 5;
+        int timer1_counter = 6;
         int myContractId;
         bool isConnected = false;
 
@@ -125,6 +125,7 @@ namespace IBKR_Trader
         public ComboBox cb;
         public TextBox bid;
         public TextBox ask;
+        BindingList<tnsData> _tns = new BindingList<tnsData>();
 
         public Form1()
         {
@@ -253,18 +254,23 @@ namespace IBKR_Trader
                 isConnected = false;
             }
 
-            try
+            if (toolstripMedvedSync.Checked)
             {
-                TickerCopy();   // Send Ticker to MedvedTrader to change it's windows automatically. //
+                try
+                {
+                    TickerCopy();   // Send Ticker to MedvedTrader to change it's windows automatically. //
+                }
+                catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
             }
-            catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
+
 
             // account info and request account updates and current positions.
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
-            //tnsForm.instance.datagridviewTns.Rows.Clear();
+            _tns.Clear();
             ibClient.ClientSocket.cancelTickByTickData(2);
+            ibClient.ClientSocket.cancelTickByTickData(3);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
 
 
@@ -300,6 +306,7 @@ namespace IBKR_Trader
             {
                 ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
                 ibClient.ClientSocket.reqTickByTickData(2, contract, "Last", 0, false);
+                ibClient.ClientSocket.reqTickByTickData(3, contract, "BidAsk", 0, true);
             }
 
             // request contract details based on contract that was created above
@@ -894,7 +901,7 @@ namespace IBKR_Trader
                     tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.25m;
                     PercentChange(null, null);
 
-                    timer1_counter = 5; // reset time counter back to 5
+                    timer1_counter = 6; // reset time counter back to 5
 
                 }
                 catch (Exception) { lbData.Items.Insert(0, "Timer counter error."); }

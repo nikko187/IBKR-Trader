@@ -126,6 +126,7 @@
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
             numOffset = new NumericUpDown();
+            toolstripMedvedSync = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -966,15 +967,15 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId, toolStripSeparator1, toolstripTns });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId, toolStripSeparator1, toolstripTns, toolstripMedvedSync });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(196, 128);
+            contextFormRightClick.Size = new Size(212, 172);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(195, 22);
+            toolstripBorderToggle.Size = new Size(211, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
@@ -982,7 +983,7 @@
             // 
             toolstripDarkMode.CheckOnClick = true;
             toolstripDarkMode.Name = "toolstripDarkMode";
-            toolstripDarkMode.Size = new Size(195, 22);
+            toolstripDarkMode.Size = new Size(211, 22);
             toolstripDarkMode.Text = "Toggle Dark Mode";
             toolstripDarkMode.Click += ToolstripDarkModeToggle_Click;
             // 
@@ -990,7 +991,7 @@
             // 
             toolstripAlwaysOnTop.CheckOnClick = true;
             toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
-            toolstripAlwaysOnTop.Size = new Size(195, 22);
+            toolstripAlwaysOnTop.Size = new Size(211, 22);
             toolstripAlwaysOnTop.Text = "Always on top";
             toolstripAlwaysOnTop.Click += ToolstripAlwaysOnTop;
             // 
@@ -1004,7 +1005,7 @@
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(192, 6);
+            toolStripSeparator1.Size = new Size(208, 6);
             // 
             // toolstripTns
             // 
@@ -1063,6 +1064,13 @@
             numOffset.Size = new Size(49, 23);
             numOffset.TabIndex = 67;
             numOffset.ValueChanged += numOffset_ValueChanged;
+            // 
+            // toolstripMedvedSync
+            // 
+            toolstripMedvedSync.CheckOnClick = true;
+            toolstripMedvedSync.Name = "toolstripMedvedSync";
+            toolstripMedvedSync.Size = new Size(211, 22);
+            toolstripMedvedSync.Text = "MedvedTrader Ticker Sync";
             // 
             // Form1
             // 
@@ -1249,5 +1257,6 @@
         private ToolStripSeparator toolStripSeparator1;
         public ToolStripComboBox toolstripTns;
         private NumericUpDown numOffset;
+        private ToolStripMenuItem toolstripMedvedSync;
     }
 }
