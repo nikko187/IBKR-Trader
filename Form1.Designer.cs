@@ -105,8 +105,6 @@
             btnTenPercent = new Button();
             comboboxPeg = new ComboBox();
             panel1 = new Panel();
-            labelLo = new Label();
-            labelHi = new Label();
             labelChange = new Label();
             panel2 = new Panel();
             label12 = new Label();
@@ -788,7 +786,7 @@
             labelName.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             labelName.Location = new Point(0, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(361, 19);
+            labelName.Size = new Size(450, 19);
             labelName.TabIndex = 54;
             labelName.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -846,31 +844,11 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.Fixed3D;
-            panel1.Controls.Add(labelLo);
-            panel1.Controls.Add(labelHi);
             panel1.Controls.Add(labelName);
             panel1.Location = new Point(12, 5);
             panel1.Name = "panel1";
             panel1.Size = new Size(457, 23);
             panel1.TabIndex = 56;
-            // 
-            // labelLo
-            // 
-            labelLo.AutoSize = true;
-            labelLo.Location = new Point(404, 2);
-            labelLo.Name = "labelLo";
-            labelLo.Size = new Size(13, 15);
-            labelLo.TabIndex = 56;
-            labelLo.Text = "0";
-            // 
-            // labelHi
-            // 
-            labelHi.AutoSize = true;
-            labelHi.Location = new Point(352, 2);
-            labelHi.Name = "labelHi";
-            labelHi.Size = new Size(13, 15);
-            labelHi.TabIndex = 55;
-            labelHi.Text = "0";
             // 
             // labelChange
             // 
@@ -1131,7 +1109,6 @@
             tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             contextFormRightClick.ResumeLayout(false);
@@ -1225,8 +1202,6 @@
         private NumericUpDown tbStopLoss;
         private Button btnTenPercent;
         private ToolStripMenuItem toolstripDarkMode;
-        private Label labelHi;
-        private Label labelLo;
         private Button btnUpdateStop;
         private Label label12;
         private ToolStripMenuItem toolstripAlwaysOnTop;

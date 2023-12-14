@@ -265,30 +265,18 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    switch (Convert.ToInt32(tickerPrice[1]))// Delayed Last 68, realtime is tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 2)   // Delayed Ask 67, realtime is tickerPrice == 2
                     {
-                        case 4:
-                            // Add the text string to the list box
-                            tbLast.Text = tickerPrice[2];
-                            PercentChange(null, null);
-                            break;
-
-                        case 2:  // Delayed Ask 67, realtime is tickerPrice == 2
-                            // Add the text string to the list box
-                            tbAsk.Text = tickerPrice[2];
-                            break;
-
-                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1
-                            // Add the text string to the list box
-                            tbBid.Text = tickerPrice[2];
-                            break;
-                        case 6:     // High of Day
-                            labelHi.Text = "H: " + tickerPrice[2];
-                            break;
-
-                        case 7:     // Low of day
-                            labelLo.Text = "L: " + tickerPrice[2];
-                            break;
+                        tbAsk.Text = tickerPrice[2];
+                    }
+                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
+                    {
+                        tbBid.Text = tickerPrice[2];
+                    }
+                    else if (Convert.ToInt32(tickerPrice[1]) == 4) // Delayed Last 68, realtime Last tickerPrice == 4
+                    {
+                        tbLast.Text = tickerPrice[2];
+                        PercentChange(null, null);
                     }
 
                     if (checkboxPegPrice.Checked)
@@ -451,10 +439,10 @@ namespace IBKR_Trader
             contract.Symbol = cbSymbol.Text;
             // Set the Security type to STK for a Stock, FUT for Futures
             contract.SecType = "STK";
-            // Use "SMART" as the general exchange, for Futures use "GLOBEX"
+            // Use "SMART" as the general exchange, for Futures use "CME"
             contract.Exchange = "SMART";
             // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND. For futures use "GLOBEX"
+            // Use either NYSE or ISLAND. For futures use ""
             contract.PrimaryExch = "ISLAND";
             // Set the currency to USD
             contract.Currency = "USD";
@@ -484,10 +472,6 @@ namespace IBKR_Trader
 
         }
 
-        /* public void MktDepth(int position, int operation, int side, double price, decimal size)
-        {
-            Debug.WriteLine("position: " + position + " Op: " + operation + " Side: " + side + " Price: " + price + " Size: " + size);
-        }*/
 
         /*        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
