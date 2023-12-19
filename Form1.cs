@@ -2100,7 +2100,7 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(35, 40, 45);
+                this.BackColor = Color.FromArgb(45, 50, 50);
                 btnPosition.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())
@@ -2131,6 +2131,7 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = Color.White;
                 }
+
                 tbShortable.ForeColor = Color.Black;
 
             }
@@ -2167,9 +2168,11 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = SystemColors.ControlText;
                 }
+
                 tbShortable.ForeColor = SystemColors.WindowText;
 
             }
+            this.Invalidate();
         }
 
         // USED TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS
