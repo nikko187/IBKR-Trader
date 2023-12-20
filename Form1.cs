@@ -269,11 +269,11 @@ namespace IBKR_Trader
                     {
                         tbAsk.Text = tickerPrice[2];
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
+                    if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
                     {
                         tbBid.Text = tickerPrice[2];
                     }
-                    else if (Convert.ToInt32(tickerPrice[1]) == 4) // Delayed Last 68, realtime Last tickerPrice == 4
+                    if (Convert.ToInt32(tickerPrice[1]) == 4) // Delayed Last 68, realtime Last tickerPrice == 4
                     {
                         tbLast.Text = tickerPrice[2];
                         PercentChange(null, null);
@@ -2100,7 +2100,7 @@ namespace IBKR_Trader
         {
             if (toolstripDarkMode.Checked)
             {
-                this.BackColor = Color.FromArgb(45, 50, 50);
+                this.BackColor = Color.FromArgb(40, 40, 40);
                 btnPosition.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())
@@ -2114,13 +2114,13 @@ namespace IBKR_Trader
                 }
                 foreach (TextBox T in Controls.OfType<TextBox>())
                 {
-                    T.BackColor = Color.Black;
-                    T.ForeColor = Color.White;
+                    T.BackColor = SystemColors.WindowText;
+                    T.ForeColor = SystemColors.ControlLight;
                 }
                 foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
                 {
-                    N.BackColor = Color.Black;
-                    N.ForeColor = Color.White;
+                    N.BackColor = SystemColors.WindowText;
+                    N.ForeColor = SystemColors.Window;
                 }
                 foreach (ComboBox CB in Controls.OfType<ComboBox>())
                 {
@@ -2131,7 +2131,6 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = Color.White;
                 }
-
                 tbShortable.ForeColor = Color.Black;
 
             }
@@ -2151,13 +2150,13 @@ namespace IBKR_Trader
                 }
                 foreach (TextBox T in Controls.OfType<TextBox>())
                 {
-                    T.BackColor = SystemColors.Control;
-                    T.ForeColor = Color.Black;
+                    T.BackColor = SystemColors.ControlLight;
+                    T.ForeColor = SystemColors.WindowText;
                 }
                 foreach (NumericUpDown N in Controls.OfType<NumericUpDown>())
                 {
                     N.BackColor = SystemColors.Window;
-                    N.ForeColor = Color.Black;
+                    N.ForeColor = SystemColors.WindowText;
                 }
                 foreach (ComboBox CB in Controls.OfType<ComboBox>())
                 {
@@ -2168,7 +2167,6 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = SystemColors.ControlText;
                 }
-
                 tbShortable.ForeColor = SystemColors.WindowText;
 
             }

@@ -140,7 +140,7 @@
             // 
             // btnConnect
             // 
-            btnConnect.FlatStyle = FlatStyle.Popup;
+            btnConnect.FlatStyle = FlatStyle.Flat;
             btnConnect.Location = new Point(475, 5);
             btnConnect.Name = "btnConnect";
             btnConnect.Size = new Size(78, 23);
@@ -470,14 +470,13 @@
             // chkBracket
             // 
             chkBracket.AutoSize = true;
-            chkBracket.FlatStyle = FlatStyle.System;
-            chkBracket.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            chkBracket.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             chkBracket.Location = new Point(176, 30);
             chkBracket.Margin = new Padding(2);
             chkBracket.Name = "chkBracket";
-            chkBracket.Size = new Size(70, 18);
+            chkBracket.Size = new Size(72, 17);
             chkBracket.TabIndex = 40;
-            chkBracket.Text = "SL + $R";
+            chkBracket.Text = "StopLoss";
             chkBracket.UseVisualStyleBackColor = true;
             chkBracket.CheckedChanged += chkBracket_CheckedChanged;
             // 
@@ -831,6 +830,7 @@
             // comboboxPeg
             // 
             comboboxPeg.Enabled = false;
+            comboboxPeg.ForeColor = Color.Black;
             comboboxPeg.FormattingEnabled = true;
             comboboxPeg.Items.AddRange(new object[] { "Peg to ASK", "Peg to MID", "Peg to BID" });
             comboboxPeg.Location = new Point(213, 119);
@@ -1093,6 +1093,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "IBKR Trader";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
