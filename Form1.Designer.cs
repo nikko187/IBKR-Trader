@@ -31,8 +31,8 @@
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             btnConnect = new Button();
             cbSymbol = new ComboBox();
@@ -72,17 +72,6 @@
             numRisk = new NumericUpDown();
             labelSpread = new Label();
             dataGridView1 = new DataGridView();
-            colTime = new DataGridViewTextBoxColumn();
-            colid = new DataGridViewTextBoxColumn();
-            colSymbol = new DataGridViewTextBoxColumn();
-            colPrice = new DataGridViewTextBoxColumn();
-            colTrigger = new DataGridViewTextBoxColumn();
-            colShares = new DataGridViewTextBoxColumn();
-            colSide = new DataGridViewTextBoxColumn();
-            colType = new DataGridViewTextBoxColumn();
-            colStatus = new DataGridViewTextBoxColumn();
-            colFill = new DataGridViewTextBoxColumn();
-            colCancel = new DataGridViewTextBoxColumn();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
@@ -117,11 +106,25 @@
             toolstripBorderToggle = new ToolStripMenuItem();
             toolstripDarkMode = new ToolStripMenuItem();
             toolstripAlwaysOnTop = new ToolStripMenuItem();
+            toolstripFutures = new ToolStripMenuItem();
+            toolstripFuturesExp = new ToolStripTextBox();
+            toolstripMTSync = new ToolStripMenuItem();
             toolstripClientId = new ToolStripTextBox();
             tbStopLoss = new NumericUpDown();
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
             numOffset = new NumericUpDown();
+            colTime = new DataGridViewTextBoxColumn();
+            colid = new DataGridViewTextBoxColumn();
+            colSymbol = new DataGridViewTextBoxColumn();
+            colPrice = new DataGridViewTextBoxColumn();
+            colTrigger = new DataGridViewTextBoxColumn();
+            colShares = new DataGridViewTextBoxColumn();
+            colSide = new DataGridViewTextBoxColumn();
+            colType = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
+            colFill = new DataGridViewTextBoxColumn();
+            colCancel = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -204,7 +207,7 @@
             numPrice.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             numPrice.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
             numPrice.Location = new Point(106, 88);
-            numPrice.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            numPrice.Maximum = new decimal(new int[] { 50000, 0, 0, 0 });
             numPrice.Name = "numPrice";
             numPrice.Size = new Size(75, 25);
             numPrice.TabIndex = 6;
@@ -545,6 +548,7 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = Color.Black;
             dataGridViewCellStyle1.ForeColor = Color.White;
@@ -570,65 +574,6 @@
             dataGridView1.TabIndex = 47;
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
-            // 
-            // colTime
-            // 
-            colTime.HeaderText = "Time";
-            colTime.Name = "colTime";
-            // 
-            // colid
-            // 
-            colid.HeaderText = "ID";
-            colid.Name = "colid";
-            // 
-            // colSymbol
-            // 
-            colSymbol.HeaderText = "Symbol";
-            colSymbol.Name = "colSymbol";
-            // 
-            // colPrice
-            // 
-            colPrice.HeaderText = "Price";
-            colPrice.Name = "colPrice";
-            // 
-            // colTrigger
-            // 
-            colTrigger.HeaderText = "AuxPrice";
-            colTrigger.Name = "colTrigger";
-            // 
-            // colShares
-            // 
-            colShares.HeaderText = "Shares";
-            colShares.Name = "colShares";
-            // 
-            // colSide
-            // 
-            colSide.HeaderText = "Side";
-            colSide.Name = "colSide";
-            // 
-            // colType
-            // 
-            colType.HeaderText = "Type";
-            colType.Name = "colType";
-            // 
-            // colStatus
-            // 
-            colStatus.HeaderText = "Status";
-            colStatus.Name = "colStatus";
-            // 
-            // colFill
-            // 
-            colFill.HeaderText = "Fill";
-            colFill.Name = "colFill";
-            // 
-            // colCancel
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 192, 192);
-            colCancel.DefaultCellStyle = dataGridViewCellStyle2;
-            colCancel.HeaderText = "X";
-            colCancel.Name = "colCancel";
             // 
             // tabControl1
             // 
@@ -943,15 +888,15 @@
             // 
             // contextFormRightClick
             // 
-            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripClientId });
+            contextFormRightClick.Items.AddRange(new ToolStripItem[] { toolstripBorderToggle, toolstripDarkMode, toolstripAlwaysOnTop, toolstripFutures, toolstripMTSync, toolstripClientId });
             contextFormRightClick.Name = "contextFormRightClick";
-            contextFormRightClick.Size = new Size(171, 95);
+            contextFormRightClick.Size = new Size(178, 139);
             // 
             // toolstripBorderToggle
             // 
             toolstripBorderToggle.CheckOnClick = true;
             toolstripBorderToggle.Name = "toolstripBorderToggle";
-            toolstripBorderToggle.Size = new Size(170, 22);
+            toolstripBorderToggle.Size = new Size(177, 22);
             toolstripBorderToggle.Text = "Toggle Border";
             toolstripBorderToggle.Click += ToolstripBorderToggle_Click;
             // 
@@ -959,7 +904,7 @@
             // 
             toolstripDarkMode.CheckOnClick = true;
             toolstripDarkMode.Name = "toolstripDarkMode";
-            toolstripDarkMode.Size = new Size(170, 22);
+            toolstripDarkMode.Size = new Size(177, 22);
             toolstripDarkMode.Text = "Toggle Dark Mode";
             toolstripDarkMode.Click += ToolstripDarkModeToggle_Click;
             // 
@@ -967,9 +912,36 @@
             // 
             toolstripAlwaysOnTop.CheckOnClick = true;
             toolstripAlwaysOnTop.Name = "toolstripAlwaysOnTop";
-            toolstripAlwaysOnTop.Size = new Size(170, 22);
+            toolstripAlwaysOnTop.Size = new Size(177, 22);
             toolstripAlwaysOnTop.Text = "Always on top";
             toolstripAlwaysOnTop.Click += ToolstripAlwaysOnTop;
+            // 
+            // toolstripFutures
+            // 
+            toolstripFutures.CheckOnClick = true;
+            toolstripFutures.DropDownItems.AddRange(new ToolStripItem[] { toolstripFuturesExp });
+            toolstripFutures.Name = "toolstripFutures";
+            toolstripFutures.Size = new Size(177, 22);
+            toolstripFutures.Text = "Futures Symbols";
+            toolstripFutures.ToolTipText = "If enabled, Futures symbols only.\r\nIf disabled, Equities symbols only.";
+            toolstripFutures.Click += FuturesToggle;
+            // 
+            // toolstripFuturesExp
+            // 
+            toolstripFuturesExp.Name = "toolstripFuturesExp";
+            toolstripFuturesExp.Size = new Size(100, 23);
+            toolstripFuturesExp.Text = "202403";
+            toolstripFuturesExp.ToolTipText = "YYYYMM Futures Expiry";
+            // 
+            // toolstripMTSync
+            // 
+            toolstripMTSync.Checked = true;
+            toolstripMTSync.CheckOnClick = true;
+            toolstripMTSync.CheckState = CheckState.Checked;
+            toolstripMTSync.Name = "toolstripMTSync";
+            toolstripMTSync.Size = new Size(177, 22);
+            toolstripMTSync.Text = "MedvedTrader Sync";
+            toolstripMTSync.ToolTipText = "Check to sync ticker changing with MedvedTrader";
             // 
             // toolstripClientId
             // 
@@ -984,7 +956,7 @@
             tbStopLoss.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             tbStopLoss.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
             tbStopLoss.Location = new Point(172, 46);
-            tbStopLoss.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
+            tbStopLoss.Maximum = new decimal(new int[] { 50000, 0, 0, 0 });
             tbStopLoss.Name = "tbStopLoss";
             tbStopLoss.ReadOnly = true;
             tbStopLoss.Size = new Size(81, 25);
@@ -1028,13 +1000,72 @@
             numOffset.TabIndex = 66;
             numOffset.ValueChanged += numOffset_ValueChanged;
             // 
+            // colTime
+            // 
+            colTime.HeaderText = "Time";
+            colTime.Name = "colTime";
+            // 
+            // colid
+            // 
+            colid.HeaderText = "ID";
+            colid.Name = "colid";
+            // 
+            // colSymbol
+            // 
+            colSymbol.HeaderText = "Symbol";
+            colSymbol.Name = "colSymbol";
+            // 
+            // colPrice
+            // 
+            colPrice.HeaderText = "Price";
+            colPrice.Name = "colPrice";
+            // 
+            // colTrigger
+            // 
+            colTrigger.HeaderText = "AuxPrice";
+            colTrigger.Name = "colTrigger";
+            // 
+            // colShares
+            // 
+            colShares.HeaderText = "Shares";
+            colShares.Name = "colShares";
+            // 
+            // colSide
+            // 
+            colSide.HeaderText = "Side";
+            colSide.Name = "colSide";
+            // 
+            // colType
+            // 
+            colType.HeaderText = "Type";
+            colType.Name = "colType";
+            // 
+            // colStatus
+            // 
+            colStatus.HeaderText = "Status";
+            colStatus.Name = "colStatus";
+            // 
+            // colFill
+            // 
+            colFill.HeaderText = "Fill";
+            colFill.Name = "colFill";
+            // 
+            // colCancel
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 192, 192);
+            colCancel.DefaultCellStyle = dataGridViewCellStyle2;
+            colCancel.HeaderText = "X";
+            colCancel.Name = "colCancel";
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(641, 154);
+            ClientSize = new Size(641, 517);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
@@ -1157,17 +1188,6 @@
         private NumericUpDown numRisk;
         private Label labelSpread;
         private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn colTime;
-        private DataGridViewTextBoxColumn colid;
-        private DataGridViewTextBoxColumn colSymbol;
-        private DataGridViewTextBoxColumn colPrice;
-        private DataGridViewTextBoxColumn colTrigger;
-        private DataGridViewTextBoxColumn colShares;
-        private DataGridViewTextBoxColumn colSide;
-        private DataGridViewTextBoxColumn colType;
-        private DataGridViewTextBoxColumn colStatus;
-        private DataGridViewTextBoxColumn colFill;
-        private DataGridViewTextBoxColumn colCancel;
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
@@ -1210,5 +1230,19 @@
         private ComboBox comboboxPeg;
         private ToolStripTextBox toolstripClientId;
         private NumericUpDown numOffset;
+        private ToolStripMenuItem toolstripFutures;
+        private ToolStripMenuItem toolstripMTSync;
+        private ToolStripTextBox toolstripFuturesExp;
+        private DataGridViewTextBoxColumn colTime;
+        private DataGridViewTextBoxColumn colid;
+        private DataGridViewTextBoxColumn colSymbol;
+        private DataGridViewTextBoxColumn colPrice;
+        private DataGridViewTextBoxColumn colTrigger;
+        private DataGridViewTextBoxColumn colShares;
+        private DataGridViewTextBoxColumn colSide;
+        private DataGridViewTextBoxColumn colType;
+        private DataGridViewTextBoxColumn colStatus;
+        private DataGridViewTextBoxColumn colFill;
+        private DataGridViewTextBoxColumn colCancel;
     }
 }

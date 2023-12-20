@@ -138,7 +138,7 @@ namespace IBKR_Trader
             dataGridView1.ShowCellToolTips = false;
             dataGridView1.BackgroundColor = SystemColors.AppWorkspace;
             dataGridView1.DefaultCellStyle.BackColor = Color.Black;
-            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+            //dataGridView1.DefaultCellStyle.ForeColor = Color.White;
             dataGridView1.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
 
             // Columns
@@ -155,7 +155,7 @@ namespace IBKR_Trader
             dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
             dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
             dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
+            dataGridView1.Sort(dataGridView1.Columns["colid"], ListSortDirection.Descending);
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
 
@@ -415,21 +415,21 @@ namespace IBKR_Trader
                 btnConnect.BackColor = Color.Gainsboro;
                 isConnected = false;
             }
-
-            try
+            if (toolstripMTSync.Checked)
             {
-                TickerCopy();
+                try
+                {
+                    TickerCopy();
+                }
+                catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for ticker sync"); }
             }
-            catch (Exception) { lbData.Items.Insert(0, "Err: Medved Trader not open for Ticker Copy"); }
 
             // account info and request account updates and current positions.
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
 
-            // ibClient.ClientSocket.cancelTickByTickData(1);
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-            // ibClient.ClientSocket.cancelRealTimeBars(0);  // not needed yet.
 
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
@@ -439,14 +439,16 @@ namespace IBKR_Trader
             // Set the underlying stock symbol fromthe cbSymbol combobox            
             contract.Symbol = cbSymbol.Text;
             // Set the Security type to STK for a Stock, FUT for Futures
-            contract.SecType = "STK";
+            contract.SecType = _secType;
             // Use "SMART" as the general exchange, for Futures use "CME"
-            contract.Exchange = "SMART";
+            contract.Exchange = _exchange;
             // Set the primary exchange (sometimes called Listing exchange)
             // Use either NYSE or ISLAND. For futures use ""
-            contract.PrimaryExch = "ISLAND";
+            contract.PrimaryExch = _primExchange;
             // Set the currency to USD
             contract.Currency = "USD";
+            if (toolstripFutures.Checked)
+                contract.LastTradeDateOrContractMonth = _futuresExp;
 
             // If using delayed market data subscription un-comment 
             // the line below to request delayed data
@@ -458,10 +460,6 @@ namespace IBKR_Trader
             // Tick by tick TESTING -- SUCCESS!
             //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
 
-            // ibClient.ClientSocket.reqMktDepthExchanges();
-            // List<IBApi.TagValue> mktDepthOptions = new List<IBApi.TagValue>();
-            // ibClient.ClientSocket.reqMarketDepth(1, contract, 10, true, mktDepthOptions);
-
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
 
@@ -470,7 +468,6 @@ namespace IBKR_Trader
 
             timer1.Start();
             isConnected = true;
-
         }
 
 
@@ -1153,6 +1150,7 @@ namespace IBKR_Trader
                     }
                 }
                 dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.RowCount - 1;
+                dataGridView1.Sort(dataGridView1.Columns["colid"], ListSortDirection.Descending);
             }
         }
 
@@ -1225,7 +1223,7 @@ namespace IBKR_Trader
                     else if (!wasFound)
                     {
                         int n = dataGridView1.Rows.Add();
-                        epoch = epoch.AddMilliseconds(Convert.ToDouble(myOpenOrder[0]));
+                        epoch = epoch.AddMilliseconds(Convert.ToDouble(myOpenOrder[0]));          
 
                         dataGridView1.Rows[n].Cells[0].Value = epoch.ToString("HH:mm:ss");      // time submitted
                         dataGridView1.Rows[n].Cells[1].Value = myOpenOrder[2];  // order id number
@@ -1246,7 +1244,7 @@ namespace IBKR_Trader
                         dataGridView1.Rows[n].Cells[2].Value = myOpenOrder[4];      // stock symbol
                         dataGridView1.Rows[n].Cells[6].Value = myOpenOrder[7];      // shares remaining
                         dataGridView1.Rows[n].Cells[7].Value = myOpenOrder[8];      // status of order
-
+                        dataGridView1.Sort(dataGridView1.Columns["colid"], ListSortDirection.Descending);
                     }
                 }
             }
@@ -2547,7 +2545,35 @@ namespace IBKR_Trader
                 }
             }
         }
-
+        string _secType = "STK";
+        string _exchange = "SMART";
+        string _primExchange = "ISLAND";
+        string _futuresExp = "";
+        private void FuturesToggle(object sender, EventArgs e)
+        {
+            if (toolstripFutures.Checked)
+            {
+                _secType = "FUT";
+                _exchange = "CME";
+                _primExchange = "";
+                _futuresExp = toolstripFuturesExp.Text;
+                cbSymbol.Text = "ES";
+                numOffset.Increment = 0.25m;
+                numPrice.Increment = 0.25m;
+                tbStopLoss.Increment = 0.25m;
+            }
+            else
+            {
+                _secType = "STK";
+                _exchange = "SMART";
+                _primExchange = "ISLAND";
+                cbSymbol.Text = "TSLA";
+                numOffset.Increment = 0.01m;
+                numPrice.Increment = 0.01m;
+                tbStopLoss.Increment = 0.01m;
+            }
+            getData();
+        }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             ibClient.ClientSocket.eDisconnect();
