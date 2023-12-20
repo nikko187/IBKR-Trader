@@ -265,20 +265,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    if (Convert.ToInt32(tickerPrice[1]) == 2)   // Delayed Ask 67, realtime is tickerPrice == 2
+                    switch (Convert.ToInt32(tickerPrice[1]))   // Delayed Ask 67, realtime is tickerPrice == 2
                     {
-                        tbAsk.Text = tickerPrice[2];
-                    }
-                    if (Convert.ToInt32(tickerPrice[1]) == 1)  // Delayed Bid 66, realtime is tickerPrice == 1
-                    {
-                        tbBid.Text = tickerPrice[2];
-                    }
-                    if (Convert.ToInt32(tickerPrice[1]) == 4) // Delayed Last 68, realtime Last tickerPrice == 4
-                    {
-                        tbLast.Text = tickerPrice[2];
-                        PercentChange(null, null);
-                    }
+                        case 2:
+                            tbAsk.Text = tickerPrice[2];
+                            break;
 
+                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
+                            tbBid.Text = tickerPrice[2];
+                            break;
+
+                        case 4: // Delayed Last 68, realtime Last tickerPrice == 4
+                            tbLast.Text = tickerPrice[2];
+                            PercentChange(null, null);
+                            break;
+                    }
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
 
