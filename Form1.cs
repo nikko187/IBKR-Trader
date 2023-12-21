@@ -264,21 +264,21 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    switch (Convert.ToInt32(tickerPrice[1]))   // Delayed Ask 67, realtime is tickerPrice == 2
-                    {
-                        case 2:
-                            tbAsk.Text = tickerPrice[2];
-                            break;
+                    //switch (Convert.ToInt32(tickerPrice[1]))   // Delayed Ask 67, realtime is tickerPrice == 2
+                    //{
+                    //    case 2:
+                    //        tbAsk.Text = tickerPrice[2];
+                    //        break;
 
-                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
-                            tbBid.Text = tickerPrice[2];
-                            break;
+                    //    case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
+                    //        tbBid.Text = tickerPrice[2];
+                    //        break;
 
-                        case 4: // Delayed Last 68, realtime Last tickerPrice == 4
-                            tbLast.Text = tickerPrice[2];
-                            PercentChange(null, null);
-                            break;
-                    }
+                    //    case 4: // Delayed Last 68, realtime Last tickerPrice == 4
+                    //        tbLast.Text = tickerPrice[2];
+                    //        PercentChange(null, null);
+                    //        break;
+                    //}
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
 
@@ -446,7 +446,7 @@ namespace IBKR_Trader
             contract.PrimaryExch = _primExchange;
             // Set the currency to USD
             contract.Currency = "USD";
-            if (toolstripFutures.Checked)
+            if (toolstripFutures.Checked)       // Futures exp date in YYYYMM format
                 contract.LastTradeDateOrContractMonth = _futuresExp;
 
             // If using delayed market data subscription un-comment 
@@ -457,7 +457,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
 
             // Tick by tick TESTING -- SUCCESS!
-            //ibClient.ClientSocket.reqTickByTickData(1, contract, "AllLast", 200,false);
+            // ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -469,7 +469,21 @@ namespace IBKR_Trader
             isConnected = true;
         }
 
-
+        /* delegate void BidAskTickCallback(double bid, double ask);
+        public void BidAskTicks(double bid, double ask)
+        {
+            if (tbAsk.InvokeRequired)
+            {
+                BidAskTickCallback d = new BidAskTickCallback(BidAskTicks);
+                this.Invoke(d, new object[] { bid, ask });
+            }
+            else
+            {
+                tbAsk.Text = ask.ToString();
+                tbBid.Text = bid.ToString();
+            }
+        }
+        */
         /*        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
         {
