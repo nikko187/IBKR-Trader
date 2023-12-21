@@ -22,7 +22,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
-// add an option to peg limit price to ASK, BID, or MID.
 
 namespace IBKR_Trader
 {
