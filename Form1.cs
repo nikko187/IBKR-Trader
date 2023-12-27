@@ -264,21 +264,29 @@ namespace IBKR_Trader
 
                 if (Convert.ToInt32(tickerPrice[0]) == 1)
                 {
-                    //switch (Convert.ToInt32(tickerPrice[1]))   // Delayed Ask 67, realtime is tickerPrice == 2
-                    //{
-                    //    case 2:
-                    //        tbAsk.Text = tickerPrice[2];
-                    //        break;
+                    switch (Convert.ToInt32(tickerPrice[1]))
+                    {
+                        case 2:     // Delayed Ask 67, realtime is tickerPrice == 2
+                            tbAsk.Text = tickerPrice[2];
+                            break;
 
-                    //    case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
-                    //        tbBid.Text = tickerPrice[2];
-                    //        break;
+                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
+                            tbBid.Text = tickerPrice[2];
+                            break;
 
-                    //    case 4: // Delayed Last 68, realtime Last tickerPrice == 4
-                    //        tbLast.Text = tickerPrice[2];
-                    //        PercentChange(null, null);
-                    //        break;
-                    //}
+                        case 4: // Delayed Last 68, realtime Last tickerPrice == 4
+                            tbLast.Text = tickerPrice[2];
+                            PercentChange(null, null);
+                            break;
+
+                        case 9:     // close price
+                            closePrice = Convert.ToDouble(tickerPrice[2]);
+                            break;
+
+                        case 14:    // open price
+                            openPrice = Convert.ToDouble(tickerPrice[2]);
+                            break;
+                    }
                     if (checkboxPegPrice.Checked)
                         comboboxPeg_SelectedIndexChanged(null, null);
 
@@ -455,9 +463,6 @@ namespace IBKR_Trader
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
             ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
-
-            // Tick by tick TESTING -- SUCCESS!
-            // ibClient.ClientSocket.reqTickByTickData(2, contract, "BidAsk", 0, false);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -1902,8 +1907,8 @@ namespace IBKR_Trader
             }
         }
 
-        public double closePrice;
-        public double openPrice;
+        double closePrice;
+        double openPrice;
 
         private void PercentChange(object sender, EventArgs e)
         {
@@ -1937,15 +1942,28 @@ namespace IBKR_Trader
 
             double changesinceopen = ((Convert.ToDouble(tbLast.Text) - openPrice) / openPrice) * 100;
             labelSinceOpen.Text = changesinceopen.ToString("#0.00") + "%";
+            if (toolstripDarkMode.Checked)
+            {
+                if (changesinceopen > 0)
+                    labelSinceOpen.ForeColor = Color.LightBlue;
 
-            if (changesinceopen > 0)
-                labelSinceOpen.ForeColor = Color.Blue;
+                else if (changesinceopen < 0)
+                    labelSinceOpen.ForeColor = Color.LightCoral;
 
-            else if (changesinceopen < 0)
-                labelSinceOpen.ForeColor = Color.DarkRed;
-
+                else
+                { labelSinceOpen.ForeColor = Color.White; }
+            }
             else
-            { labelSinceOpen.ForeColor = Color.Black; }
+            {
+                if (changesinceopen > 0)
+                    labelSinceOpen.ForeColor = Color.Blue;
+
+                else if (changesinceopen < 0)
+                    labelSinceOpen.ForeColor = Color.DarkRed;
+
+                else
+                { labelSinceOpen.ForeColor = Color.Black; }
+            }
         }
 
         private void btnS2BE_Click(object sender, EventArgs e)
@@ -2136,8 +2154,8 @@ namespace IBKR_Trader
                 }
                 foreach (ComboBox CB in Controls.OfType<ComboBox>())
                 {
-                    CB.BackColor = Color.Black;
-                    CB.ForeColor = Color.White;
+                    CB.BackColor = SystemColors.WindowText;
+                    CB.ForeColor = SystemColors.Window;
                 }
                 foreach (CheckBox check in Controls.OfType<CheckBox>())
                 {

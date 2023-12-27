@@ -98,15 +98,6 @@ namespace IBKR_Trader
             // Add this tick price to the form by calling the AddListBoxItem delegate
             myform.AddListBoxItem(strData);
 
-            if (field == 9)     // 9 real-time close price. 75 delayed close
-            {
-                myform.closePrice = price;
-            }
-
-            if (field == 14)        // 14 realtime open tick. No delayed open tick.
-            {
-                myform.openPrice = price;
-            }
         }
         //! [tickprice]
         

@@ -1067,7 +1067,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.LightGray;
+            BackColor = Color.Silver;
             ClientSize = new Size(641, 153);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(numOffset);
@@ -1122,7 +1122,6 @@
             Controls.Add(btnConnect);
             Controls.Add(label10);
             Controls.Add(label11);
-            DoubleBuffered = true;
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
