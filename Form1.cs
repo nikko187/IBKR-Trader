@@ -19,6 +19,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Windows.Forms.VisualStyles;
 
 
 /****** PROPOSED ADDITIONS, REVISIONS, AND FIXES ******/
@@ -408,6 +409,34 @@ namespace IBKR_Trader
 
             }
         }
+        delegate void TickSizeCallback(int field, decimal size);
+        public void TickSize(int field, decimal size)
+        {
+            if (labelVolume.InvokeRequired)
+            {
+                TickSizeCallback d = new TickSizeCallback(TickSize);
+                try
+                {
+                    this.Invoke(d, new object[] { field, size });
+                }
+                catch (Exception e)
+                {
+                    lbData.Items.Insert(0, "TickSize Inv Err: " + e);
+                }
+            }
+            else
+            {
+                switch (field)
+                {
+                    case 8:     // Today's volume /100
+                        labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
+                        break;
+                    case 21:    // Average Volume (90 days)?
+                        labelAvgVol.Text = "AvgVol: " + (size * 100).ToString("#,##0");
+                        break;
+                }
+            }
+        }
         private void getData()
         {
             if (ibClient.ClientSocket.IsConnected())
@@ -580,20 +609,6 @@ namespace IBKR_Trader
             }
         }
         */
-
-        delegate void CallbackVolume(decimal size);
-        public void Volume(decimal size)
-        {
-            if (labelVolume.InvokeRequired)
-            {
-                CallbackVolume d = new CallbackVolume(Volume);
-                this.Invoke(d, new object[] { size });
-            }
-            else
-            {
-                labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
-            }
-        }
 
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1882,28 +1897,6 @@ namespace IBKR_Trader
                     labelName.Text = fullName + " / " + industry + " / " + category;
                 }
                 catch (Exception h) { lbData.Items.Insert(0, "GetFullName Err: " + h); }
-            }
-        }
-
-        delegate void SetTextCallbackTickSize(decimal avgvol);
-        public void AverageVolume(decimal avgvol)
-        {
-            if (labelAvgVol.InvokeRequired)
-            {
-                try
-                {
-                    SetTextCallbackTickSize d = new SetTextCallbackTickSize(AverageVolume);
-                    Invoke(d, new object[] { avgvol });
-                }
-                catch (Exception f)
-                {
-                    lbData.Items.Insert(0, "AvgVol Invoke error: " + f);
-                }
-            }
-            else
-            {
-                decimal AV = avgvol * 100;
-                labelAvgVol.Text = "AvgVol: " + AV.ToString("#,##0");
             }
         }
 
