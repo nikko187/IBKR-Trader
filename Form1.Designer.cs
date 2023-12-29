@@ -125,6 +125,7 @@
             btnUpdateStop = new Button();
             checkboxPegPrice = new CheckBox();
             numOffset = new NumericUpDown();
+            btnResetOffset = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -1062,13 +1063,27 @@
             numOffset.TabIndex = 66;
             numOffset.ValueChanged += numOffset_ValueChanged;
             // 
+            // btnResetOffset
+            // 
+            btnResetOffset.FlatAppearance.BorderColor = Color.Gray;
+            btnResetOffset.FlatStyle = FlatStyle.Flat;
+            btnResetOffset.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnResetOffset.Location = new Point(350, 119);
+            btnResetOffset.Margin = new Padding(0);
+            btnResetOffset.Name = "btnResetOffset";
+            btnResetOffset.Size = new Size(21, 23);
+            btnResetOffset.TabIndex = 59;
+            btnResetOffset.Text = "R";
+            btnResetOffset.UseVisualStyleBackColor = true;
+            btnResetOffset.Click += btnResetOffset_Click;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(641, 153);
+            ClientSize = new Size(641, 487);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
@@ -1076,6 +1091,7 @@
             Controls.Add(btnUpdateStop);
             Controls.Add(btnTenPercent);
             Controls.Add(tbStopLoss);
+            Controls.Add(btnResetOffset);
             Controls.Add(btnPosition);
             Controls.Add(btnS2BE);
             Controls.Add(panel2);
@@ -1246,5 +1262,6 @@
         private DataGridViewTextBoxColumn colStatus;
         private DataGridViewTextBoxColumn colFill;
         private DataGridViewTextBoxColumn colCancel;
+        private Button btnResetOffset;
     }
 }

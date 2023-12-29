@@ -155,7 +155,7 @@ namespace IBKR_Trader
             dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
             dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
             dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.Sort(dataGridView1.Columns["colid"], ListSortDirection.Descending);
+
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
 
@@ -206,7 +206,6 @@ namespace IBKR_Trader
 
                     // Subscribe to Group 4 within TWS
                     ibClient.ClientSocket.subscribeToGroupEvents(9002, 4);
-                    dataGridView1.Rows.Clear();
                     getData();
                     numPort.ReadOnly = true;
 
@@ -267,15 +266,15 @@ namespace IBKR_Trader
                 {
                     switch (Convert.ToInt32(tickerPrice[1]))
                     {
-                        case 2:     // Delayed Ask 67, realtime is tickerPrice == 2
+                        case 2:     // RealTime ASK tickerPrice == 2
                             tbAsk.Text = tickerPrice[2];
                             break;
 
-                        case 1:  // Delayed Bid 66, realtime is tickerPrice == 1  
+                        case 1:     // RealTime BID tickerPrice == 1  
                             tbBid.Text = tickerPrice[2];
                             break;
 
-                        case 4: // Delayed Last 68, realtime Last tickerPrice == 4
+                        case 4:     // RealTime LAST tickerPrice == 4
                             tbLast.Text = tickerPrice[2];
                             PercentChange(null, null);
                             break;
@@ -1797,8 +1796,9 @@ namespace IBKR_Trader
                     countRow2++;
                 }
             }
-            catch (Exception)
+            catch (Exception c)
             {
+                lbData.Items.Insert(0, "Position Count: " + c);
             }
             if (wasFound2)
             {
@@ -1822,7 +1822,7 @@ namespace IBKR_Trader
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue) && row.Cells[7].Value.ToString().Equals("STP"))
                     {
                         wasFound3 = true;
                         break;
@@ -1830,8 +1830,9 @@ namespace IBKR_Trader
                     countRow3++;
                 }
             }
-            catch (Exception)
+            catch (Exception d)
             {
+                lbData.Items.Insert(0, "Order list Count: " + d);
             }
             if (wasFound3)
             {
@@ -1839,17 +1840,10 @@ namespace IBKR_Trader
                 {
                     dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
-                    {
-                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
-                        {
-                            // Modify the values in the row based on the current stock symbol.
-                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
-                            side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
-                            break;
-                        }
-                    }
+                    // Modify the values in the row based on the current stock symbol.
+                    stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
+                    stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
+                    side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
 
                     IBApi.Contract contract = new IBApi.Contract();
                     contract.Symbol = searchValue;
@@ -1983,6 +1977,7 @@ namespace IBKR_Trader
             }
             catch (Exception)
             {
+                lbData.Items.Insert(0, "Stop 2 BE Position search err.");
             }
             if (wasFound2)
             {
@@ -2009,7 +2004,7 @@ namespace IBKR_Trader
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue) && row.Cells[7].Value.ToString().Equals("STP"))
                     {
                         wasFound3 = true;
                         break;
@@ -2019,7 +2014,7 @@ namespace IBKR_Trader
             }
             catch (Exception)
             {
-                lbData.Items.Insert(0, "Error in counting Rows");
+                lbData.Items.Insert(0, "Stop to BE: Error in counting Orders Rows");
             }
             if (wasFound3)
             {
@@ -2027,17 +2022,11 @@ namespace IBKR_Trader
                 {
                     dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
-                    {
-                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
-                        {
-                            // Modify the values in the row based on the current stock symbol.
-                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
-                            side = (string)dataGridView1.Rows[countRow3].Cells[6].Value;
-                            wasFound4 = true;
-                            break;
-                        }
-                    }
+                    // Modify the values in the row based on the current stock symbol.
+                    stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value); // Position
+                    side = (string)dataGridView1.Rows[countRow3].Cells[6].Value;
+                    wasFound4 = true;
+
                     IBApi.Contract contract = new IBApi.Contract();
                     contract.Symbol = searchValue;
                     contract.SecType = "STK";
@@ -2060,12 +2049,11 @@ namespace IBKR_Trader
                     if (wasFound4)
                     {
                         lbData.Items.Insert(0, "Stop Loss modified to avg price " + Math.Round(stopLoss.AuxPrice, 2));
-
                     }
                 }
                 catch (Exception s)
                 {
-                    lbData.Items.Insert(0, "Stop to BE Error: " + s);
+                    lbData.Items.Insert(0, "Stop to BE Modify Order Error: " + s);
                 }
             }
         }
@@ -2121,10 +2109,11 @@ namespace IBKR_Trader
 
         private void ToolstripDarkModeToggle_Click(object sender, EventArgs e)
         {
-            if (toolstripDarkMode.Checked)
+            if (toolstripDarkMode.Checked)  // DARK mode
             {
                 this.BackColor = Color.FromArgb(40, 40, 40);
                 btnPosition.ForeColor = Color.White;
+                btnResetOffset.ForeColor = Color.White;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {
@@ -2154,13 +2143,25 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = Color.White;
                 }
+                foreach (ListBox listBox in Controls.OfType<ListBox>())
+                {
+                    listBox.BackColor = SystemColors.WindowText;
+                    listBox.ForeColor = SystemColors.Window;
+                }
+                foreach (DataGridView dgv in Controls.OfType<DataGridView>())
+                {
+                    dgv.EnableHeadersVisualStyles = false;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.WindowText;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.Control;
+                }
                 tbShortable.ForeColor = Color.Black;
-
+                this.Invalidate();
             }
-            else
+            else  // LIGHT Mode
             {
                 this.BackColor = Color.LightGray;
                 btnPosition.ForeColor = Color.Black;
+                btnResetOffset.ForeColor = Color.Black;
 
                 foreach (Panel p in Controls.OfType<Panel>())
                 {
@@ -2190,10 +2191,20 @@ namespace IBKR_Trader
                 {
                     check.ForeColor = SystemColors.ControlText;
                 }
+                foreach (ListBox listBox in Controls.OfType<ListBox>())
+                {
+                    listBox.BackColor = SystemColors.Window;
+                    listBox.ForeColor = SystemColors.WindowText;
+                }
+                foreach (DataGridView dgv in Controls.OfType<DataGridView>())
+                {
+                    dgv.EnableHeadersVisualStyles = true;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.WindowText;
+                }
                 tbShortable.ForeColor = SystemColors.WindowText;
-
+                this.Invalidate();
             }
-            this.Invalidate();
         }
 
         // USED TO SET WINDOW AS "ALWAYS ON TOP" OF OTHER WINDOWS
@@ -2333,8 +2344,9 @@ namespace IBKR_Trader
                     countRow2++;
                 }
             }
-            catch (Exception)
+            catch (Exception f)
             {
+                lbData.Items.Insert(0, "Symbol not found in Positions: " + f.Message);
             }
             if (wasFound2)
             {
@@ -2358,7 +2370,7 @@ namespace IBKR_Trader
                 // searches for the symbol and counts the rows and set the wasFound2 to true if found
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue))
+                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString().Equals(searchValue) && row.Cells[7].Value.ToString().Equals("STP"))
                     {
                         wasFound3 = true;
                         break;
@@ -2366,7 +2378,7 @@ namespace IBKR_Trader
                     countRow3++;
                 }
             }
-            catch (Exception) { }
+            catch (Exception g) { lbData.Items.Insert(0, "Not found in Orders: " + g); }
 
             if (wasFound3)
             {
@@ -2374,17 +2386,10 @@ namespace IBKR_Trader
                 {
                     dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
-                    {
-                        if (row.Cells[7].Value.ToString().Equals("STP") && row.Cells[2].Value.ToString().Equals(searchValue)) // was found in data grid
-                        {
-                            // Modify the values in the row based on the current stock symbol.
-                            stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
-                            stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
-                            side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
-                            break;
-                        }
-                    }
+                    // Modify the values in the row based on the current stock symbol.
+                    stopOrderId = Convert.ToInt32(dataGridView1.Rows[countRow3].Cells[1].Value);
+                    stopPrice = Convert.ToDouble(dataGridView1.Rows[countRow3].Cells[4].Value);
+                    side = (string)(dataGridView1.Rows[countRow3].Cells[6].Value);
 
                     IBApi.Contract contract = new IBApi.Contract();
                     contract.Symbol = searchValue;
@@ -2405,7 +2410,7 @@ namespace IBKR_Trader
                 }
                 catch (Exception s)
                 {
-                    Debug.WriteLine(s);
+                    lbData.Items.Insert(0, "Updating stop order Err: " + s.Message);
                 }
             }
         }
@@ -2607,6 +2612,10 @@ namespace IBKR_Trader
         private void numOffset_ValueChanged(object sender, EventArgs e)
         {
             comboboxPeg_SelectedIndexChanged(null, null);
+        }
+        private void btnResetOffset_Click(object sender, EventArgs e)
+        {
+            numOffset.Value = 0.00m;
         }
     }
 }
