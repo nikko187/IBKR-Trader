@@ -1082,7 +1082,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Silver;
+            BackColor = Color.LightGray;
             ClientSize = new Size(641, 150);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(numOffset);
