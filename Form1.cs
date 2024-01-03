@@ -99,19 +99,7 @@ namespace IBKR_Trader
 
         public void AddListBoxItem(string text)
         {
-            /*
-            // See if a new invocation is required from a different thread            
-            if (this.lbData.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(AddListBoxItem);
-                this.Invoke(d, new object[] { text });
-            }
-            else
-            {
-                // Add the text string to the list box
-                this.lbData.Items.Add(text);
-            }
-            */
+
         }
 
         // Create ibClient object to represent the connection
@@ -129,10 +117,6 @@ namespace IBKR_Trader
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Auto-Click connect on launch - DISABLED because app does not launch if the port # is incorrect.
-            // btnConnect.PerformClick();
-
-
             // dataGridView3 Properties
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.ShowCellToolTips = false;
@@ -152,8 +136,8 @@ namespace IBKR_Trader
             dataGridView1.Columns[7].Width = 60;
             dataGridView1.Columns[8].Width = 60;
             dataGridView1.Columns[9].Width = 60;*/
-            dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
-            dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
+            //dataGridView1.Columns["colCancel"].DefaultCellStyle.BackColor = Color.DodgerBlue; // or SystemColors.Highlight;
+            //dataGridView1.Columns["colCancel"].DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 192, 192);
             dataGridView1.Columns["colCancel"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
@@ -210,9 +194,9 @@ namespace IBKR_Trader
                     numPort.ReadOnly = true;
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.");
+                    MessageBox.Show("Failure to connect.\r\nIn TWS API settings, please make sure ActiveX and Socket Clients is enabled, and the Port number is correct. Disable Read-Only to trade.\r\n" + ex.Message);
                 }
             }
         }
@@ -405,7 +389,6 @@ namespace IBKR_Trader
                         }
                         break;
                 }
-
             }
         }
         delegate void TickSizeCallback(int field, decimal size);
@@ -428,12 +411,17 @@ namespace IBKR_Trader
                 switch (field)
                 {
                     case 8:     // Today's volume /100
-                        labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
+                        if (!toolstripFutures.Checked)
+                            labelVolume.Text = "Vol: " + (size * 100).ToString("#,##0");
+                        else
+                            labelVolume.Text = "Vol: " + size.ToString("#,##0");
                         break;
                     case 21:    // Average Volume (90 days)?
                         labelAvgVol.Text = "AvgVol: " + (size * 100).ToString("#,##0");
                         break;
                 }
+                if (toolstripFutures.Checked)
+                    labelAvgVol.Text = "AvgVol: N/A";
             }
         }
         private void getData()
@@ -502,21 +490,6 @@ namespace IBKR_Trader
             isConnected = true;
         }
 
-        /* delegate void BidAskTickCallback(double bid, double ask);
-        public void BidAskTicks(double bid, double ask)
-        {
-            if (tbAsk.InvokeRequired)
-            {
-                BidAskTickCallback d = new BidAskTickCallback(BidAskTicks);
-                this.Invoke(d, new object[] { bid, ask });
-            }
-            else
-            {
-                tbAsk.Text = ask.ToString();
-                tbBid.Text = bid.ToString();
-            }
-        }
-        */
         /*        delegate void SetTextCallbackTickByTick(string time, double price, decimal size);
         public void TickByTick(string time, double price, decimal size)
         {
@@ -612,7 +585,6 @@ namespace IBKR_Trader
         private void cbSymbol_SelectedIndexChanged(object sender, EventArgs e)
         {
             getData();
-
         }
 
         private void cbSymbol_KeyPress(object sender, KeyPressEventArgs e)
@@ -703,7 +675,6 @@ namespace IBKR_Trader
 
             // Number of Share automatically calculated per $ Risk and Stop Loss distance.
             double quantity = Math.Floor(Convert.ToDouble(numRisk.Value) / Math.Abs(lmtPrice - stopLoss));
-
 
             // side is either buy or sell. calls bracketorder function and stores results in list variable called bracket
             List<Order> bracket = BracketOrder(order_id++, action, quantity, lmtPrice, takeProfit, stopLoss, order_type, takeProfitEnabled);
@@ -884,7 +855,7 @@ namespace IBKR_Trader
                     // Add Last price to limit box
                     numPrice.Value = Convert.ToDecimal(tbLast.Text);
                     // Puts the Stop Loss price close to the current price
-                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.25m;
+                    tbStopLoss.Value = Convert.ToDecimal(tbLast.Text) - 0.05m;
                     PercentChange(null, null);
 
                     timer1_counter = 5; // reset time counter back to 5
@@ -1040,7 +1011,7 @@ namespace IBKR_Trader
                     string fillstatus = dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString().Trim();
 
 
-                    // checks if cell valye is SELL and changes color to Red and Bold
+                    // checks if cell value is SELL and changes color to Red and Bold
                     if (dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString().Trim() == "SELL")
                     {
                         dataGridView1.Rows[e.RowIndex].Cells[6].Style.ForeColor = Color.Red;
@@ -1082,7 +1053,7 @@ namespace IBKR_Trader
                     dataGridView1.Rows[e.RowIndex].Cells[6].Style = dataGridView1.DefaultCellStyle;
                 }
             }
-            catch (Exception f) { lbData.Items.Insert(0, "DataGridView1Formatting Err: " + f); }
+            catch (Exception f) { lbData.Items.Insert(0, "DataGridView1Formatting Err: " + f.Message); }
         }
 
         delegate void SetTextCallbackOrderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice);
@@ -2102,11 +2073,39 @@ namespace IBKR_Trader
         {
             if (toolstripBorderToggle.Checked)
             {
-                FormBorderStyle = FormBorderStyle.None;
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.DoubleBuffered = true;
+                this.SetStyle(ControlStyles.ResizeRedraw, true);
             }
-            else { FormBorderStyle = FormBorderStyle.Sizable; }
+            else 
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.DoubleBuffered = false;
+            }
         }
-
+        //** USED TO CREATE A SIZABLE BORDER AROUND WHEN BORDER STYLE IS "NONE" ****//
+        private const int cGrip = 16;      // Grip size
+        private const int cCaption = 32;   // Caption bar height;
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x84)
+            {  // Trap WM_NCHITTEST
+                Point pos = new Point(m.LParam.ToInt32());
+                pos = this.PointToClient(pos);
+                if (pos.Y < cCaption)
+                {
+                    m.Result = (IntPtr)2;  // HTCAPTION
+                    return;
+                }
+                if (pos.X >= this.ClientSize.Width - cGrip && pos.Y >= this.ClientSize.Height - cGrip)
+                {
+                    m.Result = (IntPtr)17; // HTBOTTOMRIGHT
+                    return;
+                }
+            }
+            base.WndProc(ref m);
+        }
+        //**  END SIZABLE BORDER CODE **//
         private void ToolstripDarkModeToggle_Click(object sender, EventArgs e)
         {
             if (toolstripDarkMode.Checked)  // DARK mode
@@ -2563,7 +2562,7 @@ namespace IBKR_Trader
                 switch (comboboxPeg.Text)
                 {
                     case "Peg to ASK":
-                        numPrice.Value = decimal.Parse(tbAsk.Text) + numOffset.Value; ;
+                        numPrice.Value = decimal.Parse(tbAsk.Text) + numOffset.Value;
                         break;
                     case "Peg to BID":
                         numPrice.Value = decimal.Parse(tbBid.Text) + numOffset.Value;
