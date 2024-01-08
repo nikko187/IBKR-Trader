@@ -1083,7 +1083,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
-            ClientSize = new Size(641, 150);
+            ClientSize = new Size(641, 155);
             ContextMenuStrip = contextFormRightClick;
             Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
