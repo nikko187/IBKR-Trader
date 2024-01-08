@@ -105,7 +105,6 @@ namespace IBKR_Trader
 
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
-        BindingList<tnsData> _tns = new BindingList<tnsData>();
         tnsForm tns = new tnsForm();
         public static Form1 instance;
         public string strAsk;
@@ -457,7 +456,6 @@ namespace IBKR_Trader
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
-            _tns.Clear();
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
 
             // Create a new contract to specify the security we are searching for
