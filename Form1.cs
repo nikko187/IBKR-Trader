@@ -50,6 +50,7 @@ namespace IBKR_Trader
         int timer1_counter = 5;
         int myContractId;
         bool isConnected = false;
+        public bool tnsFormIsOpen = false;
 
         /********* ~~~~~ BEGINE TESTING SENDING TICKER INFO TO OTHER WINDOWS ~~~~~ ********/
 
@@ -104,14 +105,18 @@ namespace IBKR_Trader
 
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
-
+        BindingList<tnsData> _tns = new BindingList<tnsData>();
+        tnsForm tns = new tnsForm();
+        public static Form1 instance;
+        public string strAsk;
+        public string strBid;
         public Form1()
         {
             InitializeComponent();
 
             // Instantiate the ibClient
             ibClient = new EWrapperImpl();
-
+            instance = this;
         }
 
 
@@ -142,7 +147,6 @@ namespace IBKR_Trader
 
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Black;
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
-
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -252,10 +256,12 @@ namespace IBKR_Trader
                     {
                         case 2:     // RealTime ASK tickerPrice == 2
                             tbAsk.Text = tickerPrice[2];
+                            strAsk = tickerPrice[2];
                             break;
 
                         case 1:     // RealTime BID tickerPrice == 1  
                             tbBid.Text = tickerPrice[2];
+                            strBid = tickerPrice[2];
                             break;
 
                         case 4:     // RealTime LAST tickerPrice == 4
@@ -451,7 +457,7 @@ namespace IBKR_Trader
             string account_number = "D005";
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
-
+            _tns.Clear();
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
 
             // Create a new contract to specify the security we are searching for
@@ -478,7 +484,10 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqMarketDataType(1);  // delayed data = 3 live = 1
 
             // For API v9.72 and higher, add one more parameter for regulatory snapshot
-            ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
+            if (tnsFormIsOpen == false)
+                ibClient.ClientSocket.reqMktData(1, contract, "236, 165", false, false, mktDataOptions);
+            else
+                ibClient.ClientSocket.reqMktData(1, contract, "236, 165, 375", false, false, mktDataOptions);
 
             // request contract details based on contract that was created above
             ibClient.ClientSocket.reqContractDetails(88, contract);
@@ -1226,7 +1235,7 @@ namespace IBKR_Trader
                     else if (!wasFound)
                     {
                         int n = dataGridView1.Rows.Add();
-                        epoch = epoch.AddMilliseconds(Convert.ToDouble(myOpenOrder[0]));          
+                        epoch = epoch.AddMilliseconds(Convert.ToDouble(myOpenOrder[0]));
 
                         dataGridView1.Rows[n].Cells[0].Value = epoch.ToString("HH:mm:ss");      // time submitted
                         dataGridView1.Rows[n].Cells[1].Value = myOpenOrder[2];  // order id number
@@ -2077,7 +2086,7 @@ namespace IBKR_Trader
                 this.DoubleBuffered = true;
                 this.SetStyle(ControlStyles.ResizeRedraw, true);
             }
-            else 
+            else
             {
                 this.FormBorderStyle = FormBorderStyle.Sizable;
                 this.DoubleBuffered = false;
@@ -2615,6 +2624,13 @@ namespace IBKR_Trader
         private void btnResetOffset_Click(object sender, EventArgs e)
         {
             numOffset.Value = 0.00m;
+        }
+
+        private void btnTns_Click(object sender, EventArgs e)
+        {
+            tns.Show();
+            tnsFormIsOpen = true;
+            getData();
         }
     }
 }

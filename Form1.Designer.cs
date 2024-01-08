@@ -126,6 +126,7 @@
             checkboxPegPrice = new CheckBox();
             numOffset = new NumericUpDown();
             btnResetOffset = new Button();
+            btnTns = new Button();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
@@ -1077,6 +1078,16 @@
             btnResetOffset.UseVisualStyleBackColor = true;
             btnResetOffset.Click += btnResetOffset_Click;
             // 
+            // btnTns
+            // 
+            btnTns.Location = new Point(522, 61);
+            btnTns.Name = "btnTns";
+            btnTns.Size = new Size(47, 24);
+            btnTns.TabIndex = 67;
+            btnTns.Text = "TnS";
+            btnTns.UseVisualStyleBackColor = true;
+            btnTns.Click += btnTns_Click;
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -1085,6 +1096,7 @@
             BackColor = Color.LightGray;
             ClientSize = new Size(641, 155);
             ContextMenuStrip = contextFormRightClick;
+            Controls.Add(btnTns);
             Controls.Add(numOffset);
             Controls.Add(comboboxPeg);
             Controls.Add(checkboxPegPrice);
@@ -1263,5 +1275,6 @@
         private DataGridViewTextBoxColumn colFill;
         private DataGridViewTextBoxColumn colCancel;
         private Button btnResetOffset;
+        private Button btnTns;
     }
 }
