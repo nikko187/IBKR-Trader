@@ -69,11 +69,22 @@ namespace IBKR_Trader
                     epoch = epoch.AddHours(-5);
                     string strTime = epoch.ToString("HH:mm:ss");
 
-                    string strSize = size.ToString("#,##0");
-
-                    _tns.Insert(0, new tnsData(strTime, price, strSize));
+                    string strSize;
+                    if (!toolStripSizeFilter.Checked)
+                    {
+                        strSize = size.ToString("#,##0");
+                        _tns.Insert(0, new tnsData(strTime, price, strSize));
+                    }
+                    else
+                    {
+                        if (size > Convert.ToDouble(toolStripSizeValue.Text))
+                        {
+                            strSize = size.ToString("#,##0");
+                            _tns.Insert(0, new tnsData(strTime, price, strSize));
+                        }
+                    }
                 }
-                catch (Exception) { }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
             }
         }
 
@@ -81,7 +92,7 @@ namespace IBKR_Trader
         {
             if (price >= _ask)
             {
-                datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 160, 0);
+                datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.FromArgb(0, 150, 10);
                 datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
             }
             else if (price <= _bid)
@@ -89,6 +100,16 @@ namespace IBKR_Trader
                 datagridviewTns.Rows[0].DefaultCellStyle.BackColor = Color.DarkRed;
                 datagridviewTns.Rows[0].DefaultCellStyle.ForeColor = Color.Gainsboro;
             }
+        }
+
+        public void clearTnsList()
+        {
+            if (_tns != null)
+            {
+                _tns.Clear();
+            }
+            else
+                return;
         }
 
         private void tnsForm_FormClosing(object sender, FormClosingEventArgs e)

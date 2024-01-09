@@ -1084,7 +1084,8 @@
             btnTns.Name = "btnTns";
             btnTns.Size = new Size(47, 24);
             btnTns.TabIndex = 67;
-            btnTns.Text = "TnS";
+            btnTns.Text = "T&S\r\n";
+            btnTns.UseMnemonic = false;
             btnTns.UseVisualStyleBackColor = true;
             btnTns.Click += btnTns_Click;
             // 

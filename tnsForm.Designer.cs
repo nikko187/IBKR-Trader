@@ -28,16 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tnsForm));
             datagridviewTns = new DataGridView();
+            contextTnsRightClick = new ContextMenuStrip(components);
+            toolStripSizeFilter = new ToolStripMenuItem();
+            toolStripSizeValue = new ToolStripTextBox();
             ((System.ComponentModel.ISupportInitialize)datagridviewTns).BeginInit();
+            contextTnsRightClick.SuspendLayout();
             SuspendLayout();
             // 
             // datagridviewTns
             // 
+            datagridviewTns.AllowUserToDeleteRows = false;
+            datagridviewTns.AllowUserToResizeRows = false;
             datagridviewTns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            datagridviewTns.BackgroundColor = Color.Black;
             datagridviewTns.BorderStyle = BorderStyle.None;
             datagridviewTns.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -49,6 +57,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             datagridviewTns.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             datagridviewTns.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            datagridviewTns.ContextMenuStrip = contextTnsRightClick;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = Color.Black;
             dataGridViewCellStyle2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
@@ -63,10 +72,30 @@
             datagridviewTns.Name = "datagridviewTns";
             datagridviewTns.RowHeadersVisible = false;
             datagridviewTns.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            datagridviewTns.RowTemplate.Height = 20;
+            datagridviewTns.RowTemplate.Height = 19;
             datagridviewTns.Size = new Size(208, 481);
             datagridviewTns.TabIndex = 0;
             datagridviewTns.RowPrePaint += datagridviewTns_RowPrePaint;
+            // 
+            // contextTnsRightClick
+            // 
+            contextTnsRightClick.Items.AddRange(new ToolStripItem[] { toolStripSizeFilter, toolStripSizeValue });
+            contextTnsRightClick.Name = "contextMenuStrip1";
+            contextTnsRightClick.Size = new Size(161, 51);
+            // 
+            // toolStripSizeFilter
+            // 
+            toolStripSizeFilter.CheckOnClick = true;
+            toolStripSizeFilter.Name = "toolStripSizeFilter";
+            toolStripSizeFilter.Size = new Size(160, 22);
+            toolStripSizeFilter.Text = "Size Filter";
+            // 
+            // toolStripSizeValue
+            // 
+            toolStripSizeValue.Name = "toolStripSizeValue";
+            toolStripSizeValue.Size = new Size(100, 23);
+            toolStripSizeValue.Text = "100";
+            toolStripSizeValue.ToolTipText = "Size Filter";
             // 
             // tnsForm
             // 
@@ -74,17 +103,23 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(208, 481);
             Controls.Add(datagridviewTns);
+            FormBorderStyle = FormBorderStyle.SizableToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "tnsForm";
-            Text = "tnsForm";
+            Text = "T&S";
             FormClosing += tnsForm_FormClosing;
             Load += tnsForm_Load;
             ((System.ComponentModel.ISupportInitialize)datagridviewTns).EndInit();
+            contextTnsRightClick.ResumeLayout(false);
+            contextTnsRightClick.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private DataGridView datagridviewTns;
+        private ContextMenuStrip contextTnsRightClick;
+        private ToolStripMenuItem toolStripSizeFilter;
+        private ToolStripTextBox toolStripSizeValue;
     }
 }

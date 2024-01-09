@@ -105,7 +105,6 @@ namespace IBKR_Trader
 
         // Create ibClient object to represent the connection
         EWrapperImpl ibClient;
-        tnsForm tns = new tnsForm();
         public static Form1 instance;
         public string strAsk;
         public string strBid;
@@ -457,7 +456,7 @@ namespace IBKR_Trader
             ibClient.ClientSocket.reqAccountUpdates(true, account_number);
             ibClient.ClientSocket.reqPositions();
             ibClient.ClientSocket.cancelMktData(1); // cancel market data
-
+            tnsForm.instance.clearTnsList();
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
             // Create a new TagValueList object (for API version 9.71 and later) 
@@ -2626,6 +2625,7 @@ namespace IBKR_Trader
 
         private void btnTns_Click(object sender, EventArgs e)
         {
+            tnsForm tns = new tnsForm();
             tns.Show();
             tnsFormIsOpen = true;
             getData();
